@@ -15,12 +15,11 @@ gem "ruby-debug19", :require => "ruby-debug"
 gem "mongrel", ">=1.2.0.pre2"
 gem "whenever", :require => false
 gem "markaby"  
-gem "jammit"  
 gem "composite_primary_keys", "=3.1.0"  
 gem "kindeditor"  
 gem "paperclip"  
 gem "capistrano" 
-gem "aasm"  #
+gem "aasm" 
 gem "spreadsheet", "0.6.5.4"  
 gem "rd_searchlogic", :require => "searchlogic"  
 gem "annotate"   

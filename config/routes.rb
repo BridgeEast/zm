@@ -1,4 +1,13 @@
 Zm::Application.routes.draw do
+  get "users/index"
+
+  resources :products
+
+  devise_for :users do
+    get '/users/sign_out' => 'devise/sessions#destroy'
+  end
+  
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -48,7 +57,7 @@ Zm::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => "welcome#index"
+  root :to => "welcome#index"
   match ":controller/:action"
   match ":controller(/:action(/:id(.:format)))"
 
