@@ -1,4 +1,33 @@
 Zm::Application.routes.draw do
+  
+ resources :acts_as_menus do
+   collection do
+     get "home_menu"
+     get "f_menu_win" 
+     get "s_menu_win" 
+     get "t_menu_win" 
+     get "c_menu_win" 
+     post "f_menu_create"
+     post "s_menu_create"
+     post "t_menu_create"
+     post "c_menu_update"
+     post "update_f_menu"
+     post "update_s_menu"
+     post "update_t_menu"
+   end
+   member do
+     get "update_f_menu_win"
+     get "update_s_menu_win"
+     get "update_t_menu_win"
+   end
+ end
+ match "home_menu" => "acts_as_menus#home_menu"
+ match "f_menu_win" => "acts_as_menus#f_menu_win"
+ match "s_menu_win" => "acts_as_menus#s_menu_win"
+ match "t_menu_win" => "acts_as_menus#t_menu_win"
+ match "c_menu_win" => "acts_as_menus#c_menu_win"
+      
+
   get "users/index"
 
   resources :products
@@ -57,7 +86,7 @@ Zm::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => "products#index"
+  root :to => "acts_as_menus#home_menu"
   match ":controller/:action"
   match ":controller(/:action(/:id(.:format)))"
 
