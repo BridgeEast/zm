@@ -1,0 +1,16 @@
+.logined{ 
+  float: right;
+  position: relative;
+  top: -14px;
+}
+
+body {
+	margin: 0;
+	pading: 0;
+	color: purple;
+	font-size: 14px;
+	text-shadow: #050505 0 -1px 0;
+	font-weight: bold;
+}
+
+

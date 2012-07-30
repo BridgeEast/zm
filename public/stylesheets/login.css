@@ -108,3 +108,8 @@ div.error {
 	border: solid 1px transparent;
 	margin: 6px 0;
 }
+.login{ 
+  float: right;
+  position: relative;
+  top: -14px;
+}
