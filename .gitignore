@@ -7,4 +7,4 @@ tmp
 *.rb~
 doc/js_doc/*
 usr/*
-database.yml
+config/database.yml
