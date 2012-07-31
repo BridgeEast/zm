@@ -3,7 +3,7 @@ User:Justin
 开发环境：ruby1.9.2 + rails3.0.3
 切换ruby版本命令： rvm use 1.9.2-p290 --default
 克隆项目: git clone 172.17.21.221:Code/zm
-克隆完项目，需配置config/database.yml，修改为你自己的数据库密码
+克隆完项目，需配置config/database.yml，复制database_example.yml修改为database.yml,修改数据库密码
 在项目目录下，执行 bundle installl 加载必须的gem
 建立数据库 rake db:create
 建立迁移任务 rake db:migrate
