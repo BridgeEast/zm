@@ -64,7 +64,7 @@ Zm.dataBases.region = {
             labelWidth: 60,
             bodyStyle: 'padding: 10px 0 0 0',
             width: 300,
-            height: 260,
+            height: 160,
             frame: true,
             items: [
                 { id: 'addName', fieldLabel: '部位', xtype: 'textfield', width: 200 },
@@ -81,7 +81,7 @@ Zm.dataBases.region = {
 
         return new Ext.Window({ 
             id: 'addWindow',
-            title: '添加部位',
+            title: '更新部位',
             closeAction: 'hide',
             modal: true,
             items: [ addRegionForm ]
