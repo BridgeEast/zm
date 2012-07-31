@@ -17,7 +17,7 @@ namespace :acts_as_menu do
       { :name => "客服",
         :s_menus_attributes => [
           { :name => "Excel文件处理及下板", :url => "" },
-          { :name => "浏览客户心愿单", :url => "" }
+          { :name => "浏览客户心愿单", :url => "" },
           { :name => "合同制作", :url => "" },
           { :name => "虚拟仓库管理", :url => "" },
           { :name => "预购单管理", :url => "" },
