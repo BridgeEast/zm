@@ -5,19 +5,42 @@ namespace :acts_as_menu do
     puts "Creating  datas success,checkout your home page!"
     FMenu.delete_all
     FMenu.create!([
-      { :name => "主页",:url => "acts_as_menus/home_menu"},
-      { :name => "制单",
+      { :name => "主页",:url => "home_menu"},
+      { :name => "客户",
         :s_menus_attributes => [
-          { :name => "制作板单", :url => "sample_orders/new" },
-          { :name => "制作订单", :url => "orders/new" },
-          { :name => "板房管理", :url => "sample_orders" },
-          { :name => "订单列表", :url => "orders"},
-          { :name => "订单进度列表", :url => "order_items" }
+          { :name => "浏览样品单", :url => "" },
+          { :name => "心愿单", :url => "" },
+          { :name => "订单管理", :url => "" },
         ]
       },
-      { 
-        :name => "菜单设置",
-        :url => "c_menu_win"
-      }])
+      { :name => "客服",
+        :s_menus_attributes => [
+          { :name => "Excel文件处理及下板", :url => "" },
+          { :name => "工厂订单制作", :url => "" },
+          { :name => "虚拟仓库管理", :url => "" },
+          { :name => "客户订单管理", :url => "" },
+          { :name => "工厂订单管理", :url => "" },
+          { :name => "样品管理", :url => "" },
+          { :name => "浏览客户心愿单进行推销", :url => "" }
+        ]
+      },
+      { :name => "老板",
+        :s_menus_attributes => [
+          { :name => "查看样品库", :url => "" },
+          { :name => "查看样品与沟通纪录", :url => "" },
+          { :name => "查看工厂订单", :url => "" },
+          { :name => "查看客户订单", :url => "" }
+        ]
+      },
+      { :name => "基础数据",
+        :s_menus_attributes => [
+          { :name => "样品库", :url => "" },
+          { :name => "部位", :url => "" },
+          { :name => "材料", :url => "" },
+          { :name => "颜色", :url => "" },
+          { :name => "加工方法", :url => "" }
+        ]
+      }
+      ])
   end
 end
