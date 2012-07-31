@@ -21,6 +21,17 @@ Zm::Application.routes.draw do
      get "update_t_menu_win"
    end
  end
+
+ resources :data_bases do
+   collection do
+     get "region"
+     get "get_region"
+     post "create_region"
+     post "delete_region"
+     post "update_region"
+   end
+ end
+
  match "home_menu" => "acts_as_menus#home_menu"
  match "f_menu_win" => "acts_as_menus#f_menu_win"
  match "s_menu_win" => "acts_as_menus#s_menu_win"

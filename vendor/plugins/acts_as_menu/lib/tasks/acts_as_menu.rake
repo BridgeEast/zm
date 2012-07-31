@@ -39,7 +39,7 @@ namespace :acts_as_menu do
       { :name => "基础数据",
         :s_menus_attributes => [
           { :name => "鞋库", :url => "" },
-          { :name => "部位", :url => "base_datas/region" },
+          { :name => "部位", :url => "data_bases/region" },
           { :name => "材料", :url => "" },
           { :name => "颜色", :url => "" },
           { :name => "加工方法", :url => "" }

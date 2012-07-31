@@ -11,7 +11,6 @@
   <%= stylesheet_link_tag "resources/css/ext-all.css" %>
   <%= javascript_include_tag "ext_js/ext-base.js" %>
   <%= javascript_include_tag "ext_js/ext-all-debug.js" %>
-  <%= javascript_include_tag "interface.js" %>
 </head>
 <body>
 <% if current_user %>
@@ -24,6 +23,5 @@
    <% end %>
 <div><%= acts_as_menu %></div>
 <%= yield %>
-
 </body>
 </html>
