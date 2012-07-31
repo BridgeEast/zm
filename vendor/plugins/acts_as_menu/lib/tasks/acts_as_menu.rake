@@ -8,33 +8,37 @@ namespace :acts_as_menu do
       { :name => "主页",:url => "home_menu"},
       { :name => "客户",
         :s_menus_attributes => [
-          { :name => "浏览样品单", :url => "" },
+          { :name => "浏览鞋库", :url => "" },
           { :name => "心愿单", :url => "" },
+          { :name => "预购单管理", :url => "" },
           { :name => "订单管理", :url => "" },
         ]
       },
       { :name => "客服",
         :s_menus_attributes => [
           { :name => "Excel文件处理及下板", :url => "" },
-          { :name => "工厂订单制作", :url => "" },
+          { :name => "浏览客户心愿单", :url => "" }
+          { :name => "合同制作", :url => "" },
           { :name => "虚拟仓库管理", :url => "" },
-          { :name => "客户订单管理", :url => "" },
-          { :name => "工厂订单管理", :url => "" },
-          { :name => "样品管理", :url => "" },
-          { :name => "浏览客户心愿单进行推销", :url => "" }
+          { :name => "预购单管理", :url => "" },
+          { :name => "订单管理", :url => "" },
+          { :name => "合同管理", :url => "" },
+         
         ]
       },
-      { :name => "老板",
+      { :name => "管理层",
         :s_menus_attributes => [
-          { :name => "查看样品库", :url => "" },
-          { :name => "查看样品与沟通纪录", :url => "" },
-          { :name => "查看工厂订单", :url => "" },
-          { :name => "查看客户订单", :url => "" }
+          { :name => "查看鞋库", :url => "" },
+          { :name => "查看客户心愿单", :url => "" },
+          { :name => "查看预购单", :url => "" },
+          { :name => "查看订单", :url => "" },
+          { :name => "查看合同", :url => "" },
+          { :name => "查看虚拟仓库", :url => "" }
         ]
       },
       { :name => "基础数据",
         :s_menus_attributes => [
-          { :name => "样品库", :url => "" },
+          { :name => "鞋库", :url => "" },
           { :name => "部位", :url => "" },
           { :name => "材料", :url => "" },
           { :name => "颜色", :url => "" },
