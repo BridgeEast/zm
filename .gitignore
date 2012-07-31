@@ -1,2 +1,10 @@
 *.log
 tmp
+*.xls
+*.swp
+*.log
+*.js~
+*.rb~
+doc/js_doc/*
+usr/*
+
