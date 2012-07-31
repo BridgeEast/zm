@@ -1,6 +1,6 @@
 class ActsAsMenusController < ApplicationController
   def home_menu
-    @acts_as_menu = acts_as_menu
+    #@acts_as_menu = acts_as_menu
   end
 
   def f_menu_win
