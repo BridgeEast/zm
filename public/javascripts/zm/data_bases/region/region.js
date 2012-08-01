@@ -1,16 +1,10 @@
 Zm.dataBases.region = { 
     init: function() { 
-        new Ext.Viewport({ 
+        Zm.pages.ViewPort = {
             layout: 'border',
-            items: [this.panel(), this.createRegionGrid()]
-        });
-    },
-
-    panel: function() { 
-        return new Ext.Panel({ 
-            region: 'north',
-            height: 45
-        });
+            region:'center',
+            items: [this.createRegionGrid()]
+        };
     },
 
     createRegionGrid: function() { 

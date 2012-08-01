@@ -23,5 +23,23 @@
    <% end %>
 <div><%= acts_as_menu %></div>
 <%= yield %>
+    <script type="text/javascript">
+        Ext.onReady(function(){
+            Zm.menuPosition = new Ext.Panel({ 
+                region: "north",
+                border: false,
+                height: 42 
+            });
+            if(Zm.pages.ViewPort) {  
+                Zm.pages.ViewPort.region = "center";
+                new Ext.Viewport({
+                    layout: "border",
+                    autoScroll: true,
+                    items: [Zm.menuPosition, Zm.pages.ViewPort]
+                });
+            };
+        });
+    </script>
+
 </body>
 </html>
