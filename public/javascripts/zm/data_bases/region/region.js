@@ -1,6 +1,5 @@
 Zm.dataBases.region = { 
     init: function() { 
-        this.win = this.addRegion();
         new Ext.Viewport({ 
             layout: 'border',
             items: [this.panel(), this.createRegionGrid()]
@@ -46,7 +45,7 @@ Zm.dataBases.region = {
             },
             items: [{ 
                 text: '添加',
-                handler: function() { this.win.show() }
+                handler: function() { this.addRegion("添加部位").show() }
             }, { 
                 text: '删除',
                 handler: function() { this.deleteRegion() }
@@ -57,7 +56,7 @@ Zm.dataBases.region = {
         });        
     },
 
-    addRegion: function() { 
+    addRegion: function(type) { 
         var addRegionForm = new Ext.form.FormPanel({ 
             id: 'addRegionForm',
             labelAlign: 'right',
@@ -74,30 +73,31 @@ Zm.dataBases.region = {
                 text: '保存',
                 scope: this,
                 handler: function() { 
-                    this.checkForRegion()
+                    this.checkForRegion(type)
                 }
             }]
         });
 
         return new Ext.Window({ 
             id: 'addWindow',
-            title: '更新部位',
-            closeAction: 'hide',
+            title: type,
             modal: true,
             items: [ addRegionForm ]
         });           
     },
 
-    checkForRegion: function() { 
+    checkForRegion: function(type) { 
         var name = Ext.getCmp('addName').getValue();
         var remark = Ext.getCmp('addRemark').getValue();
         var selection = Ext.getCmp('regionGrid').getSelectionModel();
+        var store = Ext.getCmp('regionGrid').store;
+        var win
         var record = { 
             name: name,
             remark: remark
         };
         if(name) { 
-            if(selection) { 
+            if(type == "修改部位") { 
                 var record = { 
                     id: selection.getSelected().data["id"],
                     name: name,
@@ -109,7 +109,7 @@ Zm.dataBases.region = {
                     jsonData: { record: record },
                     success: function() { 
                         Ext.getCmp('regionGrid').store.load();                    
-                        Ext.getCmp('addWindow').hide();                        
+                        Ext.getCmp('addWindow').close();                        
                         Ext.Msg.alert('修改', '修改成功!');
                     },
                     failure: function() { 
@@ -129,7 +129,7 @@ Zm.dataBases.region = {
                     },
                     callback: function() { 
                         Ext.getCmp('addRegionForm').form.reset();
-                        Ext.getCmp('addWindow').hide();
+                        Ext.getCmp('addWindow').close();
                         Ext.getCmp('regionGrid').store.load();
                     }
                 });      
@@ -141,12 +141,12 @@ Zm.dataBases.region = {
     },
 
     deleteRegion: function() { 
-        var id = Ext.getCmp('regionGrid').getSelectionModel().getSelected().id;
-        if(id) { 
+        var selection = Ext.getCmp('regionGrid').getSelectionModel();
+        if(selection.getSelected()) { 
             Ext.Ajax.request({ 
                 url: '/data_bases/delete_region.json',
                 method: 'post',
-                jsonData: { id: id },
+                jsonData: { id: selection.getSelected().id },
                 success: function() { 
                     Ext.getCmp('regionGrid').store.load();                    
                     Ext.Msg.alert('删除', '删除成功!');
@@ -161,10 +161,15 @@ Zm.dataBases.region = {
     },
 
     updateRegion: function() { 
-        var data = Ext.getCmp('regionGrid').getSelectionModel().getSelected().data;
-        this.win.show();             
-        Ext.getCmp('addName').setValue(data["name"]);
-        Ext.getCmp('addRemark').setValue(data["remark"]);
+        var selection = Ext.getCmp('regionGrid').getSelectionModel();
+        if(!selection.getSelected()) { 
+            Ext.Msg.alert('警告', '请选择一条记录');
+        }else{ 
+            var data = selection.getSelected().data
+            this.addRegion("修改部位").show();             
+            Ext.getCmp('addName').setValue(data["name"]);
+            Ext.getCmp('addRemark').setValue(data["remark"]);
+        };
     } 
 
 };
