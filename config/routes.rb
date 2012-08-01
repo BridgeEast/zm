@@ -29,6 +29,11 @@ Zm::Application.routes.draw do
      post "create_region"
      post "delete_region"
      post "update_region"
+     get "material"
+     get "get_material"
+     post "create_material"
+     post "delete_material"
+     post "update_material"
    end
  end
 

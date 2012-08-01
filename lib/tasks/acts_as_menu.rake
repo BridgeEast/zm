@@ -40,7 +40,7 @@ namespace :menu do
         :s_menus_attributes => [
           { :name => "鞋库", :url => "" },
           { :name => "部位", :url => "/data_bases/region" },
-          { :name => "材料", :url => "" },
+          { :name => "材料", :url => "/data_bases/material" },
           { :name => "颜色", :url => "" },
           { :name => "加工方法", :url => "" }
         ]
