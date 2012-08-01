@@ -7,7 +7,7 @@ User:Justin
 在项目目录下，执行 bundle install 加载必须的gem
 建立数据库 rake db:create
 建立迁移任务 rake db:migrate
-创建菜单 rake acts_as_menu:create_datas
+创建菜单 rake menu:init_datas
 更新指令：
 git pull --rebase 拉去远程仓库代码，更新代码
 提交指令：
