@@ -1,16 +1,10 @@
 Zm.dataBases.material = { 
     init: function() { 
-        new Ext.Viewport({ 
+        Zm.pages.ViewPort = { 
             layout: 'border',
-            items: [this.panel(), this.createMaterialGrid()]
-        });
-    },
-
-    panel: function() { 
-        return new Ext.Panel({ 
-            region: 'north',
-            height: 45
-        });
+            region:'center',
+            items: [this.createMaterialGrid()]
+        };
     },
 
     createMaterialGrid: function() { 
