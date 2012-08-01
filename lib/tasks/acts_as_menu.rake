@@ -46,5 +46,8 @@ namespace :menu do
         ]
       }
       ])
+  puts "创建管理员!"
+  User.delete_all
+  User.create!({ :email => 'hzu@gmail.com',:password=>'hzuhzu' })
   end
 end
