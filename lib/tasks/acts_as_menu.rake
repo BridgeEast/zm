@@ -5,7 +5,7 @@ namespace :menu do
     puts "创建菜单成功!"
     FMenu.delete_all
     FMenu.create!([
-      { :name => "主页",:url => "/acts_as_menu/home_menu"},
+      { :name => "主页",:url => "/home_menu"},
       { :name => "客户",
         :s_menus_attributes => [
           { :name => "浏览鞋库", :url => "" },
