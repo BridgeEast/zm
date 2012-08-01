@@ -17,9 +17,10 @@ git push origin master 提交到远程仓库
 在每此提交的时候，都必须先更新代码即 git pull --rebase
 
 User: Lixiaobo
-功能实现
-1、通过 app/views/data_bases/region.html.erb 文件包含js文件 public/javascripts/zm/data_bases/region/region.js
-2、前台通过Ajax和后台连接，请看 public/javascripts/zm/data_bases/region/region.js 和 app/controllers/data_bases_controller.rb
-3、要在 public/javascripts/zm/zm.js 中声明js模块名
-4、在 config/routes.rb 写路由
+功能实现(自己不用再包含ext库)
+1、添加菜单： 请看 lib/tasks/acts_as_menu.rake 文件，添加后要执行 rake menu:init_datas
+2、通过 app/views/data_bases/region.html.erb 文件包含js文件 public/javascripts/zm/data_bases/region/region.js
+3、前台通过Ajax和后台连接，请看 public/javascripts/zm/data_bases/region/region.js 和 app/controllers/data_bases_controller.rb
+4、要在 public/javascripts/zm/zm.js 中声明js模块名
+5、在 config/routes.rb 写路由
 
