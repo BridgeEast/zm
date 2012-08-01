@@ -1,11 +1,11 @@
 # encoding: utf-8
 namespace :acts_as_menu do
-  desc 'create f_menu data in environment'
+  desc '创建菜单'
   task :create_datas => :environment do 
-    puts "Creating  datas success,checkout your home page!"
+    puts "创建菜单成功!"
     FMenu.delete_all
     FMenu.create!([
-      { :name => "主页",:url => "home_menu"},
+      { :name => "主页",:url => "/acts_as_menu/home_menu"},
       { :name => "客户",
         :s_menus_attributes => [
           { :name => "浏览鞋库", :url => "" },
@@ -39,7 +39,7 @@ namespace :acts_as_menu do
       { :name => "基础数据",
         :s_menus_attributes => [
           { :name => "鞋库", :url => "" },
-          { :name => "部位", :url => "data_bases/region" },
+          { :name => "部位", :url => "/data_bases/region" },
           { :name => "材料", :url => "" },
           { :name => "颜色", :url => "" },
           { :name => "加工方法", :url => "" }
