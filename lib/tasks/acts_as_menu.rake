@@ -41,7 +41,7 @@ namespace :menu do
           { :name => "鞋库", :url => "" },
           { :name => "部位", :url => "/data_bases/region" },
           { :name => "材料", :url => "/data_bases/material" },
-          { :name => "颜色", :url => "" },
+          { :name => "颜色", :url => "/data_bases/color" },
           { :name => "加工方法", :url => "" }
         ]
       }
