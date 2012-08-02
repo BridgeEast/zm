@@ -10,13 +10,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120801143955) do
+ActiveRecord::Schema.define(:version => 20120802012000) do
 
   create_table "c_menus", :force => true do |t|
     t.string   "speed",       :default => "normal"
     t.string   "delay",       :default => "800"
     t.string   "animation",   :default => "height"
     t.string   "dropShadows", :default => "true"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "colors", :force => true do |t|
+    t.string   "name"
+    t.string   "remark"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
