@@ -37,6 +37,15 @@ Zm::Application.routes.draw do
    end
  end
 
+ resources :bosses do
+   collection do
+     get "client_order_enquiry"
+     get "virtual_warehouse_enquiry"
+     get "get_client_order_enquiry"
+     get "get_virtual_warehouse_enquiry"
+   end
+ end
+
  match "home_menu" => "acts_as_menus#home_menu"
  match "f_menu_win" => "acts_as_menus#f_menu_win"
  match "s_menu_win" => "acts_as_menus#s_menu_win"
