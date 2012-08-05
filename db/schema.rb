@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(:version => 20120805123434) do
     t.string   "suitable_people"
     t.string   "colors"
     t.string   "size"
-    t.string   "number"
+    t.string   "number_of_shoes",  :limit => 50
     t.string   "finished_number"
     t.string   "warehouse_number"
     t.string   "production_date"

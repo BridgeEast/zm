@@ -34,6 +34,11 @@ Zm::Application.routes.draw do
      post "create_material"
      post "delete_material"
      post "update_material"
+     get "color"
+     get "get_color"
+     post "create_color"
+     post "delete_color"
+     post "update_color"
    end
  end
 
