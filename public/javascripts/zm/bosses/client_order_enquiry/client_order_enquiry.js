@@ -34,7 +34,7 @@ Zm.bosses.client_order_enquiry= {
         });
 
         return new Ext.grid.GridPanel({ 
-            id: 'regionGrid',
+            id: 'clientOrderEnquiryGrid',
             region: 'center',
             cm: cm,
             store: store,
@@ -48,39 +48,43 @@ Zm.bosses.client_order_enquiry= {
 
 
    
-    var root=new Ext.tree.AsyncTreeNode({   
-             id:"cgo_root", text:"全部订单", expanded:true,
-		     children:[
-                    {text:'2012',id:'2012_node', expanded:true,
-                     children:[
-                              {text:'六月',id:'jun_node',leaf:true},  
-                              {text:'五月',id:'may_node',leaf:true},  
-                              {text:'四月',id:'apr_node',leaf:true},  
-                              {text:'三月',id:'mar_node',leaf:true},  
-                              {text:'二月',id:'feb_node',leaf:true},  
-                              {text:'一月',id:'jan_node',leaf:true},  
-                  ]},  
-                    {text:'2011',id:'2011_node',leaf:true},  
-                    {text:'2010',id:'2010_node',leaf:true},  
-                  ]   
-        });  
-          
-    var cgo_tree=new Ext.tree.TreePanel({     
-        
-		     id:'cgo_tree', 
-             width: 210,  
-             minSize: 210,  
-             maxSize: 300, 
-             lines:true, 
-             autoScroll:true,
-		
-    });  cgo_tree.setRootNode(root);       
-    
-    cgo_tree.on('click', function(){
-      nod = new Ext.tree.TreeNode({text: "编号:", id:'id'}); 
-			root.appendChild(nod);
-    });
-//
+   var root=new Ext.tree.AsyncTreeNode({   
+            id:"cgo_root", text:"全部订单", expanded:true,
+ 	     children:[
+                   {text:'2012',id:'2012_node', expanded:true,
+                    children:[
+                             {text:'六月',id:'jun_node',leaf:true},  
+                             {text:'五月',id:'may_node',leaf:true},  
+                             {text:'四月',id:'apr_node',leaf:true},  
+                             {text:'三月',id:'mar_node',leaf:true},  
+                             {text:'二月',id:'feb_node',leaf:true},  
+                             {text:'一月',id:'jan_node',leaf:true},  
+                 ]},  
+                   {text:'2011',id:'2011_node',leaf:true},  
+                   {text:'2010',id:'2010_node',leaf:true},  
+                 ]   
+       });  
+         
+   var cgo_tree=new Ext.tree.TreePanel({     
+       
+ 	     id:'cgo_tree', 
+            width: 210,  
+            minSize: 210,  
+            maxSize: 300, 
+            lines:true, 
+            autoScroll:true,
+ 	
+   });  cgo_tree.setRootNode(root);       
+   
+   cgo_tree.on('click', function(){
+   a=Ext.getCmp("clientOrderEnquiryGrid").store.data.get(2).data.total_price;
+            if(a)
+            {alert('jing');}
+            
+//     nod = new Ext.tree.TreeNode({text: "编号:", id:'id'}); 
+//			root.appendChild(nod);
+   });
+
 //    var rootNode = new Ext.tree.AsyncTreeNode({
 //		id : "0",
 //		text : "安徽中烟餐厅菜单"

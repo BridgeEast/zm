@@ -36,7 +36,7 @@ Zm.dataBases.region = {
         return new Ext.Toolbar({ 
             defaults: { 
                 scope: this 
-            },
+            },    
             items: [{ 
                 text: '添加',
                 handler: function() { this.addRegion("添加部位").show() }
