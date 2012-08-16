@@ -42,7 +42,7 @@ Zm::Application.routes.draw do
    end
  end
 
- resources :bosses do
+ resources :managements do
    collection do
      get "client_order_enquiry"
      get "virtual_warehouse_enquiry"

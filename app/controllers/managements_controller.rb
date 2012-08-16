@@ -1,4 +1,4 @@
-class BossesController < ApplicationController
+class ManagementsController < ApplicationController
 
   def client_order_enquiry
   end
