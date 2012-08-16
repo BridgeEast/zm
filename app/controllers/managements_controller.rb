@@ -1,20 +1,20 @@
 class ManagementsController < ApplicationController
 
-  def client_order_enquiry
+  def check_guest_order
   end
 
-  def virtual_warehouse_enquiry
+  def check_virtual_warehouse
   end
 
-  def get_client_order_enquiry
+  def get_check_guest_order
     respond_to do |format|
-      format.json{render :json => { :client_order_enquiry => ClientOrderEnquiry.all } }
+      format.json{render :json => { :check_guest_order => CheckGuestOrder.all } }
     end
   end
 
-  def get_virtual_warehouse_enquiry
+  def get_check_virtual_warehouse
     respond_to do |format|
-      format.json{render :json => { :virtual_warehouse_enquiry => VirtualWarehouseEnquiry.all } }
+      format.json{render :json => { :check_virtual_warehouse => CheckVirtualWarehouse.all } }
     end
   end
 end

@@ -1,4 +1,4 @@
-Zm.managements.virtual_warehouse_enquiry= { 
+Zm.managements.check_virtual_warehouse= { 
     init: function() { 
         Zm.pages.ViewPort = {
             layout: 'border',
@@ -10,12 +10,7 @@ Zm.managements.virtual_warehouse_enquiry= {
                    ]
         };
     },
-
-
 };
-
-
-   
  
     var root=new Ext.tree.AsyncTreeNode({   
              id:"factory_order_root", text:"全部订单", expanded:true,
@@ -74,9 +69,9 @@ Zm.managements.virtual_warehouse_enquiry= {
         ]);
 
         var store = new Ext.data.JsonStore({ 
-            url: '/managements/get_virtual_warehouse_enquiry.json',
+            url: '/managements/get_check_virtual_warehouse.json',
             fields: ['id','photo_one', 'photo_two','shoes_id','types_of_shoes','suitable_people','colors','size','number_of_shoes','finished_number','warehouse_number','production_date'],
-            root: 'virtual_warehouse_enquiry',
+            root: 'check_virtual_warehouse',
             autoLoad: true
         });
 
@@ -106,7 +101,7 @@ Zm.managements.virtual_warehouse_enquiry= {
         	items: [{
             	text: '查看详情',
             	handler: function(){
-					orderformdetail3.show();
+					sampledetail.show();
             	}					
         	}]
     	});
@@ -115,3 +110,4 @@ Zm.managements.virtual_warehouse_enquiry= {
         	grid.getSelectionModel().selectRow(rowIndex);
         	virtualwarehouseenquiry2contextmenu.showAt(e.getXY());
     	});	
+      

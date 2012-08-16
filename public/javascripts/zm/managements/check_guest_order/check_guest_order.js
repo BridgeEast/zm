@@ -1,4 +1,4 @@
-Zm.managements.client_order_enquiry= { 
+Zm.managements.check_guest_order= { 
     init: function() { 
         Zm.pages.ViewPort = {
             layout: 'border',
@@ -30,9 +30,9 @@ Zm.managements.client_order_enquiry= {
         ]);
 
         var store = new Ext.data.JsonStore({ 
-            url: '/managements/get_client_order_enquiry.json',
+            url: '/managements/get_check_guest_order.json',
             fields: ['id','order_id', 'client','contract','total_price','quality','shipment','payment','lading_bill','production_date','remark'],
-            root: 'client_order_enquiry',
+            root: 'check_guest_order',
             autoLoad: true
         });
 
@@ -54,7 +54,6 @@ var clientorderenquirycontextmenu = new Ext.menu.Menu({
 			},{
             	text: '查看订单进度',
             	handler: function(){
-					clientorderenquirypricenumber.show();
             	}
 			},{				
 				text: '打开提单', handler: function(){

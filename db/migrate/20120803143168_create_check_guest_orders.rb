@@ -1,6 +1,6 @@
-class CreateClientOrderEnquiries< ActiveRecord::Migration
+class CreateCheckGuestOrders< ActiveRecord::Migration
   def self.up
-    create_table :client_order_enquiries do |t|
+    create_table :check_guest_orders do |t|
       t.string :order_id
       t.string :client
       t.string :contract
@@ -17,7 +17,7 @@ class CreateClientOrderEnquiries< ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :client_order_enquiries
+    drop_table :check_guest_orders
   end
 end
 

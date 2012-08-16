@@ -31,9 +31,9 @@ namespace :menu do
           { :name => "查看鞋库", :url => "" },
           { :name => "查看客户心愿单", :url => "" },
           { :name => "查看预购单", :url => "" },
-          { :name => "查看订单", :url => "/managements/client_order_enquiry" },
+          { :name => "查看订单", :url => "/managements/check_guest_order" },
           { :name => "查看合同", :url => "" },
-          { :name => "查看虚拟仓库", :url => "/managements/virtual_warehouse_enquiry" }
+          { :name => "查看虚拟仓库", :url => "/managements/check_virtual_warehouse" }
         ]
       },
       { :name => "基础数据",

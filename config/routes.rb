@@ -44,10 +44,10 @@ Zm::Application.routes.draw do
 
  resources :managements do
    collection do
-     get "client_order_enquiry"
-     get "virtual_warehouse_enquiry"
-     get "get_client_order_enquiry"
-     get "get_virtual_warehouse_enquiry"
+     get "check_guest_order"
+     get "check_virtual_warehouse"
+     get "get_check_guest_order"
+     get "get_check_virtual_warehouse"
    end
  end
 

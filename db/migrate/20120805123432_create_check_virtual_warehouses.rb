@@ -1,6 +1,6 @@
-class CreateVirtualWarehouseEnquiries< ActiveRecord::Migration
+class CreateCheckVirtualWarehouses < ActiveRecord::Migration
   def self.up
-    create_table :virtual_warehouse_enquiries do |t|
+    create_table :check_virtual_warehouses do |t|
       t.string :photo_one
       t.string :photo_two
       t.string :shoes_id
@@ -18,7 +18,7 @@ class CreateVirtualWarehouseEnquiries< ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :virtual_warehouse_enquiries
+    drop_table :check_virtual_warehouses
   end
 end
 
