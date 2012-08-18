@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120805123434) do
+ActiveRecord::Schema.define(:version => 20120805123432) do
 
   create_table "c_menus", :force => true do |t|
     t.string   "speed",       :default => "normal"
@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(:version => 20120805123434) do
     t.string   "suitable_people"
     t.string   "colors"
     t.string   "size"
-    t.string   "number_of_shoes",  :limit => 50
+    t.string   "number"
     t.string   "finished_number"
     t.string   "warehouse_number"
     t.string   "production_date"
