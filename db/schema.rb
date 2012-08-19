@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120805123434) do
+ActiveRecord::Schema.define(:version => 20120817123432) do
 
   create_table "c_menus", :force => true do |t|
     t.string   "speed",       :default => "normal"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(:version => 20120805123434) do
     t.datetime "updated_at"
   end
 
-  create_table "client_order_enquiries", :force => true do |t|
+  create_table "check_guest_orders", :force => true do |t|
     t.string   "order_id"
     t.string   "client"
     t.string   "contract"
@@ -32,6 +32,22 @@ ActiveRecord::Schema.define(:version => 20120805123434) do
     t.string   "lading_bill"
     t.string   "production_date"
     t.string   "remark"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "check_virtual_warehouses", :force => true do |t|
+    t.string   "photo_one"
+    t.string   "photo_two"
+    t.string   "shoes_id"
+    t.string   "types_of_shoes"
+    t.string   "suitable_people"
+    t.string   "colors"
+    t.string   "size"
+    t.string   "number_of_shoes",  :limit => 50
+    t.string   "finished_number"
+    t.string   "warehouse_number"
+    t.string   "production_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -50,11 +66,24 @@ ActiveRecord::Schema.define(:version => 20120805123434) do
     t.datetime "updated_at"
   end
 
+  create_table "jings", :force => true do |t|
+    t.string   "name"
+    t.string   "age"
+    t.string   "sex"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "materials", :force => true do |t|
     t.string   "name"
     t.string   "remark"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "nodes", :force => true do |t|
+    t.string  "nodetext"
+    t.integer "nodeparent"
   end
 
   create_table "regions", :force => true do |t|
@@ -97,21 +126,5 @@ ActiveRecord::Schema.define(:version => 20120805123434) do
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
-
-  create_table "virtual_warehouse_enquiries", :force => true do |t|
-    t.string   "photo_one"
-    t.string   "photo_two"
-    t.string   "shoes_id"
-    t.string   "types_of_shoes"
-    t.string   "suitable_people"
-    t.string   "colors"
-    t.string   "size"
-    t.string   "number_of_shoes",  :limit => 50
-    t.string   "finished_number"
-    t.string   "warehouse_number"
-    t.string   "production_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
 end

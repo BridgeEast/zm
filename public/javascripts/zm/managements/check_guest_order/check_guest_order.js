@@ -11,8 +11,6 @@ Zm.managements.check_guest_order= {
         };
     },
 
-  
-
 };
 
         var cm = new Ext.grid.ColumnModel([ 
@@ -44,7 +42,7 @@ Zm.managements.check_guest_order= {
             viewConfig: { forceFit: true },
         });                  
    
-var clientorderenquirycontextmenu = new Ext.menu.Menu({
+        var clientorderenquirycontextmenu = new Ext.menu.Menu({
        		id: 'theContextMenu',
         	items: [{
             	text: '查看鞋',
@@ -54,19 +52,27 @@ var clientorderenquirycontextmenu = new Ext.menu.Menu({
 			},{
             	text: '查看订单进度',
             	handler: function(){
+              Ext.Ajax.request({
+                  url: '/managements/node.json',
+                  success: function(){
+                      Ext.Msg.alert('Good','It is OK now!');
+                  },
+                  failure: function(){
+                      Ext.Msg.alert('Oh no','It is so bad!');
+                  }
+              });
             	}
 			},{				
-				text: '打开提单', handler: function(){
-            Ext.Msg.alert('Hello','Jing');
-        }	
+			      	text: '打开提单',
 			},{				
-				text: '下载提单',	
+				      text: '下载提单',	
 			},{			
-				text: '打开客户合同',	
+				      text: '打开客户合同',	
 			},{		
-				text: '下载客户合同',
+		      		text: '下载客户合同',
         	}]
     	});
+
     	grid.on("rowcontextmenu", function(grid, rowIndex, e){
         	e.preventDefault();
         	grid.getSelectionModel().selectRow(rowIndex);
@@ -74,46 +80,21 @@ var clientorderenquirycontextmenu = new Ext.menu.Menu({
     	});
 
     var root=new Ext.tree.AsyncTreeNode({   
-             id:"cgo_root", text:"全部订单", expanded:true,
-		     children:[
-                    {text:'2012',id:'2012_node', expanded:true,
-                     children:[
-                              {text:'六月',id:'jun_node',leaf:true},  
-                              {text:'五月',id:'may_node',leaf:true},  
-                              {text:'四月',id:'apr_node',leaf:true},  
-                              {text:'三月',id:'mar_node',leaf:true},  
-                              {text:'二月',id:'feb_node',leaf:true},  
-                              {text:'一月',id:'jan_node',leaf:true},  
-                  ]},  
-                    {text:'2011',id:'2011_node',leaf:true},  
-                    {text:'2010',id:'2010_node',leaf:true},  
-                  ]   
+            text: 'Root',
+            id: '0'
         });  
           
     var cgo_tree=new Ext.tree.TreePanel({     
-        
-		     id:'cgo_tree', 
-             width: 210,  
-             minSize: 210,  
-             maxSize: 300, 
-             lines:true, 
-             autoScroll:true,
-		
+            loader: new Ext.tree.TreeLoader({
+                dataUrl: '/managements/node',
+            }),
+            root: 'node'
+         //   root: new Ext.tree.AsyncTreeNode({
+         //       text: 'zt',
+         //       expanded: true,
+         //       children: [
+         //           { text: 'one', id: 'one' },
+         //           { text: 'two', id: 'two' }
+         //       ]
+         //   })
     });  cgo_tree.setRootNode(root);     
-
-    var contextmenu = new Ext.menu.Menu({
-        id: 'theContextMenu',
-        items: [{
-            text: 'first',
-            handler: function(){
-                alert('last');
-            }
-        }]
-    });
-    cgo_tree.on("contextmenu", function(node, e){
-        e.preventDefault();
-        node.select();
-        contextmenu.showAt(e.getXY());
-    });
-
-
