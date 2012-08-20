@@ -5,54 +5,31 @@ Zm.managements.check_virtual_warehouse= {
             region:'center',
             items: [ 
                      {region:'north',layout:'fit',height:'90',title:'管理层-虚拟仓库管理'},
-                     {region:'west',layout:'fit', width:'180', items:[cvw_tree]},
-                     {region:'center',layout:'fit', items:[grid]}
+                     {region:'center',layout:'fit', items:[grid] },
+                     {
+                         region:'west',
+                     //  collapseMode: 'mini',  最小化后左边很细
+                     //  split: true,   调节west的宽度
+                         collapsible: true,
+                         layout:'fit',
+                         width:'180',
+                         items:[cvw_tree]
+                     }
                    ]
         };
     },
 };
+
+      var root = new Ext.tree.AsyncTreeNode({
+          text: "全部合同",
+          expanded: true
+      });
+
+      var cvw_tree = new Ext.tree.TreePanel({
+          loader: new Ext.tree.TreeLoader( { dataUrl: "/managements/virtual_warehouse_node.json" } ),
+          root: root
+      });
  
-    var root=new Ext.tree.AsyncTreeNode({   
-             id:"factory_order_root", text:"全部订单", expanded:true,
-		     children:[
-                    {text:'2012',id:'2012_node', expanded:true,
-                    children:[
-                               {text:'三月',id:'mar_node',expanded:true,
-                               children:[
-                                          {text:'合同1',id:'mar_factory_order1_node',leaf:true},
-                                          {text:'合同2',id:'mar_factory_order2_node',leaf:true},
-                                          {text:'合同3',id:'mar_factory_order3_node',leaf:true},
-                               ]},
-
-                               {text:'二月',id:'feb_node',expanded:true,
-                               children:[
-                                          {text:'合同1',id:'feb_factory_order1_node',leaf:true},
-                                          {text:'合同2',id:'feb_factory_order2_node',leaf:true},
-                                          {text:'合同3',id:'feb_factory_order3_node',leaf:true},
-                               ]},
-
-                               {text:'一月',id:'jan_node',expanded:true,
-                               children:[
-                                          {text:'合同1',id:'jan_factory_order1_node',leaf:true},
-                                          {text:'合同2',id:'jan_factory_order2_node',leaf:true},
-                                          {text:'合同3',id:'jan_factory_order3_node',leaf:true},
-                               ]}
-                  ]},  
-                    {text:'2011',id:'2011_node',leaf:true},  
-                    {text:'2010',id:'2010_node',leaf:true},  
-                  ]   
-        });   
-    var cvw_tree=new Ext.tree.TreePanel({     
-        
-		     id:'cvw_tree', 
-             width: 210,  
-             minSize: 210,  
-             maxSize: 300, 
-             lines:true, 
-             autoScroll:true,
-		
-    });  cvw_tree.setRootNode(root);       
-
         var cm = new Ext.grid.ColumnModel([ 
             new Ext.grid.RowNumberer(),
             { header: '图鞋1', dataIndex: 'photo_one' },

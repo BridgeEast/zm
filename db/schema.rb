@@ -98,6 +98,11 @@ ActiveRecord::Schema.define(:version => 20120820130335) do
     t.datetime "updated_at"
   end
 
+  create_table "nodes", :force => true do |t|
+    t.string  "nodetext"
+    t.integer "nodeparent"
+  end
+
   create_table "orders", :force => true do |t|
     t.string   "order_id",                                       :null => false
     t.string   "server_num"

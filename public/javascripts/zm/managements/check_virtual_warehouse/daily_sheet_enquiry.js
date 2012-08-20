@@ -97,7 +97,10 @@ Ext.onReady(function(){
 		 	buttons: [{
             	text: '确定'
         	},{
-				text: '重置'
+				text: '重置', handler: function(){
+            dailysheetenquiry1.form.reset();
+            dailysheetenquiry2store.removeAll();
+            }
         	}]
     	});
 		dailysheetenquiry.hide();
