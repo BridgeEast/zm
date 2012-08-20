@@ -1,7 +1,7 @@
 class CreateAdvancedOrders < ActiveRecord::Migration
   def self.up
-    create_table :advanced_orders, :primary_key => :advanced_order_id do |t|
-      t.string :advanced_order_id, :null => false
+    create_table :advanced_orders do |t|
+      t.string :advanced_order_id, :null => false, :unique => true
       t.decimal :total_price
       t.date :advanced_order_date
       t.text :remark

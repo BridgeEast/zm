@@ -1,7 +1,7 @@
 class CreateOrders < ActiveRecord::Migration
   def self.up
-    create_table :orders, :primary_key => :order_id do |t|
-      t.string :order_id, :null => false
+    create_table :orders do |t|
+      t.string :order_id, :null => false, :unique => true
       t.string :server_num
       t.string :custom_num
       t.string :custom_contrast
