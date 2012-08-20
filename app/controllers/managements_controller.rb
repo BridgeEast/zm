@@ -1,15 +1,21 @@
 class ManagementsController < ApplicationController
-    def node
-        parent = params[:parent] || 0
-        @nodes = Node.find(:all, :conditions => "nodeparent=#{parent}")
-        render :json => @nodes.to_json
-    end
+     def guest_order_node
+         nodes = []
+         GuestOrderNode.node_or_parent.each do |s|
+            nodes << { :text => s.nodetext, :expanded => true, :children => s.order_tree}
+         end
+                                                            #:children => [ {:text => s.id, :leaf => true } ]
+          render :json => nodes
+     end
 
- #   def get_node
- #     respond_to do |format|
- #       format.json{render :json => { :node => Node.all } }
- #     end
- #   end
+     def virtual_warehouse_node 
+         nodes = []
+         VirtualWarehouseNode.node_or_parent.each do |x|
+            nodes << { :text => x.nodetext, :children => x.virtual_warehouse_tree }
+         end
+          render :json => nodes
+     end
+         
     def check_guest_order
     end
   
@@ -17,7 +23,7 @@ class ManagementsController < ApplicationController
     end
   
     def get_check_guest_order
-      respond_to do |format|
+        respond_to do |format|
         format.json{render :json => { :check_guest_order => CheckGuestOrder.all } }
       end
     end

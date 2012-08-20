@@ -95,7 +95,7 @@ Ext.onReady(function(){
 		 	buttons: [{
             	text: '确定'
         	},{
-				text: '重置'
+				text: '重置', handler: function(){ dailydispatchlistenquiry1.form.reset(); dailydispatchlistenquiry2store.removeAll(); }          
         	}]
     	});
 		dailydispatchlistenquiry.hide();

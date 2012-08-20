@@ -80,21 +80,11 @@ Zm.managements.check_guest_order= {
     	});
 
     var root=new Ext.tree.AsyncTreeNode({   
-            text: 'Root',
-            id: '0'
+            text: '全部订单',
+            expanded: true
         });  
           
     var cgo_tree=new Ext.tree.TreePanel({     
-            loader: new Ext.tree.TreeLoader({
-                dataUrl: '/managements/node',
-            }),
-            root: 'node'
-         //   root: new Ext.tree.AsyncTreeNode({
-         //       text: 'zt',
-         //       expanded: true,
-         //       children: [
-         //           { text: 'one', id: 'one' },
-         //           { text: 'two', id: 'two' }
-         //       ]
-         //   })
-    });  cgo_tree.setRootNode(root);     
+            loader: new Ext.tree.TreeLoader( { dataUrl: '/managements/guest_order_node.json' } ),
+            root: root
+    });    

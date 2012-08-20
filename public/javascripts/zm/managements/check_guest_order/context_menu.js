@@ -22,7 +22,7 @@ Ext.onReady(function(){
         	proxy: new Ext.data.MemoryProxy(clientorderenquirydetaildata),
         	reader: new Ext.data.ArrayReader({}, [
 	           	{name: 'sampleformid'},
-				{name: 'samplestyle'},
+      				{name: 'samplestyle'},
             	{name: 'matchpeople'},
             	{name: 'style'},
             	{name: 'price'},
@@ -51,6 +51,26 @@ Ext.onReady(function(){
             	emptyMsg: "没有记录"
         	})
     	});
+
+      var clientorderenquirydetailcontextmenu = new Ext.menu.Menu({
+       		id: 'clientorderenquirydetailContextMenu',
+        	items: [{
+            	text: '查看详情',
+            	handler: function(){
+					sampledetail.show();
+            	}	
+			},{
+            	text: '查看合同',
+			},{
+            	text: '下载合同',	handler: function(){ Ext.Msg.alert('Hello','Jing'); }
+        	}]
+    	});
+
+    	clientorderenquirydetailgrid.on("rowcontextmenu", function(clientorderenquirydetailgrid, rowIndex, e){
+        	e.preventDefault();
+        	clientorderenquirydetailgrid.getSelectionModel().selectRow(rowIndex);
+        	clientorderenquirydetailcontextmenu.showAt(e.getXY());
+    	});      
 
       clientorderenquirydetail = new Ext.Window({
 			minimizable: true,
