@@ -10,13 +10,14 @@ Zm.dataBases.material = {
     createMaterialGrid: function() { 
         var cm = new Ext.grid.ColumnModel([ 
             new Ext.grid.RowNumberer(),
-            { header: '材料', dataIndex: 'name' },
-            { header: '备注', dataIndex: 'remark' }
+            { header: '材料', dataIndex: 'material' },
+            { header: '备注', dataIndex: 'remark' },
+            { header: '创建日期', dataIndex: 'created_date' }
         ]);
 
         var store = new Ext.data.JsonStore({ 
             url: '/data_bases/get_material.json',
-            fields: ['id','name', 'remark'],
+            fields: ['id','material', 'remark','created_date'],
             root: 'material',
             autoLoad: true
         });
@@ -57,11 +58,12 @@ Zm.dataBases.material = {
             labelWidth: 60,
             bodyStyle: 'padding: 10px 0 0 0',
             width: 300,
-            height: 160,
+            height: 200,
             frame: true,
             items: [
-                { id: 'addName', fieldLabel: '材料', xtype: 'textfield', width: 200 },
-                { id: 'addRemark', fieldLabel: '备注', xtype: 'textarea', width: 200 }
+                { id: 'addMaterial', fieldLabel: '材料', xtype: 'textfield', width: 200 },
+                { id: 'addRemark', fieldLabel: '备注', xtype: 'textarea', width: 200 },
+                { id: 'addCreatedDate', fieldLabel: '创建日期', xtype: 'datefield', width: 200 }
             ],
             buttons: [{ 
                 text: '保存',
@@ -81,21 +83,24 @@ Zm.dataBases.material = {
     },
 
     checkForMaterial: function(type) { 
-        var name = Ext.getCmp('addName').getValue();
+        var material = Ext.getCmp('addMaterial').getValue();
         var remark = Ext.getCmp('addRemark').getValue();
+        var created_date = Ext.getCmp('addCreatedDate').getValue();
         var selection = Ext.getCmp('materialGrid').getSelectionModel();
         var store = Ext.getCmp('materialGrid').store;
         var win
         var record = { 
-            name: name,
-            remark: remark
+            material: material,
+            remark: remark,
+            created_date: created_date
         };
-        if(name) { 
+        if(material) { 
             if(type == "修改部位") { 
                 var record = { 
                     id: selection.getSelected().data["id"],
-                    name: name,
-                    remark: remark
+                    material: material,
+                    remark: remark,
+                    created_date: created_date
                 };
                 Ext.Ajax.request({ 
                     url: '/data_bases/update_material.json',
@@ -161,8 +166,9 @@ Zm.dataBases.material = {
         }else{ 
             var data = selection.getSelected().data
             this.addMaterial("修改部位").show();             
-            Ext.getCmp('addName').setValue(data["name"]);
+            Ext.getCmp('addMaterial').setValue(data["material"]);
             Ext.getCmp('addRemark').setValue(data["remark"]);
+            Ext.getCmp('addCreatedDate').setValue(data["createdDates"]);
         };
     } 
 
