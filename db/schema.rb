@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120820130335) do
+ActiveRecord::Schema.define(:version => 20120821023116) do
 
   create_table "advanced_orders", :force => true do |t|
     t.string   "advanced_order_id",                                  :null => false
@@ -72,6 +72,17 @@ ActiveRecord::Schema.define(:version => 20120820130335) do
     t.datetime "updated_at"
   end
 
+  create_table "factory_orders", :force => true do |t|
+    t.string   "factory_order_id",                                :null => false
+    t.string   "factory"
+    t.string   "payment"
+    t.decimal  "total_price",      :precision => 10, :scale => 0
+    t.date     "production_date"
+    t.text     "remark"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "general_shoes", :force => true do |t|
     t.string   "shoes_id",                                         :null => false
     t.string   "suitable_people"
@@ -82,7 +93,7 @@ ActiveRecord::Schema.define(:version => 20120820130335) do
     t.string   "photo_two"
     t.string   "advanced_order_id"
     t.string   "order_id"
-    t.string   "excel_num"
+    t.string   "excel_receive_id"
     t.string   "factory_order_id"
     t.text     "remark"
     t.date     "production_date"
