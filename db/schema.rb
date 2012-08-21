@@ -10,13 +10,27 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120805123432) do
+ActiveRecord::Schema.define(:version => 20120820141428) do
 
   create_table "c_menus", :force => true do |t|
     t.string   "speed",       :default => "normal"
     t.string   "delay",       :default => "800"
     t.string   "animation",   :default => "height"
     t.string   "dropShadows", :default => "true"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "check_store_of_shoes", :force => true do |t|
+    t.string   "photoOne"
+    t.string   "photoTwo"
+    t.string   "shoesId"
+    t.string   "typesOfShoes"
+    t.string   "suitablePeople"
+    t.string   "colors"
+    t.decimal  "price",          :precision => 10, :scale => 0
+    t.date     "productionDate"
+    t.text     "remark"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -55,6 +69,10 @@ ActiveRecord::Schema.define(:version => 20120805123432) do
     t.string   "remark"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "nodes", :force => true do |t|
+    t.string "year"
   end
 
   create_table "regions", :force => true do |t|

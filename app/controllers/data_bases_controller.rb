@@ -68,7 +68,7 @@ class DataBasesController < ApplicationController
     render :json => {}
   end  
   def update_color
-    Color.find(params[:record][:id]).update_attributes(params[:recors])
+    Color.find(params[:record][:id]).update_attributes(params[:record])
     render :json => {}
   end
 
