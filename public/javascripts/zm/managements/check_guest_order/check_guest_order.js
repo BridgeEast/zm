@@ -80,21 +80,37 @@ Zm.managements.check_guest_order= {
     	});
 
     var root=new Ext.tree.AsyncTreeNode({   
-            text: 'Root',
-            id: '0'
+            id: "cgo_root",
+            text: '全部订单',
+            expanded: true,
+            children: []
         });  
           
     var cgo_tree=new Ext.tree.TreePanel({     
-            loader: new Ext.tree.TreeLoader({
-                dataUrl: '/managements/node',
-            }),
-            root: 'node'
-         //   root: new Ext.tree.AsyncTreeNode({
-         //       text: 'zt',
-         //       expanded: true,
-         //       children: [
-         //           { text: 'one', id: 'one' },
-         //           { text: 'two', id: 'two' }
-         //       ]
-         //   })
-    });  cgo_tree.setRootNode(root);     
+            root: root
+    });    
+
+    cgo_tree.on("expandnode",function(node){      //树的展开时执行的事件
+    		var myDate = new Date();
+    		var month_nodes = [];
+        var year_nodes = [];
+    				if(node.id == "cgo_root"){
+       			    for(i = 2010; i < myDate.getFullYear()+1; i++ ){
+       		          year_nodes[i] = new Ext.tree.TreeNode({ text: i, id:i });
+       	     	  		root.appendChild(year_nodes[i]);
+                    if(i == myDate.getFullYear()){
+                        for(j=1; j < myDate.getMonth() + 2; j++){
+                            month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: j });
+                            year_nodes[i].appendChild(month_nodes[j]);
+                        }
+                    }
+                    else{
+       			            for(j = 1; j < 13; j++){
+       		 		        		  month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: j });
+       		 		              year_nodes[i].appendChild(month_nodes[j]);
+    			              }
+                    }
+    			      }
+            }
+	   });
+
