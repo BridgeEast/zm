@@ -24,9 +24,7 @@ Zm.dataBases.region = {
         return new Ext.grid.GridPanel({ 
             id: 'regionGrid',
             title: '部位',
-            region: 'center',
-            cm: cm,
-            store: store,
+            region: 'center', cm: cm, store: store,
             viewConfig: { forceFit: true },
             tbar: this.gridTbar()
         });                  
@@ -134,6 +132,19 @@ Zm.dataBases.region = {
         }
     },
 
+    
+    updateRegion: function() { 
+        var selection = Ext.getCmp('regionGrid').getSelectionModel();
+        if(!selection.getSelected()) { 
+            Ext.Msg.alert('警告', '请选择一条记录');
+        }else{ 
+            var data = selection.getSelected().data
+            this.addRegion("修改部位").show();             
+            Ext.getCmp('addName').setValue(data["name"]);
+            Ext.getCmp('addRemark').setValue(data["remark"]);
+        };
+    }, 
+
     deleteRegion: function() { 
         var selection = Ext.getCmp('regionGrid').getSelectionModel();
         if(selection.getSelected()) { 
@@ -153,17 +164,5 @@ Zm.dataBases.region = {
             Ext.Msg.alert('警告', '请选择一条记录');
         }
     },
-
-    updateRegion: function() { 
-        var selection = Ext.getCmp('regionGrid').getSelectionModel();
-        if(!selection.getSelected()) { 
-            Ext.Msg.alert('警告', '请选择一条记录');
-        }else{ 
-            var data = selection.getSelected().data
-            this.addRegion("修改部位").show();             
-            Ext.getCmp('addName').setValue(data["name"]);
-            Ext.getCmp('addRemark').setValue(data["remark"]);
-        };
-    } 
 
 };

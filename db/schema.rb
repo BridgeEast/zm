@@ -12,7 +12,8 @@
 
 ActiveRecord::Schema.define(:version => 20120821023116) do
 
-  create_table "advanced_orders", :primary_key => "advanced_order_id", :force => true do |t|
+  create_table "advanced_orders", :force => true do |t|
+    t.string   "advanced_order_id",                                  :null => false
     t.decimal  "total_price",         :precision => 10, :scale => 0
     t.date     "advanced_order_date"
     t.text     "remark"
@@ -39,7 +40,8 @@ ActiveRecord::Schema.define(:version => 20120821023116) do
     t.datetime "updated_at"
   end
 
-  create_table "contrast_make_manages", :primary_key => "factory_order_id", :force => true do |t|
+  create_table "contrast_make_manages", :force => true do |t|
+    t.string   "factory_order_id", :null => false
     t.string   "factory"
     t.string   "payment"
     t.datetime "created_at"
@@ -56,7 +58,8 @@ ActiveRecord::Schema.define(:version => 20120821023116) do
     t.datetime "updated_at"
   end
 
-  create_table "excel_receives", :primary_key => "excel_num", :force => true do |t|
+  create_table "excel_receives", :force => true do |t|
+    t.string   "excel_num",  :null => false
     t.string   "custom"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -111,7 +114,8 @@ ActiveRecord::Schema.define(:version => 20120821023116) do
     t.integer "nodeparent"
   end
 
-  create_table "orders", :primary_key => "order_id", :force => true do |t|
+  create_table "orders", :force => true do |t|
+    t.string   "order_id",                                       :null => false
     t.string   "server_num"
     t.string   "custom_num"
     t.string   "custom_contrast"
