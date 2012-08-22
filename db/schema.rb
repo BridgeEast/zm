@@ -40,14 +40,6 @@ ActiveRecord::Schema.define(:version => 20120821023116) do
     t.datetime "updated_at"
   end
 
-  create_table "contrast_make_manages", :force => true do |t|
-    t.string   "factory_order_id", :null => false
-    t.string   "factory"
-    t.string   "payment"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "details_of_shoes", :force => true do |t|
     t.integer  "general_shoe_id", :null => false
     t.integer  "region_id"
