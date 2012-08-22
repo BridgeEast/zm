@@ -58,7 +58,7 @@ Zm.dataBases.material = {
             labelWidth: 60,
             bodyStyle: 'padding: 10px 0 0 0',
             width: 300,
-            height: 200,
+            height: 190,
             frame: true,
             items: [
                 { id: 'addMaterial', fieldLabel: '材料', xtype: 'textfield', width: 200 },
@@ -168,7 +168,7 @@ Zm.dataBases.material = {
             this.addMaterial("修改部位").show();             
             Ext.getCmp('addMaterial').setValue(data["material"]);
             Ext.getCmp('addRemark').setValue(data["remark"]);
-            Ext.getCmp('addCreatedDate').setValue(data["createdDates"]);
+            Ext.getCmp('addCreatedDate').setValue(data["createdDate"]);
         };
     } 
 
