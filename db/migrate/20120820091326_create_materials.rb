@@ -1,8 +1,9 @@
 class CreateMaterials < ActiveRecord::Migration
   def self.up
     create_table :materials do |t|
-      t.string :name
-      t.string :remark
+      t.string :material, :null => false
+      t.text :remark
+      t.date :created_date
 
       t.timestamps
     end
@@ -12,4 +13,3 @@ class CreateMaterials < ActiveRecord::Migration
     drop_table :materials
   end
 end
-

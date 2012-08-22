@@ -113,4 +113,3 @@ Zm.managements.check_guest_order= {
     			      }
             }
 	   });
-

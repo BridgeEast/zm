@@ -116,7 +116,10 @@ Ext.onReady(function(){
 		 	buttons: [{
             	text: '确定'
         	},{
-				text: '重置'
+      				text: '重置', handler: function(){ 
+                  mouthdispatchlistenquiry1.form.reset();
+                  mouthdispatchlistenquiry2store.removeAll();
+              }
         	}]
     	});
 		mouthdispatchlistenquiry.hide();

@@ -1,4 +1,4 @@
-var mouthsheetenquiry;
+var mouthseetenquiry;
 
 Ext.onReady(function(){
 		
@@ -116,7 +116,10 @@ Ext.onReady(function(){
 		 	buttons: [{
             	text: '确定'
         	},{
-				text: '重置'
+				text: '重置', handler: function(){
+            mouthsheetenquiry1.form.reset();
+            mouthsheetenquiry2store.removeAll();
+            }
         	}]
     	});
 		mouthsheetenquiry.hide();

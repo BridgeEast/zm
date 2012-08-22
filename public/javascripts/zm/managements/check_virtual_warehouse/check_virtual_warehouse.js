@@ -1,12 +1,20 @@
-Zm.managements.check_virtual_warehouse= { 
+jm.managements.check_virtual_warehouse= { 
     init: function() { 
         Zm.pages.ViewPort = {
             layout: 'border',
             region:'center',
             items: [ 
                      {region:'north',layout:'fit',height:'90',title:'管理层-虚拟仓库管理'},
-                     {region:'west',layout:'fit', width:'180', items:[cvw_tree]},
-                     {region:'center',layout:'fit', items:[grid] }
+                     {region:'center',layout:'fit', items:[grid] },
+                     {
+                         region:'west',
+                     //  collapseMode: 'mini',  最小化后左边很细
+                     //  split: true,   调节west的宽度
+                         collapsible: true,
+                         layout:'fit',
+                         width:'180',
+                         items:[cvw_tree]
+                     }
                    ]
         };
     },

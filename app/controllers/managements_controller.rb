@@ -3,6 +3,19 @@ class ManagementsController < ApplicationController
          nodes = []
          VirtualWarehouseNode.node_or_parent.each do |x|
             nodes << { :text => x.nodetext, :expanded => true, :children => x.virtual_warehouse_tree }
+     def guest_order_node
+         nodes = []
+         GuestOrderNode.node_or_parent.each do |s|
+            nodes << { :text => s.nodetext, :expanded => true, :children => s.order_tree}
+         end
+                                                            #:children => [ {:text => s.id, :leaf => true } ]
+          render :json => nodes
+     end
+
+     def virtual_warehouse_node 
+         nodes = []
+         VirtualWarehouseNode.node_or_parent.each do |x|
+            nodes << { :text => x.nodetext, :children => x.virtual_warehouse_tree }
          end
           render :json => nodes
      end
