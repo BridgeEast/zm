@@ -8,6 +8,8 @@ class DataBasesController < ApplicationController
   end
   def color
   end
+  def procession
+  end
 
   #scope: base_datas/region/region.js
   #scope: data_bases/material/material.js  
@@ -26,6 +28,11 @@ class DataBasesController < ApplicationController
       format.json{ render :json => { :color => Color.all } }
       end
   end
+  def get_procession
+    respond_to do |format|
+      format.json{ render :json => { :procession => Procession.all } }
+      end
+  end  
 
   #scope: data_bases/region/region.js
   #scope: data_bases/material/material.js
@@ -41,6 +48,10 @@ class DataBasesController < ApplicationController
     Color.create!(params[:record])
     render :json => {}
   end
+  def create_procession
+    Procession.create!(params[:record])
+    render :json => {}
+  end  
 
   #scope: data_bases/region/region.js
   #scope: data_bases/material/material.js
@@ -56,6 +67,10 @@ class DataBasesController < ApplicationController
     Color.find(params[:id]).destroy
        render :json => {}
   end
+  def delete_procession
+    Procession.find(params[:id]).destroy
+       render :json => {}
+  end  
 
   #scope: data_bases/region/region.js
   #scope: data_bases/material/material.js
@@ -68,7 +83,11 @@ class DataBasesController < ApplicationController
     render :json => {}
   end  
   def update_color
-    Color.find(params[:record][:id]).update_attributes(params[:recors])
+    Color.find(params[:record][:id]).update_attributes(params[:record])
+    render :json => {}
+  end
+  def update_procession
+    Procession.find(params[:record][:id]).update_attributes(params[:record])
     render :json => {}
   end
 

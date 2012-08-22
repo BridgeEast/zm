@@ -1,31 +1,33 @@
-Zm.dataBases.region = { 
+Zm.dataBases.procession = { 
     init: function() { 
-        Zm.pages.ViewPort = {
+        Zm.pages.ViewPort = { 
             layout: 'border',
             region:'center',
-            items: [this.createRegionGrid()]
+            items: [this.createProcessionGrid()]
         };
     },
 
-    createRegionGrid: function() { 
+    createProcessionGrid: function() { 
         var cm = new Ext.grid.ColumnModel([ 
             new Ext.grid.RowNumberer(),
-            { header: '部位', dataIndex: 'region' },
+            { header: '加工方法', dataIndex: 'procession' },
             { header: '备注', dataIndex: 'remark' },
             { header: '创建日期', dataIndex: 'created_date' }
         ]);
 
         var store = new Ext.data.JsonStore({ 
-            url: '/data_bases/get_region.json',
-            fields: ['id','region', 'remark', 'created_date'],
-            root: 'region',
+            url: '/data_bases/get_procession.json',
+            fields: ['id','procession', 'remark','created_date'],
+            root: 'procession',
             autoLoad: true
         });
 
         return new Ext.grid.GridPanel({ 
-            id: 'regionGrid',
-            title: '部位',
-            region: 'center', cm: cm, store: store,
+            id: 'processionGrid',
+            title: '加工方法',
+            region: 'center',
+            cm: cm,
+            store: store,
             viewConfig: { forceFit: true },
             tbar: this.gridTbar()
         });                  
@@ -35,23 +37,23 @@ Zm.dataBases.region = {
         return new Ext.Toolbar({ 
             defaults: { 
                 scope: this 
-            },    
+            },
             items: [{ 
                 text: '添加',
-                handler: function() { this.addRegion("添加部位").show() }
+                handler: function() { this.addProcession("添加加工方法").show() }
             }, { 
                 text: '删除',
-                handler: function() { this.deleteRegion() }
+                handler: function() { this.deleteProcession() }
             }, { 
                 text: '修改',
-                handler: function() { this.updateRegion() }
+                handler: function() { this.updateProcession() }
             }]
         });        
     },
 
-    addRegion: function(type) {
-        var addRegionForm = new Ext.form.FormPanel({ 
-            id: 'addRegionForm',
+    addProcession: function(type) { 
+        var addProcessionForm = new Ext.form.FormPanel({ 
+            id: 'addProcessionForm',
             labelAlign: 'right',
             labelWidth: 60,
             bodyStyle: 'padding: 10px 0 0 0',
@@ -59,15 +61,15 @@ Zm.dataBases.region = {
             height: 190,
             frame: true,
             items: [
-                { id: 'addRegion', fieldLabel: '部位', xtype: 'textfield', width: 200 },
+                { id: 'addProcession', fieldLabel: '加工方法', xtype: 'textfield', width: 200 },
                 { id: 'addRemark', fieldLabel: '备注', xtype: 'textarea', width: 200 },
-                { id: 'addCreatedDate', fieldLabel:'创建日期', xtype: 'datefield', width: 200}
+                { id: 'addCreatedDate', fieldLabel: '创建日期', xtype: 'datefield', width: 200 }
             ],
             buttons: [{ 
                 text: '保存',
                 scope: this,
                 handler: function() { 
-                    this.checkForRegion(type)
+                    this.checkForProcession(type)
                 }
             }]
         });
@@ -76,36 +78,36 @@ Zm.dataBases.region = {
             id: 'addWindow',
             title: type,
             modal: true,
-            items: [ addRegionForm ]
+            items: [ addProcessionForm ]
         });           
     },
 
-    checkForRegion: function(type) { 
-        var region = Ext.getCmp('addRegion').getValue();
+    checkForProcession: function(type) { 
+        var procession = Ext.getCmp('addProcession').getValue();
         var remark = Ext.getCmp('addRemark').getValue();
-        var createdDate = Ext.getCmp('addCreatedDate').getValue();
-        var selection = Ext.getCmp('regionGrid').getSelectionModel();
-        var store = Ext.getCmp('regionGrid').store;
+        var created_date = Ext.getCmp('addCreatedDate').getValue();
+        var selection = Ext.getCmp('processionGrid').getSelectionModel();
+        var store = Ext.getCmp('processionGrid').store;
         var win
         var record = { 
-            region: region,
+            procession: procession,
             remark: remark,
-            created_date: createdDate
+            created_date: created_date
         };
-        if(region) { 
-            if(type == "修改部位") { 
+        if(procession) { 
+            if(type == "修改加工方法") { 
                 var record = { 
                     id: selection.getSelected().data["id"],
-                    region: region,
+                    procession: procession,
                     remark: remark,
-                    created_date: createdDate
+                    created_date: created_date
                 };
                 Ext.Ajax.request({ 
-                    url: '/data_bases/update_region.json',
+                    url: '/data_bases/update_procession.json',
                     method: 'post',
                     jsonData: { record: record },
                     success: function() { 
-                        Ext.getCmp('regionGrid').store.load();                    
+                        Ext.getCmp('processionGrid').store.load();                    
                         Ext.getCmp('addWindow').close();                        
                         Ext.Msg.alert('修改', '修改成功!');
                     },
@@ -115,7 +117,7 @@ Zm.dataBases.region = {
                 });
             }else{ 
                 Ext.Ajax.request({ 
-                    url: '/data_bases/create_region.json',
+                    url: '/data_bases/create_procession.json',
                     method: 'post',
                     jsonData: { record: record },
                     success: function() { 
@@ -125,9 +127,9 @@ Zm.dataBases.region = {
                         Ext.Msg.alert('添加', '添加失败!');         
                     },
                     callback: function() { 
-                        Ext.getCmp('addRegionForm').form.reset();
+                        Ext.getCmp('addProcessionForm').form.reset();
                         Ext.getCmp('addWindow').close();
-                        Ext.getCmp('regionGrid').store.load();
+                        Ext.getCmp('processionGrid').store.load();
                     }
                 });      
             }
@@ -137,28 +139,15 @@ Zm.dataBases.region = {
         }
     },
 
-    
-    updateRegion: function() { 
-        var selection = Ext.getCmp('regionGrid').getSelectionModel();
-        if(!selection.getSelected()) { 
-            Ext.Msg.alert('警告', '请选择一条记录');
-        }else{ 
-            var data = selection.getSelected().data
-            this.addRegion("修改部位").show();             
-            Ext.getCmp('addName').setValue(data["name"]);
-            Ext.getCmp('addRemark').setValue(data["remark"]);
-        };
-    }, 
-
-    deleteRegion: function() { 
-        var selection = Ext.getCmp('regionGrid').getSelectionModel();
+    deleteProcession: function() { 
+        var selection = Ext.getCmp('processionGrid').getSelectionModel();
         if(selection.getSelected()) { 
             Ext.Ajax.request({ 
-                url: '/data_bases/delete_region.json',
+                url: '/data_bases/delete_procession.json',
                 method: 'post',
                 jsonData: { id: selection.getSelected().id },
                 success: function() { 
-                    Ext.getCmp('regionGrid').store.load();                    
+                    Ext.getCmp('processionGrid').store.load();                    
                     Ext.Msg.alert('删除', '删除成功!');
                 },
                 failure: function() { 
@@ -170,17 +159,18 @@ Zm.dataBases.region = {
         }
     },
 
-    updateRegion: function() { 
-        var selection = Ext.getCmp('regionGrid').getSelectionModel();
+    updateProcession: function() { 
+        var selection = Ext.getCmp('processionGrid').getSelectionModel();
         if(!selection.getSelected()) { 
             Ext.Msg.alert('警告', '请选择一条记录');
         }else{ 
             var data = selection.getSelected().data
-            this.addRegion("修改部位").show();         
-            Ext.getCmp('addRegion').setValue(data["region"]);
+            this.addProcession("修改加工方法").show();             
+            Ext.getCmp('addProcession').setValue(data["procession"]);
             Ext.getCmp('addRemark').setValue(data["remark"]);
             Ext.getCmp('addCreatedDate').setValue(data["createdDate"]);
         };
     } 
 
 };
+

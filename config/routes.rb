@@ -39,6 +39,11 @@ Zm::Application.routes.draw do
      post "create_color"
      post "delete_color"
      post "update_color"
+     get "procession"
+     get "get_procession"
+     post "create_procession"
+     post "delete_procession"
+     post "update_procession"
    end
  end
 
