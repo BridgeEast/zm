@@ -10,13 +10,14 @@ Zm.dataBases.color = {
     createColorGrid: function() { 
         var cm = new Ext.grid.ColumnModel([ 
             new Ext.grid.RowNumberer(),
-            { header: '颜色', dataIndex: 'name' },
-            { header: '备注', dataIndex: 'remark' }
+            { header: '颜色', dataIndex: 'color' },
+            { header: '备注', dataIndex: 'remark' },
+            { header: '创建日期', dataIndex: 'created_date' }
         ]);
 
         var store = new Ext.data.JsonStore({ 
             url: '/data_bases/get_color.json',
-            fields: ['id','name', 'remark'],
+            fields: ['id','color', 'remark','created_date'],
             root: 'color',
             autoLoad: true
         });
@@ -57,11 +58,12 @@ Zm.dataBases.color = {
             labelWidth: 60,
             bodyStyle: 'padding: 10px 0 0 0',
             width: 300,
-            height: 160,
+            height: 190,
             frame: true,
             items: [
-                { id: 'addName', fieldLabel: '颜色', xtype: 'textfield', width: 200 },
-                { id: 'addRemark', fieldLabel: '备注', xtype: 'textarea', width: 200 }
+                { id: 'addColor', fieldLabel: '颜色', xtype: 'textfield', width: 200 },
+                { id: 'addRemark', fieldLabel: '备注', xtype: 'textarea', width: 200 },
+                { id: 'addCreatedDate', fieldLabel: '创建日期', xtype: 'datefield', width: 200 }
             ],
             buttons: [{ 
                 text: '保存',
@@ -81,21 +83,24 @@ Zm.dataBases.color = {
     },
 
     checkForColor: function(type) { 
-        var name = Ext.getCmp('addName').getValue();
+        var color = Ext.getCmp('addColor').getValue();
         var remark = Ext.getCmp('addRemark').getValue();
+        var created_date = Ext.getCmp('addCreatedDate').getValue();
         var selection = Ext.getCmp('colorGrid').getSelectionModel();
         var store = Ext.getCmp('colorGrid').store;
         var win
         var record = { 
-            name: name,
-            remark: remark
+            color: color,
+            remark: remark,
+            created_date: created_date
         };
-        if(name) { 
+        if(color) { 
             if(type == "修改颜色") { 
                 var record = { 
                     id: selection.getSelected().data["id"],
-                    name: name,
-                    remark: remark
+                    color: color,
+                    remark: remark,
+                    created_date: created_date
                 };
                 Ext.Ajax.request({ 
                     url: '/data_bases/update_color.json',
@@ -161,8 +166,9 @@ Zm.dataBases.color = {
         }else{ 
             var data = selection.getSelected().data
             this.addColor("修改颜色").show();             
-            Ext.getCmp('addName').setValue(data["name"]);
+            Ext.getCmp('addColor').setValue(data["color"]);
             Ext.getCmp('addRemark').setValue(data["remark"]);
+            Ext.getCmp('addCreatedDate').setValue(data["createdDate"]);
         };
     } 
 

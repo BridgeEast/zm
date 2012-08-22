@@ -5,6 +5,8 @@ tmp
 *.log
 *.js~
 *.rb~
+*.swn
+*.swo
 doc/js_doc/*
 usr/*
 config/database.yml

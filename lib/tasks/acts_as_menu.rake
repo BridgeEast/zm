@@ -29,10 +29,10 @@ namespace :menu do
       { :name => "管理层",
         :s_menus_attributes => [
           { :name => "查看鞋库", :url => "/managements/check_store_of_shoes" },
-          { :name => "查看客户心愿单", :url => "" },
-          { :name => "查看预购单", :url => "" },
+          { :name => "查看客户心愿单", :url => "/managements/check_wish_list" },
+          { :name => "查看预购单", :url => "/managements/check_advanced_order" },
           { :name => "查看订单", :url => "/managements/check_guest_order" },
-          { :name => "查看合同", :url => "" },
+          { :name => "查看合同", :url => "/managements/check_factory_orde" },
           { :name => "查看虚拟仓库", :url => "/managements/check_virtual_warehouse" }
         ]
       },
@@ -42,7 +42,7 @@ namespace :menu do
           { :name => "部位", :url => "/data_bases/region" },
           { :name => "材料", :url => "/data_bases/material" },
           { :name => "颜色", :url => "/data_bases/color" },
-          { :name => "加工方法", :url => "" }
+          { :name => "加工方法", :url => "/data_bases/procession" }
         ]
       }
       ])

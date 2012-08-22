@@ -1,62 +1,29 @@
-Zm.managements.check_virtual_warehouse= { 
+jm.managements.check_virtual_warehouse= { 
     init: function() { 
         Zm.pages.ViewPort = {
             layout: 'border',
             region:'center',
             items: [ 
                      {region:'north',layout:'fit',height:'90',title:'管理层-虚拟仓库管理'},
-                     {region:'west',layout:'fit', width:'180', items:[cvw_tree]},
-                     {region:'center',layout:'fit', items:[grid]}
+                     {region:'center',layout:'fit', items:[grid] },
+                     {
+                         region:'west',
+                     //  collapseMode: 'mini',  最小化后左边很细
+                     //  split: true,   调节west的宽度
+                         collapsible: true,
+                         layout:'fit',
+                         width:'180',
+                         items:[cvw_tree]
+                     }
                    ]
         };
     },
 };
- 
-    var root=new Ext.tree.AsyncTreeNode({   
-             id:"factory_order_root", text:"全部订单", expanded:true,
-		     children:[
-                    {text:'2012',id:'2012_node', expanded:true,
-                    children:[
-                               {text:'三月',id:'mar_node',expanded:true,
-                               children:[
-                                          {text:'合同1',id:'mar_factory_order1_node',leaf:true},
-                                          {text:'合同2',id:'mar_factory_order2_node',leaf:true},
-                                          {text:'合同3',id:'mar_factory_order3_node',leaf:true},
-                               ]},
-
-                               {text:'二月',id:'feb_node',expanded:true,
-                               children:[
-                                          {text:'合同1',id:'feb_factory_order1_node',leaf:true},
-                                          {text:'合同2',id:'feb_factory_order2_node',leaf:true},
-                                          {text:'合同3',id:'feb_factory_order3_node',leaf:true},
-                               ]},
-
-                               {text:'一月',id:'jan_node',expanded:true,
-                               children:[
-                                          {text:'合同1',id:'jan_factory_order1_node',leaf:true},
-                                          {text:'合同2',id:'jan_factory_order2_node',leaf:true},
-                                          {text:'合同3',id:'jan_factory_order3_node',leaf:true},
-                               ]}
-                  ]},  
-                    {text:'2011',id:'2011_node',leaf:true},  
-                    {text:'2010',id:'2010_node',leaf:true},  
-                  ]   
-        });   
-    var cvw_tree=new Ext.tree.TreePanel({     
-        
-		     id:'cvw_tree', 
-             width: 210,  
-             minSize: 210,  
-             maxSize: 300, 
-             lines:true, 
-             autoScroll:true,
-		
-    });  cvw_tree.setRootNode(root);       
 
         var cm = new Ext.grid.ColumnModel([ 
             new Ext.grid.RowNumberer(),
-            { header: '图鞋1', dataIndex: 'photo_one' },
-            { header: '图鞋2', dataIndex: 'photo_two' },
+            { header: '图鞋1', dataIndex: 'nodetext' },
+            { header: '图鞋2', dataIndex: 'nodeparent' },
             { header: '鞋号', dataIndex: 'shoes_id' },
             { header: '鞋型', dataIndex: 'types_of_shoes' },
             { header: '适合人群', dataIndex: 'suitable_people' },
@@ -70,8 +37,8 @@ Zm.managements.check_virtual_warehouse= {
 
         var store = new Ext.data.JsonStore({ 
             url: '/managements/get_check_virtual_warehouse.json',
-            fields: ['id','photo_one', 'photo_two','shoes_id','types_of_shoes','suitable_people','colors','size','number_of_shoes','finished_number','warehouse_number','production_date'],
-            root: 'check_virtual_warehouse',
+            fields: ['nodetext','nodeparent'],
+            root: 'virtual_warehouse_node',
             autoLoad: true
         });
 
@@ -93,6 +60,23 @@ Zm.managements.check_virtual_warehouse= {
           }, '-', {
               text: '月发货查询',
             	handler: function(){  mouthdispatchlistenquiry.show();  }
+          }, '-', {
+              text: 'dddddddddddd',
+            	handler: function(){ 
+              var record = [];
+                  for(i = 0; i < store.getCount(); i++){
+                       record[i] = store.getAt(i);
+                    //  alert(record.get('nodetext'));
+
+                  };
+                  for(m = 0; m < 6; m++){
+                      alert(record[m].get('nodetext'));
+                  }
+              }
+          }, '-', {
+              text: 'ssssssssssssss', handler: function(){
+                  alert(store.getCount());
+            }
           }, '-'])
         });                  
 
@@ -110,4 +94,49 @@ Zm.managements.check_virtual_warehouse= {
         	grid.getSelectionModel().selectRow(rowIndex);
         	virtualwarehouseenquiry2contextmenu.showAt(e.getXY());
     	});	
+      var root = new Ext.tree.AsyncTreeNode({
+          id: "cvw_root",
+          text: "全部合同",
+          children: []
+      });
+
+      var cvw_tree = new Ext.tree.TreePanel({
+          root: root
+      });      
+
+    cvw_tree.on("expandnode",function(node){      //树的展开时执行的事件
+    		var myDate = new Date();
+    		var month_nodes = [];
+        var year_nodes = [];
+        var contract_nodes = [];
+        var record = [];
+        var txt = [];
+            for(m = 0; m < store.getCount(); m++){
+                record[m] = store.getAt(m);
+            };
+    				if(node.id == "cvw_root"){
+       			    for(i = 2010; i < myDate.getFullYear()+1; i++ ){
+       		          year_nodes[i] = new Ext.tree.TreeNode({ text: i, id: i + "sss" });
+       	     	  		root.appendChild(year_nodes[i]);
+                    if(i == myDate.getFullYear()){
+                        for(j=1; j < myDate.getMonth() + 2; j++){
+                            month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: j + "ddd" });
+                            year_nodes[i].appendChild(month_nodes[j]);
+
+                            for(k = 0; k < 5; k++){
+                                contract_nodes[k] = new Ext.tree.TreeNode({ text: record[k].get('nodetext'), id: k });
+                                month_nodes[j].appendChild(contract_nodes[k]);
+                            };
+                        }
+                    }
+                    else{
+       			            for(j=1;j<13;j++){
+       		 		        		  month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: j });
+       		 		              year_nodes[i].appendChild(month_nodes[j]);
+    			              }
+                    }
+    			      }
+            }
+
+     });      
       
