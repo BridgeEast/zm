@@ -26,12 +26,12 @@ class DataBasesController < ApplicationController
   def get_color
     respond_to do |format|
       format.json{ render :json => { :color => Color.all } }
-      end
+    end
   end
   def get_procession
     respond_to do |format|
       format.json{ render :json => { :procession => Procession.all } }
-      end
+    end
   end  
 
   #scope: data_bases/region/region.js
@@ -86,7 +86,6 @@ class DataBasesController < ApplicationController
     Color.find(params[:record][:id]).update_attributes(params[:record])
     render :json => {}
   end
-
   def update_procession
     Procession.find(params[:record][:id]).update_attributes(params[:record])
     render :json => {}

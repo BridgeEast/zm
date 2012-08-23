@@ -2,6 +2,7 @@ Zm.managements.check_store_of_shoes = {
 	init: function() {
 		Zm.pages.ViewPort = {
 			layout: 'border',
+      region: 'center',
 			items: [{
 				region: 'north',
 				title: '管理层-查看鞋库'

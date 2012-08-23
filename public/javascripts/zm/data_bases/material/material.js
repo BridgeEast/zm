@@ -24,7 +24,7 @@ Zm.dataBases.material = {
 
         return new Ext.grid.GridPanel({ 
             id: 'materialGrid',
-            title: '材料',
+            title: '基础数据-材料',
             region: 'center',
             cm: cm,
             store: store,
@@ -85,22 +85,22 @@ Zm.dataBases.material = {
     checkForMaterial: function(type) { 
         var material = Ext.getCmp('addMaterial').getValue();
         var remark = Ext.getCmp('addRemark').getValue();
-        var created_date = Ext.getCmp('addCreatedDate').getValue();
+        var createdDate = Ext.getCmp('addCreatedDate').getValue();
         var selection = Ext.getCmp('materialGrid').getSelectionModel();
         var store = Ext.getCmp('materialGrid').store;
         var win
         var record = { 
             material: material,
             remark: remark,
-            created_date: created_date
+            created_date: createdDate
         };
         if(material) { 
-            if(type == "修改部位") { 
+            if(type == "修改材料") { 
                 var record = { 
                     id: selection.getSelected().data["id"],
                     material: material,
                     remark: remark,
-                    created_date: created_date
+                    created_date: createdDate
                 };
                 Ext.Ajax.request({ 
                     url: '/data_bases/update_material.json',
@@ -135,7 +135,7 @@ Zm.dataBases.material = {
             }
 
         }else{ 
-            Ext.Msg.alert('警告', '部位不能为空' );
+            Ext.Msg.alert('警告', '材料不能为空' );
         }
     },
 
@@ -165,10 +165,10 @@ Zm.dataBases.material = {
             Ext.Msg.alert('警告', '请选择一条记录');
         }else{ 
             var data = selection.getSelected().data
-            this.addMaterial("修改部位").show();             
+            this.addMaterial("修改材料").show();             
             Ext.getCmp('addMaterial').setValue(data["material"]);
             Ext.getCmp('addRemark').setValue(data["remark"]);
-            Ext.getCmp('addCreatedDate').setValue(data["createdDate"]);
+            Ext.getCmp('addCreatedDate').setValue(data["created_date"]);
         };
     } 
 
