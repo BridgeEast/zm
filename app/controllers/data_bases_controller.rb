@@ -14,8 +14,16 @@ class DataBasesController < ApplicationController
   #scope: base_datas/region/region.js
   #scope: data_bases/material/material.js  
   def get_region
+    @regions = Region.all
+    @region_grid = @regions.collect! do|a|
+      { 
+        :id => a.id,
+        :name => a.region,
+        :remark => a.remark
+      }
+    end
     respond_to do |format|
-      format.json{ render :json => { :region => Region.all } }
+      format.json{ render :json => { :region => @region_grid } }
     end
   end
   def get_material

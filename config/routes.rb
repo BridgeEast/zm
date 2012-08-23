@@ -61,7 +61,9 @@ Zm::Application.routes.draw do
      get "get_check_virtual_warehouse"
 
      get "get_general_shoes"
+     get "get_check_shoes"
      get "get_details_of_shoes"
+
      get "check_factory_order"
      get "get_cfo_grid"
      get "check_wish_list"
