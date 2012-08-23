@@ -1,5 +1,4 @@
 GEM
-  remote: http://ruby.taobao.org/
   specs:
     aasm (3.0.8)
     abstract (1.0.0)

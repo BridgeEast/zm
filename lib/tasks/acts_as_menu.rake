@@ -28,7 +28,7 @@ namespace :menu do
       },
       { :name => "管理层",
         :s_menus_attributes => [
-          { :name => "查看鞋库", :url => "" },
+          { :name => "查看鞋库", :url => "/managements/check_store_of_shoes" },
           { :name => "查看客户心愿单", :url => "/managements/check_wish_list" },
           { :name => "查看预购单", :url => "/managements/check_advanced_order" },
           { :name => "查看订单", :url => "/managements/check_guest_order" },

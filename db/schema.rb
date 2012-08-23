@@ -31,6 +31,20 @@ ActiveRecord::Schema.define(:version => 20120821023116) do
     t.datetime "updated_at"
   end
 
+  create_table "check_store_of_shoes", :force => true do |t|
+    t.string   "photoOne"
+    t.string   "photoTwo"
+    t.string   "shoesId"
+    t.string   "typesOfShoes"
+    t.string   "suitablePeople"
+    t.string   "colors"
+    t.decimal  "price",          :precision => 10, :scale => 0
+    t.date     "productionDate"
+    t.text     "remark"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "colors", :force => true do |t|
     t.string   "color",        :null => false
     t.text     "remark"

@@ -52,6 +52,12 @@ Zm::Application.routes.draw do
      get "check_guest_order"
      get "check_virtual_warehouse"
      get "get_tree_node"
+     get "check_store_of_shoes"
+     get "node"
+     get "check_guest_order"
+     get "check_virtual_warehouse"
+     get "get_check_store_of_shoes"
+     get "get_check_guest_order"
      get "get_check_virtual_warehouse"
 
      get "get_general_shoes"

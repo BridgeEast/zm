@@ -26,12 +26,12 @@ class DataBasesController < ApplicationController
   def get_color
     respond_to do |format|
       format.json{ render :json => { :color => Color.all } }
-      end
+    end
   end
   def get_procession
     respond_to do |format|
       format.json{ render :json => { :procession => Procession.all } }
-      end
+    end
   end  
 
   #scope: data_bases/region/region.js

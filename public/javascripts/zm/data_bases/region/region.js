@@ -24,8 +24,10 @@ Zm.dataBases.region = {
 
         return new Ext.grid.GridPanel({ 
             id: 'regionGrid',
-            title: '部位',
-            region: 'center', cm: cm, store: store,
+            title: '基础数据-部位',
+            region: 'center', 
+            cm: cm, 
+            store: store,
             viewConfig: { forceFit: true },
             tbar: this.gridTbar()
         });                  
@@ -179,7 +181,7 @@ Zm.dataBases.region = {
             this.addRegion("修改部位").show();         
             Ext.getCmp('addRegion').setValue(data["region"]);
             Ext.getCmp('addRemark').setValue(data["remark"]);
-            Ext.getCmp('addCreatedDate').setValue(data["createdDate"]);
+            Ext.getCmp('addCreatedDate').setValue(data["created_date"]);
         };
     } 
 

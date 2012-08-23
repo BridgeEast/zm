@@ -11,8 +11,8 @@ User:Justin
 更新指令：
 git pull --rebase 拉去远程仓库代码，更新代码
 提交步骤：
-git add .  把本地要提交的代码移到changes to be committed
-git commit -m'此次提交注释'
+git add .   把本地要提交的代码移到changes to be committed
+git commit -m'此次提交注释' //对你更新或修改了哪些内容做一个描述。
 git pull --rebase 更新代码
 git push origin master 提交到远程仓库
 常用指令
@@ -29,3 +29,10 @@ User: Lixiaobo
 4、要在 public/javascripts/zm/zm.js 中声明js模块名
 5、在 config/routes.rb 写路由
 
+git commit -m'为了更新代码'
+git pull --rebase
+
+=========================
+关于创建基础数据：
+在lib/tasks/base_data.rake里面添加创建数据纪录，再执行rake data:create_datas
+可以通过在终端 执行 rake -T 查看有哪些rake 指令

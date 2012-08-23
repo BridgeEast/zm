@@ -24,7 +24,7 @@ Zm.dataBases.procession = {
 
         return new Ext.grid.GridPanel({ 
             id: 'processionGrid',
-            title: '加工方法',
+            title: '基础数据-加工方法',
             region: 'center',
             cm: cm,
             store: store,
@@ -85,14 +85,14 @@ Zm.dataBases.procession = {
     checkForProcession: function(type) { 
         var procession = Ext.getCmp('addProcession').getValue();
         var remark = Ext.getCmp('addRemark').getValue();
-        var created_date = Ext.getCmp('addCreatedDate').getValue();
+        var createdDate = Ext.getCmp('addCreatedDate').getValue();
         var selection = Ext.getCmp('processionGrid').getSelectionModel();
         var store = Ext.getCmp('processionGrid').store;
         var win
         var record = { 
             procession: procession,
             remark: remark,
-            created_date: created_date
+            created_date: createdDate
         };
         if(procession) { 
             if(type == "修改加工方法") { 
@@ -168,7 +168,7 @@ Zm.dataBases.procession = {
             this.addProcession("修改加工方法").show();             
             Ext.getCmp('addProcession').setValue(data["procession"]);
             Ext.getCmp('addRemark').setValue(data["remark"]);
-            Ext.getCmp('addCreatedDate').setValue(data["createdDate"]);
+            Ext.getCmp('addCreatedDate').setValue(data["created_date"]);
         };
     } 
 

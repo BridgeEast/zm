@@ -24,7 +24,7 @@ Zm.dataBases.color = {
 
         return new Ext.grid.GridPanel({ 
             id: 'colorGrid',
-            title: '颜色',
+            title: '基础数据-颜色',
             region: 'center',
             cm: cm,
             store: store,
@@ -85,14 +85,14 @@ Zm.dataBases.color = {
     checkForColor: function(type) { 
         var color = Ext.getCmp('addColor').getValue();
         var remark = Ext.getCmp('addRemark').getValue();
-        var created_date = Ext.getCmp('addCreatedDate').getValue();
+        var createdDate = Ext.getCmp('addCreatedDate').getValue();
         var selection = Ext.getCmp('colorGrid').getSelectionModel();
         var store = Ext.getCmp('colorGrid').store;
         var win
         var record = { 
             color: color,
             remark: remark,
-            created_date: created_date
+            created_date: createdDate
         };
         if(color) { 
             if(type == "修改颜色") { 
@@ -100,7 +100,7 @@ Zm.dataBases.color = {
                     id: selection.getSelected().data["id"],
                     color: color,
                     remark: remark,
-                    created_date: created_date
+                    created_date: createdDate
                 };
                 Ext.Ajax.request({ 
                     url: '/data_bases/update_color.json',
@@ -168,7 +168,7 @@ Zm.dataBases.color = {
             this.addColor("修改颜色").show();             
             Ext.getCmp('addColor').setValue(data["color"]);
             Ext.getCmp('addRemark').setValue(data["remark"]);
-            Ext.getCmp('addCreatedDate').setValue(data["createdDate"]);
+            Ext.getCmp('addCreatedDate').setValue(data["created_date"]);
         };
     } 
 
