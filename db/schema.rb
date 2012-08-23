@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120822080342) do
+ActiveRecord::Schema.define(:version => 20120821023116) do
 
   create_table "advanced_orders", :force => true do |t|
     t.string   "advanced_order_id",                                  :null => false
@@ -50,14 +50,6 @@ ActiveRecord::Schema.define(:version => 20120822080342) do
     t.string   "color",        :null => false
     t.text     "remark"
     t.date     "created_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "contrast_make_manages", :force => true do |t|
-    t.string   "factory_order_id", :null => false
-    t.string   "factory"
-    t.string   "payment"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
