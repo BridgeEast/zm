@@ -1,24 +1,4 @@
 class ManagementsController < ApplicationController
-     def virtual_warehouse_node 
-         nodes = []
-         VirtualWarehouseNode.node_or_parent.each do |x|
-            nodes << { :text => x.nodetext, :expanded => true, :children => x.virtual_warehouse_tree }
-     def guest_order_node
-         nodes = []
-         GuestOrderNode.node_or_parent.each do |s|
-            nodes << { :text => s.nodetext, :expanded => true, :children => s.order_tree}
-         end
-                                                            #:children => [ {:text => s.id, :leaf => true } ]
-          render :json => nodes
-     end
-
-     def virtual_warehouse_node 
-         nodes = []
-         VirtualWarehouseNode.node_or_parent.each do |x|
-            nodes << { :text => x.nodetext, :children => x.virtual_warehouse_tree }
-         end
-          render :json => nodes
-     end
          
     def check_guest_order
     end
@@ -26,18 +6,14 @@ class ManagementsController < ApplicationController
     def check_virtual_warehouse
     end
 
-    def guest_order_node
-    end
-  
-    def get_check_guest_order
-        respond_to do |format|
-        format.json{render :json => { :guest_order_node => GuestOrderNode.all } }
-      end
-    end
-  
     def get_check_virtual_warehouse
+        render :json => { :general_shoe => SizeOfShoe.find(:all, :conditions => ["created_at like ?", params[:date] + "%" ])}
+#         render :json => { :general_shoe => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes,size_of_shoes where general_shoes.id=size_of_shoes.id and size_of_shoes.created_at like '2012-0%'") }
+    end
+ 
+    def get_tree_node
       respond_to do |format|
-        format.json{render :json => { :virtual_warehouse_node => VirtualWarehouseNode.all } }
+        format.json{ render :json => { :tree_node => VirtualWarehouseNode.all } }
       end
     end
 end

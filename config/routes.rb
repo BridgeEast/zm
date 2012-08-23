@@ -49,11 +49,11 @@ Zm::Application.routes.draw do
 
  resources :managements do
    collection do
-     get "node"
      get "check_guest_order"
      get "check_virtual_warehouse"
-     get "get_check_guest_order"
+     get "get_tree_node"
      get "get_check_virtual_warehouse"
+
      get "get_general_shoes"
      get "get_details_of_shoes"
      get "check_factory_order"
