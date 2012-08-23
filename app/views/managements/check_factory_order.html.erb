@@ -1,0 +1,7 @@
+<%= javascript_include_tag "zm/zm.js", "zm/managements/check_factory_order/check_factory_order.js", "zm/managements/check_factory_order/click_event.js", "zm/managements/tree/cfoTree.js", "zm/managements/tree/getDate.js" %>
+<script>
+  Ext.onReady(function(){ 
+    Zm.managements.CheckFactoryOrder.init();
+    Zm.managements.CheckFactoryOrder.clickEvent.menuEvent();
+  });
+  </script>

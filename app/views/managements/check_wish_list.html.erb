@@ -1,0 +1,7 @@
+<%= javascript_include_tag "zm/zm.js", "zm/managements/check_wish_list/check_wish_list.js","zm/managements/check_wish_list/click_event.js", "zm/managements/tree/caoOrCwlTreeNode.js","zm/managements/tree/getDate.js" %>
+<script>
+  Ext.onReady( function(){ 
+    Zm.managements.CheckWishList.init();
+    Zm.managements.CheckWishList.clickEvent.menuEvent();
+  });
+  </script>
