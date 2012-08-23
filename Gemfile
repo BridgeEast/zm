@@ -1,12 +1,6 @@
 #source 'http://rubygems.org'
-#gem 'rails', '3.0.3'
-
-# Bundle edge Rails instead:
-
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-#gem 'mysql2'
-source "http://ruby.taobao.org"
-# rails basic gem
+#source 'http://ruby.taobao.org'
+#
 gem "rails", "3.0.3"
 gem "rake", "0.8.7"
 gem "thor"
@@ -27,7 +21,6 @@ gem "devise"
 gem "cancan"  
 gem "magic_encoding" 
 gem "rails-erd"
-
 
 # Use unicorn as the web server
 # gem 'unicorn'
@@ -51,3 +44,7 @@ gem "rails-erd"
 # group :development, :test do
 #   gem 'webrat'
 # end
+group :development do
+	gem 'hirb','0.6.1'
+	gem 'hirb-unicode'
+end

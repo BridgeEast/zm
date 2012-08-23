@@ -1,5 +1,4 @@
 GEM
-  remote: http://ruby.taobao.org/
   specs:
     aasm (3.0.8)
     abstract (1.0.0)
@@ -36,7 +35,7 @@ GEM
     bcrypt-ruby (3.0.1)
     builder (2.1.2)
     cancan (1.6.8)
-    capistrano (2.12.0)
+    capistrano (2.13.3)
       highline
       net-scp (>= 1.0.0)
       net-sftp (>= 2.0.0)
@@ -57,6 +56,10 @@ GEM
       abstract (>= 1.0.0)
     gem_plugin (0.2.3)
     highline (1.6.13)
+    hirb (0.6.1)
+    hirb-unicode (0.0.5)
+      hirb (~> 0.5)
+      unicode-display_width (~> 0.1.1)
     i18n (0.6.0)
     kindeditor (0.0.3)
     linecache19 (0.5.12)
@@ -134,6 +137,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.33)
+    unicode-display_width (0.1.1)
     warden (1.2.1)
       rack (>= 1.0)
     whenever (0.7.3)
@@ -150,6 +154,8 @@ DEPENDENCIES
   capistrano
   composite_primary_keys (= 3.1.0)
   devise
+  hirb (= 0.6.1)
+  hirb-unicode
   kindeditor
   magic_encoding
   markaby

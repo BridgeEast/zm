@@ -56,6 +56,7 @@ Zm::Application.routes.draw do
      get "get_check_store_of_shoes"
      get "get_check_guest_order"
      get "get_check_virtual_warehouse"
+
      get "get_general_shoes"
      get "get_details_of_shoes"
      get "check_factory_order"

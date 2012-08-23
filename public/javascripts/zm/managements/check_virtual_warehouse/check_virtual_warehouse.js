@@ -1,4 +1,4 @@
-jm.managements.check_virtual_warehouse= { 
+Zm.managements.check_virtual_warehouse= { 
     init: function() { 
         Zm.pages.ViewPort = {
             layout: 'border',
@@ -8,8 +8,6 @@ jm.managements.check_virtual_warehouse= {
                      {region:'center',layout:'fit', items:[grid] },
                      {
                          region:'west',
-                     //  collapseMode: 'mini',  最小化后左边很细
-                     //  split: true,   调节west的宽度
                          collapsible: true,
                          layout:'fit',
                          width:'180',
@@ -22,23 +20,25 @@ jm.managements.check_virtual_warehouse= {
 
         var cm = new Ext.grid.ColumnModel([ 
             new Ext.grid.RowNumberer(),
-            { header: '图鞋1', dataIndex: 'nodetext' },
-            { header: '图鞋2', dataIndex: 'nodeparent' },
+            { header: '图鞋1', dataIndex: 'photo_one' },
+            { header: '图鞋2', dataIndex: 'photo_two' },
             { header: '鞋号', dataIndex: 'shoes_id' },
             { header: '鞋型', dataIndex: 'types_of_shoes' },
             { header: '适合人群', dataIndex: 'suitable_people' },
             { header: '颜色', dataIndex: 'colors' },
-            { header: '码号', dataIndex: 'size' },
-            { header: '数量', dataIndex: 'number_of_shoes' },
-            { header: '已完成数量', dataIndex: 'finished_number' },
-            { header: '仓库数量', dataIndex: 'warehouse_number' },
+            { header: '码号', dataIndex: 'size_36' },
+            { header: '价格', dataIndex: 'price' },
+            { header: '数量', dataIndex: 'necessary_num' },
+            { header: '已完成数量', dataIndex: 'finished_num' }, 
+            { header: '仓库数量', dataIndex: 'store_remaining' },
             { header: '制作日期', dataIndex: 'production_date' },
+            { header: '制作日期', dataIndex: 'created_at' },
         ]);
 
         var store = new Ext.data.JsonStore({ 
-            url: '/managements/get_check_virtual_warehouse.json',
-            fields: ['nodetext','nodeparent'],
-            root: 'virtual_warehouse_node',
+            url: '/managements/get_cdheck_virtual_warehouse.json',
+            fields: ['created_at','size_36','photo_one','photo_two','shoes_id','suitable_people','colors','types_of_shoes','price','production_date','necessary_num','finished_num','store_remaining'],
+            root: 'general_shoe',
             autoLoad: true
         });
 
@@ -61,24 +61,27 @@ jm.managements.check_virtual_warehouse= {
               text: '月发货查询',
             	handler: function(){  mouthdispatchlistenquiry.show();  }
           }, '-', {
-              text: 'dddddddddddd',
-            	handler: function(){ 
-              var record = [];
-                  for(i = 0; i < store.getCount(); i++){
-                       record[i] = store.getAt(i);
-                    //  alert(record.get('nodetext'));
-
-                  };
-                  for(m = 0; m < 6; m++){
-                      alert(record[m].get('nodetext'));
-                  }
-              }
-          }, '-', {
               text: 'ssssssssssssss', handler: function(){
-                  alert(store.getCount());
+              var i=2012;
+              var j=0;
+              var k=8;
+                  store.proxy = new Ext.data.HttpProxy({ 
+                      url: "/managements/get_check_virtual_warehouse.json",
+                      method: "post",
+                      jsonData: {date: i+"-"+j}
+                  });
+                  store.reload();
             }
-          }, '-'])
-        });                  
+          }, '-']),
+          bbar: new Ext.PagingToolbar({
+              pageSize: 10,
+              store: store,
+              displayInfo: true,
+              displayMsg: "显示第{0}条到{1}条记录，一共{2}条",
+              emptyMsg: "没有记录"
+          })
+        });
+        store.load();
 
         var virtualwarehouseenquiry2contextmenu = new Ext.menu.Menu({
        		id: 'theContextMenu',
@@ -94,6 +97,16 @@ jm.managements.check_virtual_warehouse= {
         	grid.getSelectionModel().selectRow(rowIndex);
         	virtualwarehouseenquiry2contextmenu.showAt(e.getXY());
     	});	
+
+        var treeStore = new Ext.data.JsonStore({ 
+            url: '/managements/get_tree_node.json',
+            fields: ['nodetext','nodeparent'],
+            root: 'tree_node',
+            autoLoad: true
+        });
+
+        var jing_year_nodes = [];    //全局变量数组，暂时没有好的方法，先用着 
+      
       var root = new Ext.tree.AsyncTreeNode({
           id: "cvw_root",
           text: "全部合同",
@@ -107,36 +120,81 @@ jm.managements.check_virtual_warehouse= {
     cvw_tree.on("expandnode",function(node){      //树的展开时执行的事件
     		var myDate = new Date();
     		var month_nodes = [];
-        var year_nodes = [];
         var contract_nodes = [];
         var record = [];
         var txt = [];
-            for(m = 0; m < store.getCount(); m++){
-                record[m] = store.getAt(m);
+            for(m = 0; m < treeStore.getCount(); m++){
+                record[m] = treeStore.getAt(m);
             };
     				if(node.id == "cvw_root"){
        			    for(i = 2010; i < myDate.getFullYear()+1; i++ ){
-       		          year_nodes[i] = new Ext.tree.TreeNode({ text: i, id: i + "sss" });
-       	     	  		root.appendChild(year_nodes[i]);
+       		          jing_year_nodes[i] = new Ext.tree.TreeNode({ text: i, id: "node" + i });
+       	     	  		root.appendChild(jing_year_nodes[i]);
+
                     if(i == myDate.getFullYear()){
                         for(j=1; j < myDate.getMonth() + 2; j++){
-                            month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: j + "ddd" });
-                            year_nodes[i].appendChild(month_nodes[j]);
+                            if(j > 9){
+                                month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "node" + i + j });
+                                jing_year_nodes[i].appendChild(month_nodes[j]);
+                            }                            else{
+                                month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "node" + i + "0" + j });
+                                jing_year_nodes[i].appendChild(month_nodes[j]);
+                            }
 
                             for(k = 0; k < 5; k++){
-                                contract_nodes[k] = new Ext.tree.TreeNode({ text: record[k].get('nodetext'), id: k });
+                                contract_nodes[k] = new Ext.tree.TreeNode({ text: record[k].get('nodetext'), id: "node" + i + j + k });
                                 month_nodes[j].appendChild(contract_nodes[k]);
                             };
                         }
                     }
                     else{
        			            for(j=1;j<13;j++){
-       		 		        		  month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: j });
-       		 		              year_nodes[i].appendChild(month_nodes[j]);
+                            if(j > 9){
+                                month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "node" + i + j });
+                                jing_year_nodes[i].appendChild(month_nodes[j]);
+                            }else{
+                                month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "node" + i + "0" + j });
+                                jing_year_nodes[i].appendChild(month_nodes[j]);
+                            }
     			              }
                     }
     			      }
-            }
-
+        jing_node3.remove();    
+            };
      });      
       
+     cvw_tree.on("collapsenode", function(node){
+         if(node.id=="cvw_root"){
+             var myDate = new Date();
+             for(i = 2010; i <= 2012; i++){ jing_year_nodes[i].remove() };
+             jing_node3 = new Ext.tree.TreeNode({text: "2010", id: "linshi"});
+             root.appendChild(jing_node3);
+         }
+     });
+
+     cvw_tree.on("click", function(node){
+         var myDate = new Date();
+         var stringValue = node.id;
+     //    var stringValue = "cvw_root";
+     //    for(i = 2010; i < myDate.getFullYear() + 1; i++){
+     //       for(j = 1; j < 13; j++){
+     //           var stringnode = "node" + i +j;
+     //           if(!stringnode.localeCompare(node.id)){
+     //               alert(stringnode);
+     //           }
+     //       }
+     //    }
+     //            j //    var i = 3;
+     //    var j = 4;
+     //    var nodestring = "node" + i + j;
+     //    alert(nodestring);
+     //    if(stringValue.localeCompare("node201280")){
+     //        alert("jing")
+     //    }
+     //    else
+     //        alert("chen")
+        //alert(stringValue.localeCompare("node201280"));
+      
+
+        alert(node.id);
+     });
