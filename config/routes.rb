@@ -49,16 +49,20 @@ Zm::Application.routes.draw do
 
  resources :managements do
    collection do
+####### 好，这部分是我的路由,不要改我的 ###########
      get "check_guest_order"
+     get "get_guest_order"
      get "check_virtual_warehouse"
      get "get_tree_node"
-     get "check_store_of_shoes"
-     get "node"
-     get "check_guest_order"
-     get "check_virtual_warehouse"
-     get "get_check_store_of_shoes"
+     get "get_month"
      get "get_check_guest_order"
      get "get_check_virtual_warehouse"
+     get "get_check_virtual_warehouse_node"
+####### 好，这部分是我的路由 ######################
+
+     get "check_store_of_shoes"
+     get "node"
+     get "get_check_store_of_shoes"
 
      get "get_general_shoes"
      get "get_check_shoes"
