@@ -1,0 +1,7 @@
+<%= javascript_include_tag "zm/zm.js", "zm/managements/check_advanced_order/check_advanced_order.js", "zm/managements/check_advanced_order/click_event.js", "zm/managements/tree/caoOrCwlTreeNode.js","zm/managements/tree/getDate.js" %>
+<script>
+  Ext.onReady(function(){ 
+    Zm.managements.CheckAdvancedOrder.init();
+    Zm.managements.CheckAdvancedOrder.clickEvent.menuEvent();
+  });
+  </script>
