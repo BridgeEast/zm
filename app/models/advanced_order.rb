@@ -1,5 +1,5 @@
 class AdvancedOrder < ActiveRecord::Base
-  has_many :general_shoes
+  has_many :general_shoes,:dependent => :destroy
   ############# 获取预购单所需的记录 ###############
   def self.get_cao_record( param )
     rec = Array.new
