@@ -1,6 +1,6 @@
 class GeneralShoe < ActiveRecord::Base
-  has_one :size_of_shoe
-  has_one :details_of_shoe
+  has_many :size_of_shoes
+  has_many :details_of_shoes
   has_one :play_board
 
   belongs_to :advanced_order
@@ -43,3 +43,4 @@ class GeneralShoe < ActiveRecord::Base
   end
 
 end
+

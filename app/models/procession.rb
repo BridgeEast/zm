@@ -1,3 +1,3 @@
 class Procession < ActiveRecord::Base
-  has_many :details_of_shoes
+  has_one :details_of_shoe
 end
