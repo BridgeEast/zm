@@ -21,23 +21,12 @@ class ManagementsController < ApplicationController
     def check_virtual_warehouse
     end
 
-    def get_check_virtual_warehouse
-        render :json => { :general_shoe => SizeOfShoe.find(:all, :conditions => ["created_at like ?", params[:date] + "%" ])}
- #   def get_check_guest_order
- #     grids = []
- #     GeneralShoe.all.each do |s|
- #       grids << { :id => s.id, :photo_one => s.photo_one, :photo_two => s.photo_two }
- #     end
- #     render :json => grids
- #   end
-
     def get_check_guest_order
       render :json => { :check => GeneralShoe.find_by_sql("select id, photo_one, photo_two from general_shoes")}
     end
 
     def get_check_virtual_warehouse
       render :json => { :general_shoe => SizeOfShoe.find(:all, :conditions => ["created_at like ?", params[:date] + "%" ])}
->>>>>>> 009ba6e
 #         render :json => { :general_shoe => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes,size_of_shoes where general_shoes.id=size_of_shoes.id and size_of_shoes.created_at like '2012-0%'") }
     end
  
