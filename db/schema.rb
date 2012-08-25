@@ -40,6 +40,17 @@ ActiveRecord::Schema.define(:version => 20120825022728) do
     t.datetime "updated_at"
   end
 
+<<<<<<< HEAD
+=======
+  create_table "contrast_make_manages", :force => true do |t|
+    t.string   "factory_order_id", :null => false
+    t.string   "factory"
+    t.string   "payment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+>>>>>>> 提交代码
   create_table "details_of_shoes", :force => true do |t|
     t.integer  "general_shoe_id", :null => false
     t.integer  "region_id"
@@ -51,7 +62,11 @@ ActiveRecord::Schema.define(:version => 20120825022728) do
   end
 
   create_table "excel_receives", :force => true do |t|
+<<<<<<< HEAD
     t.string   "excel_receive_id", :null => false
+=======
+    t.string   "excel_num",  :null => false
+>>>>>>> 提交代码
     t.string   "custom"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -101,6 +116,14 @@ ActiveRecord::Schema.define(:version => 20120825022728) do
     t.datetime "updated_at"
   end
 
+<<<<<<< HEAD
+=======
+  create_table "nodes", :force => true do |t|
+    t.string  "nodetext"
+    t.integer "nodeparent"
+  end
+
+>>>>>>> 提交代码
   create_table "orders", :force => true do |t|
     t.string   "order_id",                                       :null => false
     t.string   "server_num"

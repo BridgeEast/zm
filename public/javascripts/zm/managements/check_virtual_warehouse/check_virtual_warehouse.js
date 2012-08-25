@@ -31,13 +31,13 @@ Zm.managements.check_virtual_warehouse= {
             { header: '数量', dataIndex: 'necessary_num' },
             { header: '已完成数量', dataIndex: 'finished_num' }, 
             { header: '仓库数量', dataIndex: 'store_remaining' },
-            { header: '制作日期', dataIndex: 'created_at' },
+            { header: '制作日期', dataIndex: 'production_date' },
         ]);
 
 
         var store = new Ext.data.JsonStore({ 
             url: "/managements/get_check_virtual_warehouse_node.json",
-            fields: ['photo_one','photo_two','shoes_id','suitable_people','colors','size','types_of_shoes','price','created_at','necessary_num','finished_num','store_remaining'],
+            fields: ['photo_one','photo_two','shoes_id','suitable_people','colors','size','types_of_shoes','price','production_date','necessary_num','finished_num','store_remaining'],
             root: 'virtual_warehouse',
             autoLoad: true
         });
@@ -66,13 +66,8 @@ Zm.managements.check_virtual_warehouse= {
               	handler: function(){  var a = "morning"; var b = a.split(""); alert(b);  }
             }, '-', {
                 text: 'ssssssssssssss', handler: function(){
-                var i=2012;
-                var j=0;
-                var k=8;
-                    store.proxy = new Ext.data.HttpProxy({ 
-                        url: "/managements/get_check_virtual_warehouse.json",
-                    });
-                    store.reload();
+                    var a = "chenjing";
+                    alert(a.substring(4,7));
               }
           }, '-']),
           bbar: new Ext.PagingToolbar({
@@ -100,7 +95,7 @@ Zm.managements.check_virtual_warehouse= {
   
         var treeStore = new Ext.data.JsonStore({ 
             url: '/managements/get_tree_node.json',
-            fields: ['factory_order_id'],
+            fields: ['factory_order_id', 'production_date'],
             root: 'tree_node',
             autoLoad: true
         });
@@ -138,16 +133,22 @@ Zm.managements.check_virtual_warehouse= {
                                     jing_year_nodes[i].appendChild(month_nodes[j]);
 
                                     for(k = 0; k < treeStore.getCount(); k++){
-                                        contract_nodes[k] = new Ext.tree.TreeNode({ text: record[k].get('factory_order_id'), id: "node" + i + j + k });
-                                        month_nodes[j].appendChild(contract_nodes[k]);
+                                        var dada = i + "-" + j;
+                                        if(record[k].get('production_date').substring(0, 7) == dada ){
+                                            contract_nodes[k] = new Ext.tree.TreeNode({ text: record[k].get('factory_order_id'), id: "node" + i + j + record[k].get('factory_order_id') });
+                                            month_nodes[j].appendChild(contract_nodes[k]);
+                                        }
                                     }
                                 }else{
                                     month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "node" + i + "0" + j });
                                     jing_year_nodes[i].appendChild(month_nodes[j]);
 
                                     for(k = 0; k < treeStore.getCount(); k++){
-                                        contract_nodes[k] = new Ext.tree.TreeNode({ text: record[k].get('factory_order_id'), id: "node" + i + "0" + j + k });
-                                        month_nodes[j].appendChild(contract_nodes[k]);
+                                        var dada = i + "-0" + j;
+                                        if(record[k].get('production_date').substring(0, 7) == dada ){
+                                            contract_nodes[k] = new Ext.tree.TreeNode({ text: record[k].get('factory_order_id'), id: "node" + i + "0" + j + record[k].get('factory_order_id') });
+                                            month_nodes[j].appendChild(contract_nodes[k]);
+                                        }
                                     }
                                 }
                             }
@@ -177,13 +178,19 @@ Zm.managements.check_virtual_warehouse= {
          });
 
          cvw_tree.on("click", function(node){
-             var nodeString = node.id;
-             var stringValue = nodeString.split("");
+             var stringValue = node.id.split("");
              var i = stringValue[7];
              var j = stringValue[9];
-             var date = "201" + i + "-0" + j; 
-             var contract = "contract3";
-             var record = {contract: contract, date: date};
+             var date = "";
+             var record = {};
+             var contract = node.id.substring(10,node.id.length);  //根据id提取合同的名字
+             if(stringValue[8] == 0){
+                 date = "201" + i + "-0" + j; 
+             }else{
+                 date = "201" + i + "-1" + j;
+             }
+             record = {contract: contract, date: date};
+
              if(node.id.length == 10){
                  store.proxy = new Ext.data.HttpProxy({
                      url: "/managements/get_month.json",
@@ -191,7 +198,13 @@ Zm.managements.check_virtual_warehouse= {
                      jsonData: { record: record }
                  });
                  store.reload();
-             };
-             alert(node.id);
+             }else if(node.id.length > 10){
+                 store.proxy = new Ext.data.HttpProxy({
+                     url:"/managements/get_contract.json",
+                     method: "post",
+                     jsonData:{ record: record }
+                 });
+                 store.reload();
+             }
          });
 

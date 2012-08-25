@@ -38,7 +38,7 @@ namespace :menu do
       },
       { :name => "基础数据",
         :s_menus_attributes => [
-          { :name => "鞋库", :url => "" },
+          { :name => "鞋库", :url => "/data_bases/store_of_shoes" },
           { :name => "部位", :url => "/data_bases/region" },
           { :name => "材料", :url => "/data_bases/material" },
           { :name => "颜色", :url => "/data_bases/color" },
