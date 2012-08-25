@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ContrastMakeManageTest < ActiveSupport::TestCase
+class ManagementsControllerTest < ActionController::TestCase
   # Replace this with your real tests.
   test "the truth" do
     assert true

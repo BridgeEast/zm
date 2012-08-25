@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120820125547) do
+ActiveRecord::Schema.define(:version => 20120824135921) do
 
   create_table "advanced_orders", :force => true do |t|
     t.string   "advanced_order_id",                                  :null => false
@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(:version => 20120820125547) do
   end
 
   create_table "excel_receives", :force => true do |t|
-    t.string   "excel_num",  :null => false
+    t.string   "excel_receive_id", :null => false
     t.string   "custom"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -64,17 +64,42 @@ ActiveRecord::Schema.define(:version => 20120820125547) do
     t.datetime "updated_at"
   end
 
+  create_table "factory_orders", :force => true do |t|
+    t.string   "factory_order_id",                                :null => false
+    t.string   "factory"
+    t.string   "payment"
+    t.decimal  "total_price",      :precision => 10, :scale => 0
+    t.date     "production_date"
+    t.text     "remark"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "general_shoes", :force => true do |t|
+    t.string   "shoes_id",                                         :null => false
+    t.string   "suitable_people"
+    t.string   "colors"
+    t.string   "types_of_shoes"
+    t.decimal  "price",             :precision => 10, :scale => 0
+    t.string   "photo_one"
+    t.string   "photo_two"
+    t.integer  "advanced_order_id"
+    t.integer  "order_id"
+    t.integer  "excel_num"
+    t.integer  "factory_order_id"
+    t.text     "remark"
+    t.date     "production_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+>>>>>>> 3aa03a1
   create_table "materials", :force => true do |t|
     t.string   "material",     :null => false
     t.text     "remark"
     t.date     "created_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "nodes", :force => true do |t|
-    t.string  "nodetext"
-    t.integer "nodeparent"
   end
 
   create_table "orders", :force => true do |t|
@@ -126,6 +151,16 @@ ActiveRecord::Schema.define(:version => 20120820125547) do
     t.string   "name"
     t.string   "url"
     t.integer  "f_menu_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "size_of_shoes", :force => true do |t|
+    t.integer  "general_shoe_id", :null => false
+    t.integer  "size"
+    t.integer  "necessary_num"
+    t.integer  "finished_num"
+    t.integer  "store_remaining"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
