@@ -16,17 +16,6 @@ class DataBasesController < ApplicationController
   #scope: base_datas/region/region.js
   #scope: data_bases/material/material.js  
   def get_region
-<<<<<<< HEAD
-=======
-    @regions = Region.all
-    @region_grid = @regions.collect! do|a|
-      { 
-        :id => a.id,
-        :region => a.region,
-        :remark => a.remark
-      }
-    end
->>>>>>> 提交代码
     respond_to do |format|
       format.json{ render :json => { :region => Region.all } }
     end
