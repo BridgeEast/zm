@@ -27,7 +27,7 @@ Zm.managements.check_store_of_shoes = {
 		},
 		{
 			header: '鞋型',
-			dataIndex: 'types_of_Shoes'
+			dataIndex: 'types_of_shoes'
 		},
 		{
 			header: '适用人群',
@@ -142,10 +142,8 @@ Zm.managements.check_store_of_shoes = {
 		};
 
 		treeCsos.setRootNode(rootShoes);
-
-		treeCsos.setRootNode(rootShoes);
 		treeCsos.on('click', function(node) {
-
+         
 			if (node.leaf) {
 				var year = node.parentNode.parentNode.text;
 				var month = node.parentNode.id.split("_")[1];
@@ -161,10 +159,10 @@ Zm.managements.check_store_of_shoes = {
 				store.load()
 			}
 		})
-
 		return treeCsos
 
 	}
 
 }
+
 

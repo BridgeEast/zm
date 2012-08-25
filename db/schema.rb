@@ -85,7 +85,6 @@ ActiveRecord::Schema.define(:version => 20120825022728) do
     t.string   "photo_two"
     t.integer  "advanced_order_id"
     t.integer  "order_id"
-    t.integer  "excel_num"
     t.integer  "excel_receive_id"
     t.integer  "factory_order_id"
     t.text     "remark"
