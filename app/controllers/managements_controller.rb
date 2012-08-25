@@ -1,7 +1,8 @@
 class ManagementsController < ApplicationController
+ 
+  #*********************************************查看鞋库****************************************************
 
-###############  这部分是我的，别碰我的东西 #####################################################################
-   
+
     def check_store_of_shoes
     end
 
@@ -10,22 +11,36 @@ class ManagementsController < ApplicationController
         format.json{ render :json => { :check_store_of_shoes => GeneralShoe.all }}
       end
     end
-
-   def get_data
-        choices = []
-
-     GeneralShoe.all.each do |item|
-       if( item.production_date.to_s.split("-")[1].gsub(/\b(0+)/,"") == params[:selectMonth] and item.production_date.to_s.split("-")[0] == params[:selectYear].to_s and
-         item.types_of_shoes == params[:selectType])
-         choices << item
-       end
-     end
+    
+    def get_data
+      choices = []
+      
+      GeneralShoe.all.each do |item|
+        if( item.production_date.to_s.split("-")[1].gsub(/\b(0+)/,"") == params[:selectMonth] and item.production_date.to_s.split("-")[0] == params[:selectYear].to_s and item.types_of_shoes == params[:selectType])
+          choices << item
+        end
+      end
      
-     respond_to do |format|
-       format.json{ render :json => { :check_store_of_shoes => choices} }
-     end
-   end
-         
+      respond_to do |format|
+        format.json{ render :json => { :check_store_of_shoes => choices} }
+      end
+    end
+    
+    def get_details
+      #details = []
+
+      respond_to do |format|
+        format.json{ render :json => { :details =>  GeneralShoe.details_of_shoes.find(:all , :conditions => "params[:select_id] = details_of_shoes.general_shoe_id") } }
+      end
+
+    end
+
+
+
+  #*********************************************************************************************************
+
+
+
     def check_guest_order
     end
   

@@ -70,7 +70,7 @@ Zm::Application.routes.draw do
 ####### 好，这部分是我的路由 ######################
 
      get "check_store_of_shoes"
-     get "node"
+     get "get_data"
      get "get_check_store_of_shoes"
 
      get "get_general_shoes"

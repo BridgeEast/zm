@@ -79,6 +79,7 @@ Zm.managements.check_store_of_shoes = {
 			}]
 		});
 		csosGrid.on("rowcontextmenu", function(grid, rowIndex, e) {
+           //select_id = csosGrid.getSelectionModel().getSelected().data["id"];
 			e.preventDefault();
 			grid.getSelectionModel().selectRow(rowIndex);
 			contextmenu.showAt(e.getXY())
