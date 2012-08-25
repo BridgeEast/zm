@@ -1,5 +1,5 @@
 #source 'http://rubygems.org'
-#source 'http://ruby.taobao.org'
+source 'http://ruby.taobao.org'
 #
 gem "rails", "3.0.3"
 gem "rake", "0.8.7"
@@ -44,7 +44,7 @@ gem "rails-erd"
 # group :development, :test do
 #   gem 'webrat'
 # end
-group :development do
-	gem 'hirb','0.6.1'
-	gem 'hirb-unicode'
-end
+#group :development do
+  gem 'hirb','0.6.1'
+  gem 'hirb-unicode'
+#end

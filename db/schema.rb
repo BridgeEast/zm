@@ -10,9 +10,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120821023116) do
+ActiveRecord::Schema.define(:version => 20120824132011) do
 
-  create_table "advanced_orders", :primary_key => "advanced_order_id", :force => true do |t|
+  create_table "advanced_orders", :force => true do |t|
+    t.string   "advanced_order_id",                                  :null => false
     t.decimal  "total_price",         :precision => 10, :scale => 0
     t.date     "advanced_order_date"
     t.text     "remark"
@@ -39,13 +40,6 @@ ActiveRecord::Schema.define(:version => 20120821023116) do
     t.datetime "updated_at"
   end
 
-  create_table "contrast_make_manages", :primary_key => "factory_order_id", :force => true do |t|
-    t.string   "factory"
-    t.string   "payment"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "details_of_shoes", :force => true do |t|
     t.integer  "general_shoe_id", :null => false
     t.integer  "region_id"
@@ -56,7 +50,8 @@ ActiveRecord::Schema.define(:version => 20120821023116) do
     t.datetime "updated_at"
   end
 
-  create_table "excel_receives", :primary_key => "excel_num", :force => true do |t|
+  create_table "excel_receives", :force => true do |t|
+    t.string   "excel_num",  :null => false
     t.string   "custom"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -88,10 +83,10 @@ ActiveRecord::Schema.define(:version => 20120821023116) do
     t.decimal  "price",             :precision => 10, :scale => 0
     t.string   "photo_one"
     t.string   "photo_two"
-    t.string   "advanced_order_id"
-    t.string   "order_id"
-    t.string   "excel_receive_id"
-    t.string   "factory_order_id"
+    t.integer  "advanced_order_id"
+    t.integer  "order_id"
+    t.integer  "excel_num"
+    t.integer  "factory_order_id"
     t.text     "remark"
     t.date     "production_date"
     t.datetime "created_at"
@@ -106,12 +101,8 @@ ActiveRecord::Schema.define(:version => 20120821023116) do
     t.datetime "updated_at"
   end
 
-  create_table "nodes", :force => true do |t|
-    t.string  "nodetext"
-    t.integer "nodeparent"
-  end
-
-  create_table "orders", :primary_key => "order_id", :force => true do |t|
+  create_table "orders", :force => true do |t|
+    t.string   "order_id",                                       :null => false
     t.string   "server_num"
     t.string   "custom_num"
     t.string   "custom_contrast"
@@ -165,15 +156,7 @@ ActiveRecord::Schema.define(:version => 20120821023116) do
 
   create_table "size_of_shoes", :force => true do |t|
     t.integer  "general_shoe_id", :null => false
-    t.integer  "size_36"
-    t.integer  "size_37"
-    t.integer  "size_38"
-    t.integer  "size_39"
-    t.integer  "size_40"
-    t.integer  "size_41"
-    t.integer  "size_42"
-    t.integer  "size_43"
-    t.integer  "size_44"
+    t.integer  "size"
     t.integer  "necessary_num"
     t.integer  "finished_num"
     t.integer  "store_remaining"
@@ -206,10 +189,5 @@ ActiveRecord::Schema.define(:version => 20120821023116) do
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
-
-  create_table "virtual_warehouse_nodes", :id => false, :force => true do |t|
-    t.string  "nodetext",   :limit => 20
-    t.integer "nodeparent"
-  end
 
 end

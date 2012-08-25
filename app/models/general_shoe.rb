@@ -1,7 +1,7 @@
 class GeneralShoe < ActiveRecord::Base
-  has_one :size_of_shoe
-  has_one :details_of_shoe
-  has_one :play_board
+  has_many :size_of_shoes, :dependent => :destroy
+  has_many :details_of_shoes,:dependent => :destroy
+  has_one :play_board,:dependent => :destroy
 
   belongs_to :advanced_order
   belongs_to :order
@@ -43,3 +43,4 @@ class GeneralShoe < ActiveRecord::Base
   end
 
 end
+

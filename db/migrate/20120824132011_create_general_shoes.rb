@@ -11,10 +11,10 @@ class CreateGeneralShoes < ActiveRecord::Migration
 
       t.string :photo_one
       t.string :photo_two
-      t.string :advanced_order_id
-      t.string :order_id
-      t.string :excel_num
-      t.string :factory_order_id
+      t.integer :advanced_order_id
+      t.integer :order_id
+      t.integer :excel_num
+      t.integer :factory_order_id
 
       t.text :remark
       t.date :production_date

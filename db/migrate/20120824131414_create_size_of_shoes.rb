@@ -4,16 +4,8 @@ class CreateSizeOfShoes < ActiveRecord::Migration
 
       t.integer :general_shoe_id, :null => false
 
-      t.integer :size_36
-      t.integer :size_37
-      t.integer :size_38
-      t.integer :size_39
-      t.integer :size_40
-      t.integer :size_41
-      t.integer :size_42
-      t.integer :size_43
-      t.integer :size_44
 
+      t.integer :size
       t.integer :necessary_num
       t.integer :finished_num
       t.integer :store_remaining
