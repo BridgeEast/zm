@@ -7,4 +7,6 @@ Zm = {
     //管理层
     managements: {},
     getDate: {},
+    //the services, 对应着相对应的controller器----aji
+    services:{}
 }

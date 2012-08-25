@@ -61,14 +61,6 @@ Zm.managements.check_virtual_warehouse= {
             }, '-', {
                 text: '月发货查询',
               	handler: function(){  mouthdispatchlistenquiry.show();  }
-            }, '-', {
-                text: 'ddddddddddddddd',
-              	handler: function(){  var a = "morning"; var b = a.split(""); alert(b);  }
-            }, '-', {
-                text: 'ssssssssssssss', handler: function(){
-                    var a = "chenjing";
-                    alert(a.substring(4,7));
-              }
           }, '-']),
           bbar: new Ext.PagingToolbar({
               pageSize: 10,
@@ -95,7 +87,7 @@ Zm.managements.check_virtual_warehouse= {
   
         var treeStore = new Ext.data.JsonStore({ 
             url: '/managements/get_tree_node.json',
-            fields: ['factory_order_id', 'production_date'],
+            fields: ['id', 'production_date'],
             root: 'tree_node',
             autoLoad: true
         });
@@ -103,7 +95,7 @@ Zm.managements.check_virtual_warehouse= {
         var jing_year_nodes = [];    //全局变量数组，暂时没有好的方法，先用着 
         
         var root = new Ext.tree.AsyncTreeNode({
-            id: "cvw_root",
+            id: "cvwRoot",
             text: "全部合同",
             children: []
         });
@@ -120,8 +112,8 @@ Zm.managements.check_virtual_warehouse= {
             var txt = [];
                 for(m = 0; m < treeStore.getCount(); m++){
                     record[m] = treeStore.getAt(m);
-                };
-        				if(node.id == "cvw_root"){
+                }
+        				if(node.id == "cvwRoot"){
            			    for(i = 2010; i < myDate.getFullYear()+1; i++ ){
            		          jing_year_nodes[i] = new Ext.tree.TreeNode({ text: i, id: "node" + i });
            	     	  		root.appendChild(jing_year_nodes[i]);
@@ -133,20 +125,22 @@ Zm.managements.check_virtual_warehouse= {
                                     jing_year_nodes[i].appendChild(month_nodes[j]);
 
                                     for(k = 0; k < treeStore.getCount(); k++){
-                                        var dada = i + "-" + j;
-                                        if(record[k].get('production_date').substring(0, 7) == dada ){
-                                            contract_nodes[k] = new Ext.tree.TreeNode({ text: record[k].get('factory_order_id'), id: "node" + i + j + record[k].get('factory_order_id') });
+                                        var month_data= i + "-" + j;
+                                        if(record[k].get('production_date').substring(0, 7) == month_data){
+                                            contract_nodes[k] = new Ext.tree.TreeNode({ text: record[k].get('id'), id: "node" + i + j + record[k].get('id') });
                                             month_nodes[j].appendChild(contract_nodes[k]);
                                         }
                                     }
                                 }else{
                                     month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "node" + i + "0" + j });
                                     jing_year_nodes[i].appendChild(month_nodes[j]);
+                                    var x = 0;
+                                    var myNode = [];
 
                                     for(k = 0; k < treeStore.getCount(); k++){
-                                        var dada = i + "-0" + j;
-                                        if(record[k].get('production_date').substring(0, 7) == dada ){
-                                            contract_nodes[k] = new Ext.tree.TreeNode({ text: record[k].get('factory_order_id'), id: "node" + i + "0" + j + record[k].get('factory_order_id') });
+                                        var month_data= i + "-0" + j;
+                                        if(record[k].get('production_date').substring(0, 7) == month_data){  //按月份进行分类
+                                            contract_nodes[k] = new Ext.tree.TreeNode({ text: record[k].get('id'), id: "node" + i + "0" + j + record[k].get('id') });
                                             month_nodes[j].appendChild(contract_nodes[k]);
                                         }
                                     }
@@ -157,19 +151,37 @@ Zm.managements.check_virtual_warehouse= {
                                 if(j > 9){
                                     month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "node" + i + j });
                                     jing_year_nodes[i].appendChild(month_nodes[j]);
+
+                                    for(k = 0; k < treeStore.getCount(); k++){
+                                        var month_data= i + "-" + j;
+                                        if(record[k].get('production_date').substring(0, 7) == month_data){
+                                            contract_nodes[k] = new Ext.tree.TreeNode({ text: record[k].get('id'), id: "node" + i + j + record[k].get('id') });
+                                            month_nodes[j].appendChild(contract_nodes[k]);
+                                        }
+                                    }
                                 }else{
                                     month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "node" + i + "0" + j });
                                     jing_year_nodes[i].appendChild(month_nodes[j]);
+                                    var x = 0;
+                                    var myNode = [];
+
+                                    for(k = 0; k < treeStore.getCount(); k++){
+                                        var month_data= i + "-0" + j;
+                                        if(record[k].get('production_date').substring(0, 7) == month_data){  //按月份进行分类
+                                            contract_nodes[k] = new Ext.tree.TreeNode({ text: record[k].get('id'), id: "node" + i + "0" + j + record[k].get('id') });
+                                            month_nodes[j].appendChild(contract_nodes[k]);
+                                        }
+                                    }
                                 }
         			              }
                         }
         			      }
              jing_node3.remove();    
-                };
+                }
          });      
           
          cvw_tree.on("collapsenode", function(node){  //树的闭合事件
-             if(node.id=="cvw_root"){
+             if(node.id=="cvwRoot"){
                  var myDate = new Date();
                  for(i = 2010; i <= 2012; i++){ jing_year_nodes[i].remove() };
                  jing_node3 = new Ext.tree.TreeNode({text: "2010", id: "linshi"});
@@ -191,14 +203,7 @@ Zm.managements.check_virtual_warehouse= {
              }
              record = {contract: contract, date: date};
 
-             if(node.id.length == 10){
-                 store.proxy = new Ext.data.HttpProxy({
-                     url: "/managements/get_month.json",
-                     method: "post",
-                     jsonData: { record: record }
-                 });
-                 store.reload();
-             }else if(node.id.length > 10){
+             if(node.id.length > 10){
                  store.proxy = new Ext.data.HttpProxy({
                      url:"/managements/get_contract.json",
                      method: "post",
