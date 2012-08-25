@@ -2,10 +2,6 @@ class GeneralShoe < ActiveRecord::Base
   has_many :size_of_shoes, :dependent => :destroy
   has_many :details_of_shoes,:dependent => :destroy
   has_one :play_board,:dependent => :destroy
-  has_one :region
-  has_one :material
-  has_one :color
-  has_one :process
 
   belongs_to :advanced_order
   belongs_to :order
