@@ -43,5 +43,14 @@ class GeneralShoe < ActiveRecord::Base
   end
 
 end
+<<<<<<< HEAD
+=======
+class DetailsOfSheo < ActiveRecord::Base
+  has_one :region
+  has_one :material
+  has_one :color
+  has_one :process
+end
+>>>>>>> 提交代码
 
 
