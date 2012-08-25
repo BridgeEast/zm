@@ -32,16 +32,16 @@ class ManagementsController < ApplicationController
     def check_virtual_warehouse
     end
 
-#    def get_month
-#      render :json => { :virtual_warehouse => GeneralShoe.find(:all, :conditions => ["created_at like ?", params[:date] + "%" ]) }
-#    end
-
     def get_month
-      render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.created_at like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id") }
+      render :json => { :virtual_warehouse => GeneralShoe.find(:all, :conditions => ["production_date like ?", params[:record][:date] + "%" ]) }
+    end
+
+    def get_contract
+      render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id") }
     end
 
 #    def get_month
-#      render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select * from general_shoes where created_at like '#{params[:record][:date]}%'") }
+#      render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select * from general_shoes where production_date like '#{params[:record][:date]}%'") }
 #    end
 
     def get_check_virtual_warehouse_node
