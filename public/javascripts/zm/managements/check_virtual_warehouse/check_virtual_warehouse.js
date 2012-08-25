@@ -112,7 +112,7 @@ Zm.managements.check_virtual_warehouse= {
             var txt = [];
                 for(m = 0; m < treeStore.getCount(); m++){
                     record[m] = treeStore.getAt(m);
-                };
+                }
         				if(node.id == "cvwRoot"){
            			    for(i = 2010; i < myDate.getFullYear()+1; i++ ){
            		          jing_year_nodes[i] = new Ext.tree.TreeNode({ text: i, id: "node" + i });
