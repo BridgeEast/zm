@@ -6,14 +6,24 @@ class ManagementsController < ApplicationController
 
     def get_check_store_of_shoes
       respond_to do |format|
-        debugger
         format.json{ render :json => { :check_store_of_shoes => GeneralShoe.all }}
       end
     end
 
    def get_data
-      respond_to do |format|
-        format.json{ render :json => { :check_store_of_shoes => GeneralShoe.find(:all , :conditions => "production_date.split("/")[1] = '08'  ") }}
+        choices = []
+
+     GeneralShoe.all.each do |item|
+       if( item.production_date.to_s.split("-")[1].gsub(/\b(0+)/,"") == params[:selectMonth] and item.production_date.to_s.split("-")[0] == params[:selectYear].to_s and
+         item.types_of_shoes == params[:selectType])
+         choices << item
+       end
+     end
+     
+     respond_to do |format|
+       format.json{ render :json => { :check_store_of_shoes => choices} }
+     end
+   end
          
     def check_guest_order
     end
@@ -36,17 +46,7 @@ class ManagementsController < ApplicationController
       end
     end
 
-  def node
-    nod = []
-    Node.all.each do |s|
-      nod << { :text => s.year ,
-               :expand => true ,
-               :leaf => true
 
-             }
-    end
-    render :json => nod
-  end
 
   def check_guest_order
   end

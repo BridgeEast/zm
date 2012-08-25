@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120821023116) do
+ActiveRecord::Schema.define(:version => 20120820125547) do
 
   create_table "advanced_orders", :force => true do |t|
     t.string   "advanced_order_id",                                  :null => false
@@ -60,35 +60,6 @@ ActiveRecord::Schema.define(:version => 20120821023116) do
   create_table "f_menus", :force => true do |t|
     t.string   "name"
     t.string   "url"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "factory_orders", :force => true do |t|
-    t.string   "factory_order_id",                                :null => false
-    t.string   "factory"
-    t.string   "payment"
-    t.decimal  "total_price",      :precision => 10, :scale => 0
-    t.date     "production_date"
-    t.text     "remark"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "general_shoes", :force => true do |t|
-    t.string   "shoes_id",                                         :null => false
-    t.string   "suitable_people"
-    t.string   "colors"
-    t.string   "types_of_shoes"
-    t.decimal  "price",             :precision => 10, :scale => 0
-    t.string   "photo_one"
-    t.string   "photo_two"
-    t.string   "advanced_order_id"
-    t.string   "order_id"
-    t.string   "excel_receive_id"
-    t.string   "factory_order_id"
-    t.text     "remark"
-    t.date     "production_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -155,24 +126,6 @@ ActiveRecord::Schema.define(:version => 20120821023116) do
     t.string   "name"
     t.string   "url"
     t.integer  "f_menu_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "size_of_shoes", :force => true do |t|
-    t.integer  "general_shoe_id", :null => false
-    t.integer  "size_36"
-    t.integer  "size_37"
-    t.integer  "size_38"
-    t.integer  "size_39"
-    t.integer  "size_40"
-    t.integer  "size_41"
-    t.integer  "size_42"
-    t.integer  "size_43"
-    t.integer  "size_44"
-    t.integer  "necessary_num"
-    t.integer  "finished_num"
-    t.integer  "store_remaining"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

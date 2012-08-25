@@ -2,7 +2,7 @@ Zm.managements.check_store_of_shoes = {
 	init: function() {
 		Zm.pages.ViewPort = {
 			layout: 'border',
-      region: 'center',
+			region: 'center',
 			items: [{
 				region: 'north',
 				title: '管理层-查看鞋库'
@@ -15,23 +15,23 @@ Zm.managements.check_store_of_shoes = {
 		var cm = new Ext.grid.ColumnModel([
 		new Ext.grid.RowNumberer(), {
 			header: '鞋图1',
-			dataIndex: 'photoOne'
+			dataIndex: 'photo_one'
 		},
 		{
 			header: '鞋图2',
-			dataIndex: 'photoTwo'
+			dataIndex: 'photo_two'
 		},
 		{
 			header: '鞋号',
-			dataIndex: 'shoesId'
+			dataIndex: 'shoes_id'
 		},
 		{
 			header: '鞋型',
-			dataIndex: 'typesOfShoes'
+			dataIndex: 'types_of_Shoes'
 		},
 		{
 			header: '适用人群',
-			dataIndex: 'suitablePeople'
+			dataIndex: 'suitable_people'
 		},
 		{
 			header: '颜色',
@@ -43,8 +43,8 @@ Zm.managements.check_store_of_shoes = {
 		},
 		{
 			header: '制作日期',
-			dataIndex: 'productionDate',
-			renderer: Ext.util.Format.dateRenderer('Y/m/d')
+			dataIndex: 'production_date',
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
 		},
 		{
 			header: '备注',
@@ -52,45 +52,13 @@ Zm.managements.check_store_of_shoes = {
 		},
 		]);
 
-		//var store = new Ext.data.JsonStore({
-		//url: '/managements/get_check_store_of_shoes.json',
-		//fields: ['id', 'photoOne', 'photoTwo', 'shoesId', 'typesOfShoes', 'suitablePeople', 'colors', 'price', 'productionDate', 'remark'],
-		//root: 'check_store_of_shoes',
-		//autoLoad: true
-		/*});*/
-		var data = [['1-1.jpg', '1-2.jpg', 'name1', 'descn1'], ['3-1.jpg', '3-2.jpg', 'name2', 'descn2']];
-		var store = new Ext.data.Store({
-			proxy: new Ext.data.MemoryProxy(data),
-			reader: new Ext.data.ArrayReader({},
-			[{
-				name: 'photoOne'
-			},
-			{
-				name: 'photoTwo'
-			},
-			{
-				name: 'shoesId'
-			},
-			{
-				name: 'typesOfShoes'
-			},
-			{
-				name: 'suitablePeople'
-			},
-			{
-				name: 'colors'
-			},
-			{
-				name: 'price'
-			},
-			{
-				name: 'productionDate'
-			},
-			{
-				name: 'remark'
-			}])
+		store = new Ext.data.JsonStore({
+			url: '/managements/get_check_store_of_shoes.json',
+			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'production_date', 'remark'],
+			root: 'check_store_of_shoes',
+			autoLoad: true
 		});
-		store.load();
+
 		var csosGrid = new Ext.grid.GridPanel({
 			id: 'csosGrod',
 			region: 'center',
@@ -122,6 +90,7 @@ Zm.managements.check_store_of_shoes = {
 	create_csos_tree: function() {
 
 		var treeCsos = new Ext.tree.TreePanel({
+			autoScroll: true,
 			region: 'west',
 			id: 'treeCsos',
 			width: '180'
@@ -129,8 +98,7 @@ Zm.managements.check_store_of_shoes = {
 
 		var rootShoes = new Ext.tree.TreeNode({
 			id: 'rootShoes',
-			text: '全部鞋' ,
-            expand: false
+			text: '全部鞋'
 		});
 
 		var nowYear = new Date().getFullYear();
@@ -154,7 +122,7 @@ Zm.managements.check_store_of_shoes = {
 					id: i + '_' + j,
 					children: [{
 						text: '高跟鞋',
-						id: 'nodeHighHeeledShoe',
+						id: 'nodeHighHeeledShoe' + i + j,
 						leaf: true
 
 					},
@@ -174,6 +142,25 @@ Zm.managements.check_store_of_shoes = {
 		};
 
 		treeCsos.setRootNode(rootShoes);
+
+		treeCsos.setRootNode(rootShoes);
+		treeCsos.on('click', function(node) {
+
+			if (node.leaf) {
+				var year = node.parentNode.parentNode.text;
+				var month = node.parentNode.id.split("_")[1];
+				store.proxy = new Ext.data.HttpProxy({
+					url: '/managements/get_data.json',
+					method: 'post',
+					jsonData: {
+						selectYear: year,
+						selectMonth: month,
+						selectType: node.text
+					}
+				}),
+				store.load()
+			}
+		})
 
 		return treeCsos
 
