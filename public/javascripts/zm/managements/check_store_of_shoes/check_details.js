@@ -24,7 +24,7 @@ Ext.onReady(function() {
 
 	var cm = new Ext.grid.ColumnModel([{
 		header: '部位',
-		dataIndex: 'position'
+		dataIndex: 'region'
 	},
 	{
 		header: '材料',
@@ -32,36 +32,29 @@ Ext.onReady(function() {
 	},
 	{
 		header: '颜色',
-		dataIndex: 'colors'
+		dataIndex: 'color'
 	},
 	{
 		header: '加工方法',
-		dataIndex: 'refine'
-	},
-	{
-		header: '备注',
-		dataIndex: 'remark'
+		dataIndex: 'procession'
 	}]);
 
-	var data = [['面料', 'NS-34,HP-8,H-3', '深沙色，深棕色，卡其绿', '', ''], ['内里', 'MH-30', '卡其色', '', ''], ['大底', 'MH-30', '卡其色', '', '内松紧顺面色'], ['鞋垫', 'B-24', '卡其色', '', ''], ['后套里', 'F-42', '棕色', '', ''], ['鞋带内里', '16MM宽', '古铜色', '', ''], ['线圈', ' ', '棕色', '', ''], ['毛刺', '7MM', '古铜色', '', ''], ['铆钉', '43/1*3', '棕色', '', ''], ['车线', '43/4*3', '349#', '', ''], ['Sock Logo', ' ', '', '无', ''], ['Outsole', ' ', '深棕色、沙色', '', '']];
+	var data = [['面料', 'NS-34,HP-8,H-3', '深沙色，深棕色，卡其绿', ''], ['内里', 'MH-30', '卡其色', ''], ['大底', 'MH-30', '卡其色', '', '内松紧顺面色'], ['鞋垫', 'B-24', '卡其色', '']];
 
 	var store = new Ext.data.Store({
 		proxy: new Ext.data.MemoryProxy(data),
 		reader: new Ext.data.ArrayReader({},
 		[{
-			name: 'position'
+			name: 'region'
 		},
 		{
 			name: 'material'
 		},
 		{
-			name: 'colors'
+			name: 'color'
 		},
 		{
-			name: 'refine'
-		},
-		{
-			name: 'remark'
+			name: 'procession'
 		}])
 	});
 
@@ -82,6 +75,7 @@ Ext.onReady(function() {
 		})
 	});
 	store.load();
+
 	check_detail = new Ext.Window({
 		layout: 'border',
 		closeAction: 'hide',
@@ -91,6 +85,7 @@ Ext.onReady(function() {
 		resizable: false,
 		items: [detail, grid]
 	});
+
 	check_detail.hide();
 })
 
