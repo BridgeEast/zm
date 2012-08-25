@@ -1,6 +1,6 @@
 Ext.onReady(function() {
 
-	var detail = new Ext.form.FormPanel({
+	var form = new Ext.form.FormPanel({
 		region: 'north',
 		layout: 'fit',
 		frame: true,
@@ -41,32 +41,32 @@ Ext.onReady(function() {
 
     //var select_id = Ext.getCmp("grid").getSelectionModel().getSelected().data["id"];
 
-	var store = new Ext.data.JsonStore({
-		url: '/managements/get_details.json',
-		fields: ['region_id', 'material_id', 'color_id', 'procession_id'],
-        method: 'post',
-        jsonData: { select_id: select_id } ,
-		root: 'details',
-		autoLoad: true
-	})
-	/* var data = [['面料', 'NS-34,HP-8,H-3', '深沙色，深棕色，卡其绿', ''], ['内里', 'MH-30', '卡其色', ''], ['大底', 'MH-30', '卡其色', '', '内松紧顺面色'], ['鞋垫', 'B-24', '卡其色', '']];*/
+    var store = new Ext.data.JsonStore({
+        url: '/managements/get_details.json',
+        fields: ['id','region_id', 'material_id', 'color_id', 'procession_id'],
+       /* method: 'post',*/
+        /*jsonData: { select_id: select_id } ,*/
+        root: 'details',
+        autoLoad: true
+    }) ;
+  /*  var data = [['面料', 'NS-34,HP-8,H-3', '深沙色，深棕色，卡其绿', ''], ['内里', 'MH-30', '卡其色', ''], ['大底', 'MH-30', '卡其色', '', '内松紧顺面色'], ['鞋垫', 'B-24', '卡其色', '']];*/
 
-	//var store = new Ext.data.Store({
-	//proxy: new Ext.data.MemoryProxy(data),
-	//reader: new Ext.data.ArrayReader({},
-	//[{
-	//name: 'region'
-	//},
-	//{
-	//name: 'material'
-	//},
-	//{
-	//name: 'color'
-	//},
-	//{
-	//name: 'procession'
-	//}])
-	/*});*/
+    //var store = new Ext.data.Store({
+    //proxy: new Ext.data.MemoryProxy(data),
+    //reader: new Ext.data.ArrayReader({},
+    //[{
+    //name: 'region_id'
+    //},
+    //{
+    //name: 'material_id'
+    //},
+    //{
+    //name: 'color_id'
+    //},
+    //{
+    //name: 'procession_id'
+    //}])
+    //});
 
 	var grid = new Ext.grid.GridPanel({
 		region: 'center',
@@ -84,7 +84,7 @@ Ext.onReady(function() {
 			emptyMsg: "没有记录"
 		})
 	});
-	/* store.load();*/
+   /* store.load();*/
 
 	check_detail = new Ext.Window({
 		layout: 'border',
@@ -93,7 +93,7 @@ Ext.onReady(function() {
 		width: 500,
 		constrainHeader: true,
 		resizable: false,
-		items: [detail, grid]
+		items: [form, grid]
 	});
 
 	check_detail.hide();
