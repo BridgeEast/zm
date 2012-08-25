@@ -13,7 +13,7 @@ class CreateGeneralShoes < ActiveRecord::Migration
       t.string :photo_two
       t.integer :advanced_order_id
       t.integer :order_id
-      t.integer :excel_num
+      t.integer :excel_receive_id
       t.integer :factory_order_id
 
       t.text :remark

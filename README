@@ -25,6 +25,9 @@ git stash pop恢复隐藏修改
 git add . 不会把删除的文件提交到changes to be commited 上面
 可以通过tig status 查看修改记录，选中需要删除的文件，按U把文件上移
 再执行git commit -m'XX'提交代码，其他照旧
+******************
+关于git的电子书介绍
+http://progit.redhome.cc/book/zh/
 
 User: Lixiaobo
 功能实现(自己不用再包含ext库)

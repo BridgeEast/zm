@@ -60,16 +60,6 @@ class ManagementsController < ApplicationController
 
 ###############  这部分是我的，别碰我的东西   ##################################################################
 
-    def check_store_of_shoes
-    end
-
-    def get_check_store_of_shoes
-      respond_to do |format|
-        debugger
-        format.json{ render :json => { :check_store_of_shoes => GeneralShoe.all }}
-      end
-    end
-
     ##############################################################################################
     def check_factory_order
     end
