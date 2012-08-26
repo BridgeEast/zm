@@ -33,17 +33,10 @@ class ManagementsController < ApplicationController
         #format.json{ render :json => { :details =>  GeneralShoe.details_of_shoes.find(:all , :conditions => "params[:select_id] = details_of_shoes.general_shoe_id") } }
       #end
   respond_to do |format|
-        format.json{ render :json => { :details => DetailsOfShoe.all} }
+        format.json{ render :json => { :check_store_of_shoes => GeneralShoe.find(:all , :conditions => "production_date.split("/")[1] = '08'  ") }}
       end
-
-    end
-
-
-
-  #*********************************************************************************************************
-
-
-
+   end
+         
     def check_guest_order
     end
   
@@ -52,6 +45,20 @@ class ManagementsController < ApplicationController
 
     def get_contract
       render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id") }
+
+    def get_check_virtual_warehouse
+        render :json => { :general_shoe => SizeOfShoe.find(:all, :conditions => ["created_at like ?", params[:date] + "%" ])}
+    end
+ #   def get_check_guest_order
+ #     grids = []
+ #     GeneralShoe.all.each do |s|
+ #       grids << { :id => s.id, :photo_one => s.photo_one, :photo_two => s.photo_two }
+ #     end
+ #     render :json => grids
+ #   end
+
+    def get_check_guest_order
+      render :json => { :check => GeneralShoe.find_by_sql("select id, photo_one, photo_two from general_shoes")}
     end
 
     def get_check_virtual_warehouse_node
@@ -79,54 +86,85 @@ class ManagementsController < ApplicationController
     end
     ######################### 点击树节点获取工厂合同表格 #######################
     def get_cfo_grid
-      @factory_orders = FactoryOrder.get_cfo_record( params[:id] )
-      if @factory_orders == [] then
+      factory_orders = FactoryOrder.get_cfo_record( params[:id] )
+      if factory_orders == [] then
         # 如果没有找到对应的记录
-        @cfo_grid = ""
+        cfo_grid = ""
       else
-        @cfo_grid = FactoryOrder.create_cfo_json( @factory_orders )
+        cfo_grid = FactoryOrder.create_cfo_json( factory_orders )
       end
       #回应请求
       respond_to do |format|
-        format.json{ render :json => { :cfo => @cfo_grid } }
+        format.json{ render :json => { :cfo => cfo_grid } }
       end
     end
     ######################## 点击树节点获取预购单对应表格 ########################
     def get_cao_grid
-      @advanced_orders = AdvancedOrder.get_cao_record( params[:id] )
-      if @advanced_orders == [] then
-        @cao_grid = ""
+      advanced_orders = AdvancedOrder.get_cao_record( params[:id] )
+      if advanced_orders == [] then
+        cao_grid = ""
       else
-        @cao_grid = AdvancedOrder.create_cao_json( @advanced_orders )
+        cao_grid = AdvancedOrder.create_cao_json( advanced_orders )
       end
       respond_to do|format|
-        format.json{ render :json => { :cao => @cao_grid } }
+        format.json{ render :json => { :cao => cao_grid } }
       end
     end
     ######################## 点击树节点获取心愿单对应表格 ########################
     def get_cwl_grid
-      @wish_list = GeneralShoe.get_cwl_record( params[:id] )
-      if @wish_list == [] then
-        @cwl_grid = ""
+      wish_list = GeneralShoe.get_cwl_record( params[:id] )
+      if wish_list == [] then
+        cwl_grid = ""
       else
-        @cwl_grid = GeneralShoe.create_cwl_json( @wish_list )
+        cwl_grid = GeneralShoe.create_cwl_json( wish_list )
       end
       respond_to do |format|
-        format.json{ render :json => { :cwl => @cwl_grid } }
+        format.json{ render :json => { :cwl => cwl_grid } }
       end
     end
     ############################ 点击右键查看鞋 #################################
-    def get_general_shoes
-      @general_shoes = FactoryOrder.find( param[:id] ).general_shoes
+    def get_check_shoes
+      index = params[:start]
+      pageSize = params[:limit]
+      i = index.to_i
+      check_shoes = Array.new
+      count = pageSize.to_i + index.to_i
+      # 按照第几页显示10条数据
+      for i in index.to_i...count
+        tmp = FactoryOrder.find( params[:id] ).general_shoes[ i ]
+        p tmp
+        if tmp != nil then
+          check_shoes << tmp
+          i += 1
+        else
+          break
+        end
+      end
+      general_shoes = GeneralShoe.get_shoes_json( check_shoes ) 
+      general_shoes = { :totalProperty => 100, :cs => general_shoes }
       respond_to do|format|
-        format.json{ render :json => { :cs => @general_shoes } }
+        format.json{ render :json => general_shoes }
       end
     end
     ############################ 点击右键查看详情 ###############################
     def get_details_of_shoes
-      @details_shoes = GeneralShoe.get_details_json( params[:id] )
+      details_shoes = GeneralShoe.get_details_json( params[:id] )
       respond_to do|format|
-        format.json{ render :json => { :dos => @details_shoes } }
+        format.json{ render :json => { :dos => details_shoes } }
+      end
+    end
+    ############################ 点击右键查看合同 ###############################
+    def get_check_factory_order
+      factory_order = GeneralShoe.where( :id => params[:id] )#此处应该再取出合同的url，便于在form中显示
+      respond_to do |format|
+        format.json{ render :json => { :fo => factory_order } }
+      end
+    end
+    ########################## 点击右键查看订单 ##############################
+    def get_check_orders
+      orders = GeneralShoe.where( :id => params[:id] ) #此处应该再取出订单存放的url，便于在form中显示
+      respond_to do|format|
+        format.json{ render :json => { :co => orders } }
       end
     end
 

@@ -73,9 +73,9 @@ Zm::Application.routes.draw do
      get "get_data"
      get "get_check_store_of_shoes"
 
-     get "get_general_shoes"
      get "get_check_shoes"
      get "get_details_of_shoes"
+     get "get_check_orders"
 
      get "check_factory_order"
      get "get_cfo_grid"

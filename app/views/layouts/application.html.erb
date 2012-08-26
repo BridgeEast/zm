@@ -13,6 +13,11 @@
   <%= javascript_include_tag "ext_js/ext-all-debug.js" %>
   <%= javascript_include_tag "zm/zm.js"%>
 </head>
+<script type="text/javascript">
+  function title_img(val){
+		return  '<img src="/images/'+val+'" width="70" height="70" align="center">'
+	};
+  </script>
 <body>
 <% if current_user %>
   <div class='menu_bar'>
