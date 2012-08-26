@@ -36,10 +36,10 @@ Zm.managements.check_virtual_warehouse= {
 
 
         var store = new Ext.data.JsonStore({ 
-            url: "/managements/get_check_virtual_warehouse_node.json",
+            url: "/management/get_check_virtual_warehouse_node.json",
             fields: ['photo_one','photo_two','shoes_id','suitable_people','colors','size','types_of_shoes','price','production_date','necessary_num','finished_num','store_remaining'],
             root: 'virtual_warehouse',
-            autoLoad: true
+            autoLoad: false
         });
 
 
@@ -51,16 +51,16 @@ Zm.managements.check_virtual_warehouse= {
             viewConfig: { forceFit: true },
             tbar: new Ext.Toolbar(['-', {
               	text: '日报表查询',	
-               	handler: function(){  dailysheetenquiry.show();  }
+               	handler: function(){  dailySheetWindow.show();  }
           	}, '-', {
               	text: '月报表查询',	
-              	handler: function(){  mouthsheetenquiry.show();  }
+              	handler: function(){  mouthSheetWindow.show();  }
           	}, '-', {
                 text: '日发货查询',
-              	handler: function(){  dailydispatchlistenquiry.show();  }
+              	handler: function(){  dailyDispatchWindow.show();  }
             }, '-', {
                 text: '月发货查询',
-              	handler: function(){  mouthdispatchlistenquiry.show();  }
+              	handler: function(){  mouthDispatchWindow.show();  }
           }, '-']),
           bbar: new Ext.PagingToolbar({
               pageSize: 10,
@@ -175,32 +175,26 @@ Zm.managements.check_virtual_warehouse= {
                                 }
         			              }
                         }
-        			      }
-             jing_node3.remove();    
+        			      }; jing_node3.remove();    
                 }
          });      
           
          cvw_tree.on("collapsenode", function(node){  //树的闭合事件
              if(node.id=="cvwRoot"){
                  var myDate = new Date();
-                 for(i = 2010; i <= 2012; i++){ jing_year_nodes[i].remove() };
+                 for(i = 2010; i <= myDate.getFullYear(); i++){ jing_year_nodes[i].remove() };
                  jing_node3 = new Ext.tree.TreeNode({text: "2010", id: "linshi"});
                  root.appendChild(jing_node3);
              }
+                 store.removeAll();
          });
 
          cvw_tree.on("click", function(node){
-             var stringValue = node.id.split("");
-             var i = stringValue[7];
-             var j = stringValue[9];
-             var date = "";
+             var i = node.id.substring(4, 8);
+             var j = node.id.substring(8, 10);
              var record = {};
              var contract = node.id.substring(10,node.id.length);  //根据id提取合同的名字
-             if(stringValue[8] == 0){
-                 date = "201" + i + "-0" + j; 
-             }else{
-                 date = "201" + i + "-1" + j;
-             }
+             var date = i + "-" + j;
              record = {contract: contract, date: date};
 
              if(node.id.length > 10){

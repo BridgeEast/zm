@@ -60,13 +60,14 @@ Zm::Application.routes.draw do
    collection do
 ####### 好，这部分是我的路由,不要改我的 ###########
      get "check_guest_order"
+     get "get_daily_sheet"
      get "get_guest_order"
      get "check_virtual_warehouse"
      get "get_tree_node"
-     get "get_month"
      get "get_check_guest_order"
      get "get_check_virtual_warehouse"
      get "get_check_virtual_warehouse_node"
+     get "get_detail"
 ####### 好，这部分是我的路由 ######################
 
      get "check_store_of_shoes"

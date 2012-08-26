@@ -2,7 +2,6 @@ class ManagementsController < ApplicationController
  
   #*********************************************查看鞋库****************************************************
 
-
     def check_store_of_shoes
     end
 
@@ -46,12 +45,58 @@ class ManagementsController < ApplicationController
 
 
 
-    def check_guest_order
-    end
-  
-    def check_virtual_warehouse
+     respond_to do |format|
+       format.json{ render :json => { :check_store_of_shoes => choices} }
+     end
+   end
+
+###############  以下部分是我的，别碰我的东西 #####################################################################
+    #guest_contex
+    def get_detail
+      render :json => { :guest_detail => GeneralShoe.all }
     end
 
+ #   def get_daily_sheet
+ #     render :json => { :daily_data => SizeOfShoe.all }
+ #   end
+
+    def get_daily_sheet
+      index = params[:start]
+      pagSize = params[:limit]
+      i = index.to_i
+      pag = pagSize.to_i
+      count = pag - i
+      daily_data = []
+
+      SizeOfShoe.find_by_sql("select * from size_of_shoes where id <= '#{pag}' and id > '#{i}'").collect do |s|
+        daily_data << { :general_shoe_id => s.general_shoe_id, :necessary_num => s.necessary_num, :finished_num => s.finished_num }
+      end
+
+      daily_sheet = { :totalProperty => 200, :gds => daily_data }
+      respond_to do |format|
+        format.json { render :json => daily_sheet }
+      end
+    end
+
+    #guest     
+    def check_guest_order
+    end
+
+    #guest
+    def get_check_guest_order
+      render :json => { :check_guest_order => Order.all }
+    end
+    
+    #guest
+    def get_guest_order
+      render :json => { :check_guest_order => Order.find_by_sql("select * from orders where production_date like '#{params[:date]}%'") }
+    end
+
+    #virtual
+    def check_virtual_warehouse
+    end
+    
+    #virtual
     def get_contract
       render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id") }
       end
@@ -71,17 +116,18 @@ class ManagementsController < ApplicationController
     def get_check_guest_order
       render :json => { :check => GeneralShoe.find_by_sql("select id, photo_one, photo_two from general_shoes")}
     end
-
+    
+    #virtual
     def get_check_virtual_warehouse_node
       render :json => { :virtual_warehouse => GeneralShoe.all }
     end
- 
+    
+    #virtual
     def get_tree_node
-      respond_to do |format|
-        format.json{ render :json => { :tree_node => FactoryOrder.all } }
-      end
+      render :json => { :tree_node => FactoryOrder.all }
     end
-
+    
+    #virtual
     def get_check_virtual_warehouse
       render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where general_shoes.id = size_of_shoes.general_shoe.id ")}
     end
