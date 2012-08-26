@@ -1,5 +1,6 @@
 Zm.managements.check_store_of_shoes = {
 	init: function() {
+        this.select_id ;  
 		Zm.pages.ViewPort = {
 			layout: 'border',
 			region: 'center',
@@ -52,7 +53,7 @@ Zm.managements.check_store_of_shoes = {
 		},
 		]);
 
-		var store = new Ext.data.JsonStore({
+		store = new Ext.data.JsonStore({
 			url: '/managements/get_check_store_of_shoes.json',
 			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'production_date', 'remark'],
 			root: 'check_store_of_shoes',
@@ -73,17 +74,20 @@ Zm.managements.check_store_of_shoes = {
 			items: [{
 				id: 'checkDetails',
 				text: '查看详情',
+                scope:this,
 				handler: function() {
-					check_detail.show()
+					this.select_id = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["id"];
+                    Zm.managements.win.init().show();
 				}
 			}]
 		});
+
 		csosGrid.on("rowcontextmenu", function(grid, rowIndex, e) {
-			//selct_id = csosGrid.getSelectionModel().getSelected().id;
 			e.preventDefault();
 			grid.getSelectionModel().selectRow(rowIndex);
 			contextmenu.showAt(e.getXY())
 		});
+
 		return csosGrid
 
 	},
@@ -123,7 +127,7 @@ Zm.managements.check_store_of_shoes = {
 					id: i + '_' + j,
 					children: [{
 						text: '高跟鞋',
-						id: 'nodeHighHeeledShoe' + i + j,
+						id: 'nodeHighHeeledShoe',
 						leaf: true
 
 					},
@@ -148,28 +152,16 @@ Zm.managements.check_store_of_shoes = {
 			if (node.leaf) {
 				var year = node.parentNode.parentNode.text;
 				var month = node.parentNode.id.split("_")[1];
-				/* store.proxy = new Ext.data.HttpProxy({*/
-				//url: '/managements/get_data.json',
-				//method: 'post',
-				//jsonData: {
-				//selectYear: year,
-				//selectMonth: month,
-				//selectType: node.text
-				//}
-				//}),
-				/*store.load()*/
-				Ext.Ajax.request({
+				store.proxy = new Ext.data.HttpProxy({
 					url: '/managements/get_data.json',
 					method: 'post',
 					jsonData: {
 						selectYear: year,
 						selectMonth: month,
 						selectType: node.text
-					},
-					success: function() {
-						Ext.getCmp('treeCsos').store.load()
 					}
-				})
+				}),
+				store.load()
 			}
 		})
 		return treeCsos

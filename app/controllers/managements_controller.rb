@@ -7,9 +7,7 @@ class ManagementsController < ApplicationController
     end
 
     def get_check_store_of_shoes
-      respond_to do |format|
-        format.json{ render :json => { :check_store_of_shoes => GeneralShoe.all }}
-      end
+      render :json => { :check_store_of_shoes => GeneralShoe.all }
     end
     
     def get_data
@@ -27,21 +25,17 @@ class ManagementsController < ApplicationController
     end
     
     def get_details
-      details = []
+     #details = []
 
-<<<<<<< HEAD
-      DetailsOfShoe.all.each do |item|
-        if (item.general_shoe_id == params[:select_id])
-          details << item
-        end
-      end
-
-    respond_to do |format|
-        format.json{ render :json => { :details => details } }
-      end
-     # respond_to do |format|
-        #format.json{ render :json => { :details => DetailsOfShoe.all} }
+      #DetailsOfShoe.all.each do |item|
+        #if (item.general_shoe_id == params[:id])
+          #details << item
+        #end
       #end
+
+      #render :json => { :details => details } 
+     
+       render :json => { :details => DetailsOfShoe.where(:general_shoe_id => params[:id]) }
 
     end
 
@@ -51,16 +45,6 @@ class ManagementsController < ApplicationController
 
 
 
-=======
-   #   respond_to do |format|
-        #format.json{ render :json => { :details =>  GeneralShoe.details_of_shoes.find(:all , :conditions => "params[:select_id] = details_of_shoes.general_shoe_id") } }
-      #end
-  respond_to do |format|
-        format.json{ render :json => { :check_store_of_shoes => GeneralShoe.find(:all , :conditions => "production_date.split("/")[1] = '08'  ") }}
-      end
-   end
-         
->>>>>>> d156b655aa365dfe655ffa72aa9d46ac342af526
     def check_guest_order
     end
   
@@ -69,6 +53,8 @@ class ManagementsController < ApplicationController
 
     def get_contract
       render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id") }
+
+    end
 
     def get_check_virtual_warehouse
         render :json => { :general_shoe => SizeOfShoe.find(:all, :conditions => ["created_at like ?", params[:date] + "%" ])}
