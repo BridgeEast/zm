@@ -75,6 +75,10 @@ class GeneralShoe < ActiveRecord::Base
       }
     end
   end
+  ################## 查看号码和数量 ##################
+  def self.get_size_num_json( the_shoe_id )
+    
+  end
 end
 
 

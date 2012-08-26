@@ -143,7 +143,6 @@ class ManagementsController < ApplicationController
       # 按照第几页显示10条数据
       for i in index.to_i...count
         tmp = FactoryOrder.find( params[:id] ).general_shoes[ i ]
-        p tmp
         if tmp != nil then
           check_shoes << tmp
           i += 1
