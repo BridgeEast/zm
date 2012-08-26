@@ -326,7 +326,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 		var addGridTbar = new Ext.Toolbar(['-', {
 			text: '添加一行',
 			handler: function() {
-				var p = new addGridRecord({
+    			var p = new addGridRecord({
 					region: '',
 					material: '',
 					color: '',
@@ -360,6 +360,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			cm: addGridCm,
 			store: addGridStore,
 			tbar: addGridTbar,
+      clicksToEdit: 1,
 			viewConfig: {
 				forceFit: true
 			},
@@ -391,17 +392,21 @@ Zm.services.excelProcessingAndPlayBoard = {
 			//protect the frame out of the page 
 			items: [addShoesForm, addGrid, addPhoto],
 			buttons: [{
-				text: 'uploadphoto',
+				text: '上传图片',
 				scope: this
 			},
 			{
-				text: 'sure',
+				text: '确定',
 				scope: this
 			},
 			{
-				text: 'reset',
+				text: '重置',
 				scope: this
-			}]
+			},
+      {
+        text: '取消',
+        scope: this,
+      }]
 
 		});
 	},
