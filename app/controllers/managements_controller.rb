@@ -27,14 +27,20 @@ class ManagementsController < ApplicationController
     end
     
     def get_details
-      #details = []
+      details = []
 
-   #   respond_to do |format|
-        #format.json{ render :json => { :details =>  GeneralShoe.details_of_shoes.find(:all , :conditions => "params[:select_id] = details_of_shoes.general_shoe_id") } }
-      #end
-  respond_to do |format|
-        format.json{ render :json => { :details => DetailsOfShoe.all} }
+      DetailsOfShoe.all.each do |item|
+        if (item.general_shoe_id == params[:select_id])
+          details << item
+        end
       end
+
+    respond_to do |format|
+        format.json{ render :json => { :details => details } }
+      end
+     # respond_to do |format|
+        #format.json{ render :json => { :details => DetailsOfShoe.all} }
+      #end
 
     end
 

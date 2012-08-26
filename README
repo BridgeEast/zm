@@ -14,6 +14,7 @@ git pull --rebase 拉去远程仓库代码，更新代码
 git add .   把本地要提交的代码移到changes to be committed
 git commit -m'此次提交注释' //对你更新或修改了哪些内容做一个描述。
 git pull --rebase 更新代码
+git pull
 git push origin master 提交到远程仓库
 常用指令
 tig 查看提交纪录

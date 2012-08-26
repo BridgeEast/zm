@@ -39,13 +39,13 @@ Ext.onReady(function() {
 		dataIndex: 'procession_id'
 	}]);
 
-    //var select_id = Ext.getCmp("grid").getSelectionModel().getSelected().data["id"];
+    var select_id = Ext.getCmp("csosGrid").getSelectionModel().getSelected().id;
 
     var store = new Ext.data.JsonStore({
         url: '/managements/get_details.json',
         fields: ['id','region_id', 'material_id', 'color_id', 'procession_id'],
-       /* method: 'post',*/
-        /*jsonData: { select_id: select_id } ,*/
+       method: 'post',
+        jsonData: { select_id: select_id } ,
         root: 'details',
         autoLoad: true
     }) ;

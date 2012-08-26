@@ -52,7 +52,7 @@ Zm.managements.check_store_of_shoes = {
 		},
 		]);
 
-		store = new Ext.data.JsonStore({
+		var store = new Ext.data.JsonStore({
 			url: '/managements/get_check_store_of_shoes.json',
 			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'production_date', 'remark'],
 			root: 'check_store_of_shoes',
@@ -79,7 +79,7 @@ Zm.managements.check_store_of_shoes = {
 			}]
 		});
 		csosGrid.on("rowcontextmenu", function(grid, rowIndex, e) {
-           //selct_id = csosGrid.getSelectionModel().getSelected().data["id"];
+			//selct_id = csosGrid.getSelectionModel().getSelected().id;
 			e.preventDefault();
 			grid.getSelectionModel().selectRow(rowIndex);
 			contextmenu.showAt(e.getXY())
@@ -144,20 +144,32 @@ Zm.managements.check_store_of_shoes = {
 
 		treeCsos.setRootNode(rootShoes);
 		treeCsos.on('click', function(node) {
-         
+
 			if (node.leaf) {
 				var year = node.parentNode.parentNode.text;
 				var month = node.parentNode.id.split("_")[1];
-				store.proxy = new Ext.data.HttpProxy({
+				/* store.proxy = new Ext.data.HttpProxy({*/
+				//url: '/managements/get_data.json',
+				//method: 'post',
+				//jsonData: {
+				//selectYear: year,
+				//selectMonth: month,
+				//selectType: node.text
+				//}
+				//}),
+				/*store.load()*/
+				Ext.Ajax.request({
 					url: '/managements/get_data.json',
 					method: 'post',
 					jsonData: {
 						selectYear: year,
 						selectMonth: month,
 						selectType: node.text
+					},
+					success: function() {
+						Ext.getCmp('treeCsos').store.load()
 					}
-				}),
-				store.load()
+				})
 			}
 		})
 		return treeCsos
@@ -165,5 +177,4 @@ Zm.managements.check_store_of_shoes = {
 	}
 
 }
-
 
