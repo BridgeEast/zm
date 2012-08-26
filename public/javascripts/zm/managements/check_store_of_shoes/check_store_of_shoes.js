@@ -60,7 +60,7 @@ Zm.managements.check_store_of_shoes = {
 		});
 
 		var csosGrid = new Ext.grid.GridPanel({
-			id: 'csosGrod',
+			id: 'csosGrid',
 			region: 'center',
 			cm: cm,
 			store: store,

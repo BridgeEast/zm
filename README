@@ -45,3 +45,4 @@ git pull --rebase
 关于创建基础数据：
 在lib/tasks/base_data.rake里面添加创建数据纪录，再执行rake data:create_datas
 可以通过在终端 执行 rake -T 查看有哪些rake 指令
+

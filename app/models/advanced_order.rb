@@ -1,7 +1,7 @@
 class AdvancedOrder < ActiveRecord::Base
   has_many :general_shoes,:dependent => :destroy
   ############# 获取预购单所需的记录 ###############
-  def self.get_cao_record( param )
+  def self.get_cao_record( param_node )
     rec = Array.new
     self.all.each do |record|
       cao_state = record.state           #待定预购单 或 进行中预购单
@@ -9,7 +9,12 @@ class AdvancedOrder < ActiveRecord::Base
       cao_date = date.to_s.split("-")
       caoNodeId = cao_date[0] + '-' + cao_date[1].to_i.to_s + '-' + cao_state # 构建成节点的Id形式
       # 存入所需的记录 
-      if caoNodeId == param then
+      case param_node
+      when cao_date[0]
+        rec << record
+      when cao_date[0] + '-' + cao_date[1].to_i.to_s
+        rec << record
+      when caoNodeId
         rec << record
       end
     end
@@ -17,7 +22,6 @@ class AdvancedOrder < ActiveRecord::Base
   end
   ############## 创建预购单所需数据的json ###############
   def self.create_cao_json( cao )
-    p cao
     cao.collect! do |item|
       { 
          :id => item.id,
