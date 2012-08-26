@@ -15,23 +15,23 @@ Zm.managements.wish_list = {
 		var cm = new Ext.grid.ColumnModel([
 		new Ext.grid.RowNumberer(), {
 			header: '鞋图1',
-			dataIndex: 'photoOne'
+			dataIndex: 'photo_one'
 		},
 		{
 			header: '鞋图2',
-			dataIndex: 'photoTwo'
+			dataIndex: 'photo_two'
 		},
 		{
 			header: '鞋号',
-			dataIndex: 'shoesId'
+			dataIndex: 'shoes_id'
 		},
 		{
 			header: '鞋型',
-			dataIndex: 'typesOfShoes'
+			dataIndex: 'types_of_shoes'
 		},
 		{
 			header: '适用人群',
-			dataIndex: 'suitablePeople'
+			dataIndex: 'suitable_people'
 		},
 		{
 			headeri: '颜色',
@@ -43,66 +43,39 @@ Zm.managements.wish_list = {
 		},
 		{
 			header: '确定打板时间',
-			dataIndex: 'startPlayBoardDate',
+			dataIndex: 'sure_board',
 			renderer: Ext.util.Format.dateRenderer('Y/m/d')
 		},
 		{
 			header: '完成打板时间',
-			dataIndex: 'finishedPlayBoardDate',
+			dataIndex: 'done_board',
 			renderer: Ext.util.Format.dateRenderer('Y/m/d')
 		},
 		{
 			header: '制作日期',
-			dataIndex: 'productionDate',
+			dataIndex: 'production_date',
 			renderer: Ext.util.Format.dateRenderer('Y/m/d')
 		},
+		{    
+			header: '谈话',
+			dataIndex: 'communication'		
+    },
 		{    
 			header: '备注',
 			dataIndex: 'remark'
 		},
 		]);
 
-		//var store = new Ext.data.JsonStore({
-		//url: '/managements/get_check_store_of_shoes.json',
-		//fields: ['id', 'photoOne', 'photoTwo', 'shoesId', 'typesOfShoes', 'suitablePeople', 'colors', 'price', 'productionDate', 'remark'],
-		//root: 'check_store_of_shoes',
-		//autoLoad: true
-		/*});*/
-		var data = [['1-1.jpg', '1-2.jpg', 'name1', 'descn1'], ['3-1.jpg', '3-2.jpg', 'name2', 'descn2']];
-		var store = new Ext.data.Store({
-			proxy: new Ext.data.MemoryProxy(data),
-			reader: new Ext.data.ArrayReader({},
-			[{
-				name: 'photoOne'
-			},
-			{
-				name: 'photoTwo'
-			},
-			{
-				name: 'shoesId'
-			},
-			{
-				name: 'typesOfShoes'
-			},
-			{
-				name: 'suitablePeople'
-			},
-			{
-				name: 'colors'
-			},
-			{
-				name: 'price'
-			},
-			{
-				name: 'productionDate'
-			},
-			{
-				name: 'remark'
-			}])
+
+		store = new Ext.data.JsonStore({
+			url: '/managements/get_check_store_of_shoes.json',
+			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'sure_board','done_board','production_date', 'remark'],
+			root: 'wish_list',
+			autoLoad: true
 		});
-		store.load();
-		var csosGrid = new Ext.grid.GridPanel({
-			id: 'csosGrod',
+
+		var wlGrid = new Ext.grid.GridPanel({
+			id: 'wlGrid',
 			region: 'center',
 			cm: cm,
 			store: store,
@@ -120,18 +93,19 @@ Zm.managements.wish_list = {
 				}
 			}]
 		});
-		csosGrid.on("rowcontextmenu", function(grid, rowIndex, e) {
+		wlGrid.on("rowcontextmenu", function(grid, rowIndex, e) {
 			e.preventDefault();
 			grid.getSelectionModel().selectRow(rowIndex);
 			contextmenu.showAt(e.getXY())
 		});
-		return csosGrid
+		return wlGrid
 
 	},
 
 	create_csos_tree: function() {
 
 		var treeCsos = new Ext.tree.TreePanel({
+			autoScroll: true,
 			region: 'west',
 			id: 'treeCsos',
 			width: '180'
@@ -139,8 +113,7 @@ Zm.managements.wish_list = {
 
 		var rootShoes = new Ext.tree.TreeNode({
 			id: 'rootShoes',
-			text: '全部鞋' ,
-            expand: false
+			text: '全部鞋'
 		});
 
 		var nowYear = new Date().getFullYear();
@@ -164,7 +137,7 @@ Zm.managements.wish_list = {
 					id: i + '_' + j,
 					children: [{
 						text: '高跟鞋',
-						id: 'nodeHighHeeledShoe',
+						id: 'nodeHighHeeledShoe' + i + j,
 						leaf: true
 
 					},
@@ -184,7 +157,23 @@ Zm.managements.wish_list = {
 		};
 
 		treeCsos.setRootNode(rootShoes);
-
+		treeCsos.on('click', function(node) {
+         
+			if (node.leaf) {
+				var year = node.parentNode.parentNode.text;
+				var month = node.parentNode.id.split("_")[1];
+				store.proxy = new Ext.data.HttpProxy({
+					url: '/managements/get_data.json',
+					method: 'post',
+					jsonData: {
+						selectYear: year,
+						selectMonth: month,
+						selectType: node.text
+					}
+				}),
+				store.load()
+			}
+		})
 		return treeCsos
 
 	}
