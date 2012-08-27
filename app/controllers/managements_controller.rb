@@ -205,7 +205,14 @@ class ManagementsController < ApplicationController
         format.json{ render :json => { :co => orders } }
       end
     end
-
+    ###########################################################
+    def get_shoes_size_num
+      shoes = FactoryOrder.where( :id => params[:id] ).first.general_shoes
+      size_num = GeneralShoe.get_size_and_num_json( shoes )
+      respond_to do|format|
+        format.json{ render :json => { :csn => size_num } }
+      end
+    end
 end
 
 
