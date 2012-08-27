@@ -144,7 +144,7 @@ class DataBasesController < ApplicationController
   def update_shoes
     @records = params[:record]
     GeneralShoe.find(params[:record][:id]).update_attributes(params[:record])
-    GeneralShoe.find(params[:record][:id]).details_of_shoes.all.update_attributes(
+    DetailsOfShoe.where("general_shoe_id = ?", params[:record][:id]).update_attributes(
       {
       :region_id => @records[:region_id],
       :material_id => @records[:material_id],

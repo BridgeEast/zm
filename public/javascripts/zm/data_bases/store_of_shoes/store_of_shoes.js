@@ -13,11 +13,13 @@ Zm.dataBases.storeOfShoes = {
         var shoesCm = new Ext.grid.ColumnModel([
         new Ext.grid.RowNumberer(), {
             header: '样品图1',
-            dataIndex: 'photo_one'
+            dataIndex: 'photo_one',
+            renderer: title_img
         },
         {
             header: '样品图2',
-            dataIndex: 'photo_two'
+            dataIndex: 'photo_two',
+            renderer: title_img
         },
         {
             header: '样品号',
@@ -228,6 +230,7 @@ Zm.dataBases.storeOfShoes = {
             }])
         });
         store.load();
+        
 
         var CreateRecord = Ext.data.Record.create([{
             name: 'region'
@@ -371,13 +374,13 @@ Zm.dataBases.storeOfShoes = {
                     columnWidth: .5,
                     layout: 'form',
                     title: '图片1',
-                    html: '<img src=\'/images/' + Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
+
                 },
                 {
                     columnWidth: .5,
                     layout: 'form',
                     title: '图片2',
-                    html: '<img src=\'/images/' + Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
+
                 }]
             }]
         });
@@ -469,6 +472,7 @@ Zm.dataBases.storeOfShoes = {
                     color_id: colorsId,
                     procession_id: processionId
                 };
+
                 Ext.Ajax.request({
                     url: '/data_bases/update_shoes.json',
                     method: 'post',
@@ -550,12 +554,10 @@ Zm.dataBases.storeOfShoes = {
     },
 
     sampleDetail: function() {
+                    
         var sampleDetailForm = new Ext.form.FormPanel({
             region: 'north',
-            layout: 'fit',
             frame: true,
-            labelAlign: 'left',
-            labelWidth: 100,
             height: 240,
             width: 500,
             title: '样品详细信息',
@@ -563,11 +565,11 @@ Zm.dataBases.storeOfShoes = {
                 layout: 'column',
                 items: [{
                     columnWidth: .5,
-                    html: '<img src=\'/images/' + Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
+                    html: '<img src=\'/images/shoes/' + Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
                 },
                 {
                     columnWidth: .5,
-                    html: '<img src=\'/images/' + Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
+                    html: '<img src=\'/images/shoes/' + Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
                 }]
             }]
         });
