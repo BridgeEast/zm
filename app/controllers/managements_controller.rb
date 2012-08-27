@@ -24,7 +24,21 @@ class ManagementsController < ApplicationController
     end
     
 
+    def get_details
+      
+      #DetailsOfShoe.all.each do |item|
+        #if (item.general_shoe_id == params[:id])
+          #details << item
+        #end
+      #end
 
+      #render :json => { :details => details } 
+     
+       render :json => { :details => DetailsOfShoe.where(:general_shoe_id => params[:id]) }
+
+    end
+
+  #*********************************************************************************************************
 
 ###############  以下部分是我的，别碰我的东西 #####################################################################
     #guest_contex
@@ -37,22 +51,28 @@ class ManagementsController < ApplicationController
  #   end
 
     def get_daily_sheet
-      index = params[:start]
-      pagSize = params[:limit]
-      i = index.to_i
-      pag = pagSize.to_i
-      count = pag - i
+      if params[:start].to_i == 0 
+        index =  params[:start].to_i+ 1
+      else
+        index = params[:start].to_i + 2
+      end
+      pageSize = params[:limit].to_i 
       daily_data = []
-
-      SizeOfShoe.find_by_sql("select * from size_of_shoes where id <= '#{pag}' and id > '#{i}'").collect do |s|
-        daily_data << { :general_shoe_id => s.general_shoe_id, :necessary_num => s.necessary_num, :finished_num => s.finished_num }
+      ids = []
+      count = pageSize + index
+      if count > SizeOfShoe.count 
+        count = SizeOfShoe.count
       end
-
-      daily_sheet = { :totalProperty => 200, :gds => daily_data }
-      respond_to do |format|
-        format.json { render :json => daily_sheet }
+      (index..count).each do |id| 
+        ids<< id
       end
+      SizeOfShoe.find(ids).each do |s|
+        daily_data << { :id => s.id, :necessary_num => s.necessary_num, :finished_num => s.finished_num }
+      end
+      daily_sheet = { :totalProperty => SizeOfShoe.count, :gds => daily_data,  }
+      render :json => daily_sheet
     end
+
 
     #guest     
     def check_guest_order
@@ -75,7 +95,7 @@ class ManagementsController < ApplicationController
     #virtual
     def get_contract
       render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id") }
-      end
+    end
 
 
     def get_check_virtual_warehouse
@@ -95,7 +115,7 @@ class ManagementsController < ApplicationController
     
     #virtual
     def get_check_virtual_warehouse_node
-      render :json => { :virtual_warehouse => GeneralShoe.all }
+      render :json => {}
     end
     
     #virtual

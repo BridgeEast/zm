@@ -46,7 +46,7 @@ Zm.managements.check_guest_order= {
          		id: 'theContextMenu',
           	items: [{
               	text: '查看鞋', 
-                handler: function(){ clientorderenquirydetail.show(); }
+                handler: function(){ guestDetailWindow.show(); }
   	    		},{
                	text: '查看订单进度',
                 handler: function(){ chen_node3.remove(); }

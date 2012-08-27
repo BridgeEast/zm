@@ -1,7 +1,7 @@
 Ext.onReady(function(){
     var cm = new Ext.grid.ColumnModel([
         new Ext.grid.RowNumberer(),
-        { header: "样品", dataIndex: "general_shoe_id"},
+        { header: "样品", dataIndex: "id"},
         { header: "38", dataIndex: "necessary_num"},
         { header: "39", dataIndex: "finished_num"},
         { header: "40", dataIndex: "size_40"},
@@ -13,17 +13,16 @@ Ext.onReady(function(){
 
     var store = new Ext.data.JsonStore({
         url: "/managements/get_daily_sheet.json",
-        fields: ["general_shoe_id", "necessary_num", "finished_num", "size_40", "size_41", "size_42", "size_43", "size_44"],
+        fields: ["id", "necessary_num", "finished_num", "size_40", "size_41", "size_42", "size_43", "size_44"],
         totalProperty: "totalProperty",
-      //  baseParams: {},
         root: "gds",
     });
-    store.load({ params: { start: 0, limit: 8 } });
+    store.load({ params: { start: 0, limit: 9 } });
 
     var dailySheetGrid = new Ext.grid.GridPanel({
         id: "dailysheetgird",
         width: 585,
-        height: 287,
+        height: 305,
         frame: true,
         viewConfig: { forceFit: true },
         cm: cm,
@@ -35,7 +34,7 @@ Ext.onReady(function(){
             xtype: "datefield",
         }],
         bbar: new Ext.PagingToolbar({
-            pagSize: 6,
+            pageSize:9, 
             store: store,
             displayInfo: true,
             displayMsg: "第 {0} 到 {1} 条记录，共 {2} 条",
@@ -47,7 +46,7 @@ Ext.onReady(function(){
         id: "sheetwindow",
         title: "工作日报表查询",
         width: 600,
-        height: 350,
+        height: 365,
         closeAction: "hide",
         resizable: false,
         items: [dailySheetGrid],

@@ -18,7 +18,7 @@ Ext.onReady(function(){
           autoLoad: true
     	});
   
-  	  var clientorderenquirydetailgrid = new Ext.grid.GridPanel({
+  	  var guestDetailGrid= new Ext.grid.GridPanel({
 		    	region: 'center',
 		    	height: 570,
 		    	autoScroll: true,
@@ -38,12 +38,11 @@ Ext.onReady(function(){
         	})
     	});
 
-      var clientorderenquirydetailcontextmenu = new Ext.menu.Menu({
+      var guestContextMenu = new Ext.menu.Menu({
        		id: 'clientorderenquirydetailContextMenu',
         	items: [{
             	text: '查看详情',
             	handler: function(){
-				    	sampledetail.show();
             	}	
 			},{
             	text: '查看合同',
@@ -52,24 +51,23 @@ Ext.onReady(function(){
         	}]
     	});
 
-    	clientorderenquirydetailgrid.on("rowcontextmenu", function(clientorderenquirydetailgrid, rowIndex, e){
+    	guestContextMenu.on("rowcontextmenu", function(guestDetailGrid, rowIndex, e){
         	e.preventDefault();
-        	clientorderenquirydetailgrid.getSelectionModel().selectRow(rowIndex);
-        	clientorderenquirydetailcontextmenu.showAt(e.getXY());
+        	guestDetailGrid.getSelectionModel().selectRow(rowIndex);
+        	guestContexMenu.showAt(e.getXY());
     	});      
 
-      clientorderenquirydetail = new Ext.Window({
-			minimizable: true,
-			region: 'center',
-			labelAlign: 'top',
-			frame:true,
-        	closeAction: 'hide',
-			height: 600,
-			width: 500,
-			defaultButton: 0,
-			constrainHeader: true,
-			resizable: false,
-       	 	items: [clientorderenquirydetailgrid]
+      guestDetailWindow = new Ext.Window({
+	    		minimizable: true,
+	    		region: 'center',
+	    		labelAlign: 'top',
+	    		frame:true,
+            	closeAction: 'hide',
+	    		height: 600,
+	    		width: 500,
+	    		defaultButton: 0,
+	    		constrainHeader: true,
+	    		resizable: false,
+       	 	items: [guestDetailGrid]
     	});
-	    clientorderenquirydetail.hide();
 	});					 

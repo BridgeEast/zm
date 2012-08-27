@@ -36,7 +36,7 @@ Zm.managements.check_virtual_warehouse= {
 
 
         var store = new Ext.data.JsonStore({ 
-            url: "/management/get_check_virtual_warehouse_node.json",
+            url: "/managements/get_check_virtual_warehouse_node.json",
             fields: ['photo_one','photo_two','shoes_id','suitable_people','colors','size','types_of_shoes','price','production_date','necessary_num','finished_num','store_remaining'],
             root: 'virtual_warehouse',
             autoLoad: false
@@ -75,7 +75,7 @@ Zm.managements.check_virtual_warehouse= {
         var virtualwarehouseenquiry2contextmenu = new Ext.menu.Menu({
          		id: 'theContextMenu',
           	items: [{
-              	text: '查看详情', handler: function(){ sampledetail.show(); }					
+              	text: '查看详情', handler: function(){ detailsWindow.show(); }					
           	}]
       	});
 
@@ -175,7 +175,7 @@ Zm.managements.check_virtual_warehouse= {
                                 }
         			              }
                         }
-        			      }; jing_node3.remove();    
+        			      } jing_node3.remove();    
                 }
          });      
           
