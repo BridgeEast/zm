@@ -68,7 +68,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			items: [{
 				text: '添加鞋',
 				handler: function() {// 这里一定要先用function，不然会直接引用下面的命令
-          this.addShoes("添加鞋").show()
+          this.addOrModifyshoes("添加鞋").show()
 				}
 			},
 			'-', {
@@ -80,17 +80,24 @@ Zm.services.excelProcessingAndPlayBoard = {
 			'-', {
 				text: '发送至心愿单',
 				handler: function() {
-					this.sendToWishList()
+				  
 				}
 			}]
 		});
 
 		var Epapbcontextmenu = new Ext.menu.Menu({ // 这里做了一个菜单，供下面的行的右键可用
 			id: 'Epapbcontextmenu',
+      defaults: { scope:this },
 			items: [{ //菜单主要有什么内容，实现什么功能
 				text: '查看详情',
 				handler: function() {
-          this.createCheckDetails().show()
+          var shoes_id = Ext.getCmp('epapbGrid').getSelectionModel().getSelected().data.id;
+          // Ext.Msg.alert("xxx",shoes_id);
+          //this.cwlWindow( this.checkDetailsForm(), this.checkDetailsGrid() ).show();
+          Zm.services.checkDetail.createCheckDetails(shoes_id).show();
+          //var store = Ext.getCmp('detailGrid').store;
+          //store.setBaseParam('id', shoes_id );
+          //store.reload();
         }
 			},
 			{
@@ -143,15 +150,15 @@ Zm.services.excelProcessingAndPlayBoard = {
 		return EpapbGrid;
 
 	},
-	//++++++++++++++++++++++++++++++++addShoes:function+++++++++++++++++++++++++++++++
-	addShoes: function(type) {
-		var addShoesFormComboStore = new Ext.data.SimpleStore({
+	//++++++++++++++++++++++++++++++++addOrModifyshoes:function+++++++++++++++++++++++++++++++
+	addOrModifyshoes: function(type) {
+		var AOMSFormStore = new Ext.data.SimpleStore({
 			fields: ['value', 'text'],
 			data: [['value1', '高跟鞋'], ['value2', '平底鞋'], ['value3', '靴子']]
 		});
 
-		var addShoesForm = new Ext.form.FormPanel({
-			id: 'addShoesForm',
+		var AOMSForm = new Ext.form.FormPanel({
+			id: 'AOMSForm',
 			labelAlign: 'right',
 			labelWidth: 60,
 			bodyStyle: 'padding: 10px 0 0 0',
@@ -174,7 +181,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 					fieldLabel: '鞋型',
 					xtype: 'combo',
 					width: 120,
-					store: addShoesFormComboStore,
+					store: AOMSFormStore,
 					displayField: 'text',
 					valueField: 'text',
 					mode: 'local',
@@ -217,7 +224,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 				}]
 			}]
 		});
-
+    //----------AOMSGrid-----
 		var addGridEditorRegion = new Ext.grid.GridEditor(
 		new Ext.form.ComboBox({
 			id: 'addGridEditorRegion',
@@ -290,7 +297,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			editable: false
 		}));
 
-		var addGridCm = new Ext.grid.ColumnModel([
+		var AOMSCm = new Ext.grid.ColumnModel([
 		new Ext.grid.RowNumberer(), {
 			header: '部位',
 			dataIndex: 'region',
@@ -337,9 +344,9 @@ Zm.services.excelProcessingAndPlayBoard = {
 		// 在下面的stroe里得到的数据，可以不按顺序就能读到这里来
 		]);
 
-		var data = [];
-		var addGridStore = new Ext.data.JsonStore({
-			proxy: new Ext.data.MemoryProxy(data),
+		var AOMSData = [];
+		var AOMSStore = new Ext.data.JsonStore({
+			proxy: new Ext.data.MemoryProxy(AOMSData),
 			reader: new Ext.data.ArrayReader({},
 			[{
 				name: 'region'
@@ -354,9 +361,9 @@ Zm.services.excelProcessingAndPlayBoard = {
 				name: 'procession'
 			}])
 		});
-		addGridStore.load();
+		AOMSStore.load();
 
-		var addGridRecord = Ext.data.Record.create([{
+		var AOMSRecord = Ext.data.Record.create([{
 			name: 'region'
 		},
 		{
@@ -369,7 +376,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			name: 'procession'
 		}]);
 
-		var addGridTbar = new Ext.Toolbar(['-', {
+		var AOMSGridTbar = new Ext.Toolbar(['-', {
 			text: '添加一行',
 			handler: function() {
 				var p = new addGridRecord({
@@ -398,22 +405,22 @@ Zm.services.excelProcessingAndPlayBoard = {
 		},
 		'-'])
 
-		var addGrid = new Ext.grid.EditorGridPanel({
-			id: 'addGrid ',
+		var AOMSGrid = new Ext.grid.EditorGridPanel({
+			id: 'AOMSGrid',
 			//title: '部位',
 			region: 'center',
 			height: 200,
-			cm: addGridCm,
-			store: addGridStore,
-			tbar: addGridTbar,
+			cm: AOMSCm,
+			store: AOMSStore,
+			tbar: AOMSGridTbar,
 			clicksToEdit: 1,
 			viewConfig: {
 				forceFit: true
 			},
 		});
 
-		var addPhoto = new Ext.Panel({
-			id: 'addPhoto',
+		var AOMSPhoto = new Ext.Panel({
+			id: 'AOMSPhoto',
 			// title: "xx",
 			// height: 100,
 			// width: 100,
@@ -429,14 +436,14 @@ Zm.services.excelProcessingAndPlayBoard = {
 		});
 
 		return new Ext.Window({
-			id: 'addShoesWindow',
+			id: 'AOMSWindow',
 			title: type,
 			modal: true,
 			height: 600,
 			width: 600,
 			constrainHeader: true,
 			//protect the frame out of the page 
-			items: [addShoesForm, addGrid, addPhoto],
+			items: [AOMSForm,AOMSGrid,AOMSPhoto],
 			buttons: [{
 				text: '上传图片',
 				scope: this
@@ -483,91 +490,7 @@ Zm.services.excelProcessingAndPlayBoard = {
   //+++++++++++++++++++++++++++++++send_to_wish_list++++++++++++++++++++++++++++++++++++++++++
   
   //++++++++++++++++++++++++++++++++++check_details++++++++++++++++++++++++++++++++++++++++++++
-  // 查看详情
-	createCheckDetails: function() {
-
-		var detailCm = new Ext.grid.ColumnModel([
-		new Ext.grid.RowNumberer(), {
-			header: '部位',
-			dataIndex: 'region',
-		},
-		{
-			header: '材料',
-			dataIndex: 'material'
-		},
-		//这里可以不用指定type，但还是要的也好
-		{
-			header: '颜色',
-			dataIndex: 'color',
-
-		},
-		{
-			header: '加工方法',
-			dataIndex: 'procession',
-
-		},
-		// 在下面的stroe里得到的数据，可以不按顺序就能读到这里来
-		]);
-
-		var data = [];
-		var detailStore = new Ext.data.Store({
-			proxy: new Ext.data.MemoryProxy(data),
-			reader: new Ext.data.ArrayReader({},
-			[{
-				name: 'region'
-			},
-			{
-				name: 'material'
-			},
-			{
-				name: 'color'
-			},
-			{
-				name: 'procession'
-			}])
-		});
-
-		var detailGrid = new Ext.grid.EditorGridPanel({
-			id: 'addGrid ',
-			//title: '部位',
-			region: 'center',
-			height: 200,
-			cm: detailCm,
-			store: detailStore,
-			viewConfig: {
-				forceFit: true
-			},
-		});
-
-		var detailPhoto = new Ext.Panel({
-			id: 'detailPhoto',
-			// title: "xx",
-			// height: 100,
-			// width: 100,
-			layout: 'column',
-			items: [{
-				title: 'photo1',
-				columnWidth: .5
-			},
-			{
-				title: 'photo2',
-				columnWidth: .5
-			}]
-		});
-
-		return new Ext.Window({
-			id: 'detailWin',
-			title: type,
-			modal: true,
-			height: 600,
-			width: 600,
-			constrainHeader: true,
-			//protect the frame out of the page 
-			items: [detailGrid, detailPhoto],
-
-		});
-	},
-
+  
 	//+++++++++++++++++++++++++++++++++++EpapbTree+++++++++++++++++++++++++++++++++++++++++++++++
 	createEpapbTree: function() {
 

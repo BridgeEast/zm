@@ -24,6 +24,14 @@ class ServicesController < ApplicationController
     GeneralShoe.find(params[:id]).destroy
     render :json => {}
   end
+  #-----------------------------右键查看详情----------------
+  def get_details_of_shoes
+    details_shoes = GeneralShoe.get_details_json( params[:id] )
+    respond_to do|format|
+      format.json{ render :json => { :dos => details_shoes } }
+    end
+  end
+
 
 
 

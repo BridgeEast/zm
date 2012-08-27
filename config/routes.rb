@@ -95,6 +95,7 @@ Zm::Application.routes.draw do
      get "get_excel_shoes"
      get "scanningGuestWishLists"
      post "delete_shoes_and_detail_of_shoes"
+     get "get_details_of_shoes"
      
    end
  end
