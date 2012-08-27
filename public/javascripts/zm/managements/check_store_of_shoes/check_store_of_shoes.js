@@ -153,27 +153,30 @@ Zm.managements.check_store_of_shoes = {
 			if (node.leaf) {
 				var year = node.parentNode.parentNode.text;
 				var month = node.parentNode.id.split("_")[1];
+				if (parseInt(month) < 10) month = '0' + month
+				       var date = year + '-' + month;
 				var type = node.text
 			}
 			else if (node.text.toString().indexOf("月") != - 1) {
-				 year = node.parentNode.text;
-				 month = node.id.split("_")[1];
+				year = node.parentNode.text;
+				month = node.id.split("_")[1];
+				if (parseInt(month) < 10) month = '0' + month 
+                    date = year + '-' + month;
 			}
 			else if (node.parentNode.text == '全部鞋') {
-				year = node.text;
+				date = node.text;
 			}
-            else{ 
-            year = null;
-            month = null;
-            type = null
-            }
+			else {
+				year = null;
+				month = null;
+				type = null
+			}
 
 			store.proxy = new Ext.data.HttpProxy({
 				url: '/managements/get_data.json',
 				method: 'post',
 				jsonData: {
-					selectYear: year,
-					selectMonth: month,
+					selectDate: date,
 					selectType: type
 				}
 			}),
