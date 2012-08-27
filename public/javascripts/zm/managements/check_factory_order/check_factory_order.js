@@ -47,13 +47,31 @@ Zm.managements.CheckFactoryOrder = {
                        var obj = Ext.getCmp("cfoGrid").getSelectionModel().getSelected().data; // 取出被选中合同id
                        var store = Ext.getCmp( 'checkShoes' ).store;                       // 发送请求显示查看鞋数据
                        store.setBaseParam( "id", obj.id );
-                       store.load({ params:{  start: 0, limit: 10 } });
+                       var myMask = this.loadingMask( "checkShoes" );
+                       myMask.show();
+                       store.load({ 
+                         params:{  start: 0, limit: 10 },
+                         callback: function(){ 
+                           myMask.hide();
+                         }
+                       });
                        Zm.managements.CheckFactoryOrder.clickEvent.menuDetailsEvent();
                               }
                         },{ 
                      id: 'modifyPaymentsMenu',
-                     text: '修改付款情况',
+                     text: '查看码号和数量',
                      handler: function(){ 
+                       this.checkWindow( this.checkSizeNum() ).show();
+                       var obj = Ext.getCmp("cfoGrid").getSelectionModel().getSelected().data;
+                       var store = Ext.getCmp('checkSizeNum').store;
+                       store.setBaseParam( "id", obj.id );
+                       var myMask = this.loadingMask( "checkSizeNum" );
+                       myMask.show()
+                       store.load({ 
+                         callback: function(){ 
+                                     myMask.hide();
+                                   }
+                       });
                               }
                           },{ 
                      id: 'checkFatoryOrderMenu',
@@ -78,12 +96,9 @@ Zm.managements.CheckFactoryOrder = {
                               var store = Ext.getCmp("checkDetailsGrid").store;
                               var obj = Ext.getCmp('checkShoes').getSelectionModel().getSelected().data;
                               store.setBaseParam( "id", obj.id );
-                              var myMask = new Ext.LoadMask( Ext.getDom("checkDetailsGrid"), { 
-                                removeMask: true ,
-                                msg: "Please wait..." 
-                              });
-                              store.load();
+                              var myMask = this.loadingMask( "checkDetailsGrid" );
                               myMask.show();
+                              store.load({ callback:function(){ myMask.hide() } });
                             } 
                     },{ 
                       text: '查看订单',handler: function(){ 
@@ -97,13 +112,14 @@ Zm.managements.CheckFactoryOrder = {
                 var cm = new Ext.grid.ColumnModel([ 
                   { header: '鞋号', dataIndex: 'shoes_id' },
                   { header: '鞋型', dataIndex: 'types_of_shoes' },
+                  { header: '适合人群', dataIndex: 'suitable_people' },
                   { header: '颜色', dataIndex: 'colors' },
                   { header: '价格', dataIndex: 'price' },
                   { header: '备注', dataIndex: 'remark' },
                 ]);
                 var store = new Ext.data.JsonStore({ 
                   url: '/managements/get_check_shoes.json',
-                  fields: ['id', 'shoes_id', 'types_of_shoes', 'colors', 'price', 'remark' ],
+                  fields: ['id', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'remark', 'photo_one', 'photo_two' ],
                   totalProperty: 'totalProperty', 
                   baseParams: { id: 'null' },
                   root: 'cs',
@@ -137,10 +153,10 @@ Zm.managements.CheckFactoryOrder = {
                           layout: 'column',
                           items: [{ 
                             columnWidth: .5,
-                            html: "< img src=\'/images/" + Ext.getCmp('checkShoes').getSelectionModel().getSelected().data.photo_one + "\' width=100% height=100% />"
+                            html: "<img src=\'/images/shoes/" + Ext.getCmp('checkShoes').getSelectionModel().getSelected().data.photo_one + "\' width=100% height=100% />"
                           },{ 
                             columnWidth: .5,
-                            html: "<img src=\'/images/" + Ext.getCmp('checkShoes').getSelectionModel().getSelected().data.photo_two + "\' width=100% height=100% />"
+                            html: "<img src=\'/images/shoes/" + Ext.getCmp('checkShoes').getSelectionModel().getSelected().data.photo_two + "\' width=100% height=100% />"
                           }]
                         }],
                       });
@@ -156,7 +172,7 @@ Zm.managements.CheckFactoryOrder = {
                   ]);
                   var store = new Ext.data.JsonStore({
                     url: '/managements/get_details_of_shoes.json',
-                    fields: [ 'region', 'material' , 'color', 'procession', 'remark'],
+                    fields: [ 'region', 'material' , 'color', 'procession', 'remark' ],
                     baseParams: { id: 'null' },
                     root: 'dos'
                   });
@@ -165,6 +181,33 @@ Zm.managements.CheckFactoryOrder = {
                     region: 'center',
                     cm: cm,
                     store: store,
+                  });
+                },
+//--------------------------查看码号和数量
+  checkSizeNum: function(){ 
+                  var cm = new Ext.grid.ColumnModel([
+                      { header: '鞋号', dataIndex: 'shoes_id' },
+                      { header: '36', dataIndex: 'size_36' },
+                      { header: '37', dataIndex: 'size_37' },
+                      { header: '38', dataIndex: 'size_38' },
+                      { header: '39', dataIndex: 'size_39' },
+                      { header: '40', dataIndex: 'size_40' },
+                      { header: '41', dataIndex: 'size_41' },
+                      { header: '42', dataIndex: 'size_42' },
+                      { header: '43', dataIndex: 'size_43' },
+                      { header: '44', dataIndex: 'size_44' },
+                     ]);
+                  var store = new Ext.data.JsonStore({
+                      url: '/managements/get_shoes_size_num',
+                      fields: [ 'id', 'shoes_id', 'size_36', 'size_37', 'size_38', 'size_39', 'size_40', 'size_41', 'size_42', 'size_43', 'size_44' ],
+                      baseParams: { id: 'null' },
+                      root: 'csn',
+                   });
+                  return new Ext.grid.GridPanel({
+                    id: 'checkSizeNum',
+                    cm: cm,
+                    store: store,
+                    viewConfig: { forceFit: true },
                   });
                 },
 //--------------------------查看订单
@@ -188,6 +231,7 @@ Zm.managements.CheckFactoryOrder = {
                    closeAction: 'close',
                    constrain: true,
                    constrainHeader: true,
+                   resizable: false,
                    height: 600,
                    width: 500,
                    items: [ checkGrid ],
@@ -205,4 +249,11 @@ Zm.managements.CheckFactoryOrder = {
                      items: [ checkDetailsForm, checkDetailsGrid ],
                    });
                  },
+  loadingMask: function( loading ){ 
+                 return new Ext.LoadMask( Ext.getDom( loading ),{ 
+                   msg: 'Please waiting...',
+                   removeMask: true,
+                 });
+               },
 }
+

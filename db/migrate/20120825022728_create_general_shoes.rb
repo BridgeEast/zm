@@ -2,7 +2,7 @@ class CreateGeneralShoes < ActiveRecord::Migration
   def self.up
     create_table :general_shoes do |t|
 
-      t.string :shoes_id, :null => false
+      t.string :shoes_id, :null => false, :unique => true
       t.string :suitable_people
       t.string :colors
       t.string :types_of_shoes

@@ -60,13 +60,14 @@ Zm::Application.routes.draw do
    collection do
 ####### 好，这部分是我的路由,不要改我的 ###########
      get "check_guest_order"
+     get "get_daily_sheet"
      get "get_guest_order"
      get "check_virtual_warehouse"
      get "get_tree_node"
-     get "get_month"
      get "get_check_guest_order"
      get "get_check_virtual_warehouse"
      get "get_check_virtual_warehouse_node"
+     get "get_detail"
 ####### 好，这部分是我的路由 ######################
 
      get "check_store_of_shoes"
@@ -77,6 +78,7 @@ Zm::Application.routes.draw do
      get "get_check_shoes"
      get "get_details_of_shoes"
      get "get_check_orders"
+     get "get_shoes_size_num"
 
      get "check_factory_order"
      get "get_cfo_grid"
@@ -84,6 +86,17 @@ Zm::Application.routes.draw do
      get "get_cwl_grid"
      get "check_advanced_order"
      get "get_cao_grid"
+   end
+ end
+
+ resources :services do
+   collection do
+     get "excelProcessingAndPlayBoard"
+     get "get_excel_shoes"
+     get "scanningGuestWishLists"
+     post "delete_shoes_and_detail_of_shoes"
+     get "get_details_of_shoes"
+     
    end
  end
 

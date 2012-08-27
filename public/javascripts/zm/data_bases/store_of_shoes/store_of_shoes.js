@@ -8,7 +8,7 @@ Zm.dataBases.storeOfShoes = {
     },
 
     createStoreOfShoes: function() {
-       
+
         //用于显示鞋库的gridpanel
         var shoesCm = new Ext.grid.ColumnModel([
         new Ext.grid.RowNumberer(), {
@@ -55,7 +55,7 @@ Zm.dataBases.storeOfShoes = {
             autoLoad: true
         });
 
-        return new Ext.grid.GridPanel({
+        var shoesGrid = new Ext.grid.GridPanel({
             id: 'storeOfShoesGrid',
             title: '鞋库',
             region: 'center',
@@ -66,6 +66,33 @@ Zm.dataBases.storeOfShoes = {
             },
             tbar: this.gridTbar()
         });
+
+        var contextmenu = new Ext.menu.Menu({
+            id: 'checkDetails',
+            defaults: {
+                scope: this
+            },
+            items: [{
+                text: '查看详情',
+                handler: function() {
+                    this.sampleDetail().show();
+                }
+            },
+            {
+                text: '修改',
+                handler: function() {
+                    this.updateShoes()
+                }
+            }]
+        });
+
+        shoesGrid.on("rowcontextmenu", function(grid, rowIndex, e) {
+            e.preventDefault();
+            grid.getSelectionModel().selectRow(rowIndex);
+            contextmenu.showAt(e.getXY())
+        });
+
+        return shoesGrid;
     },
 
     gridTbar: function() {
@@ -73,30 +100,19 @@ Zm.dataBases.storeOfShoes = {
             defaults: {
                 scope: this
             },
-            items: ['-',{
+            items: ['-', {
                 text: '添加新样品',
                 handler: function() {
                     this.addShoes("添加新样品").show()
                 }
-            },'-',
-            {
+            },
+            '-', {
                 text: '删除所选',
                 handler: function() {
                     this.deleteShoes()
                 }
-            },'-',
-            {
-                text: '查看详情',
-                handler: function() {
-                    this.sampleDetail().show()
-                }
-            },'-',
-            {
-                text: '修改',
-                handler: function() {
-                    this.updateShoes()
-                }
-            },'-']
+            },
+            '-']
         });
     },
 
@@ -227,6 +243,7 @@ Zm.dataBases.storeOfShoes = {
         }]);
 
         var grid = new Ext.grid.EditorGridPanel({
+            id: 'grid',
             region: 'center',
             autoScroll: true,
             loadMask: true,
@@ -353,12 +370,14 @@ Zm.dataBases.storeOfShoes = {
                 items: [{
                     columnWidth: .5,
                     layout: 'form',
-                    title: '图片1'
+                    title: '图片1',
+                    html: '<img src=\'/images/' + Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
                 },
                 {
                     columnWidth: .5,
                     layout: 'form',
-                    title: '图片2'
+                    title: '图片2',
+                    html: '<img src=\'/images/' + Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
                 }]
             }]
         });
@@ -444,7 +463,11 @@ Zm.dataBases.storeOfShoes = {
                     types_of_shoes: typesOfShoes,
                     price: price,
                     remark: remark,
-                    production_date: productionDate
+                    production_date: productionDate,
+                    region_id: regionId,
+                    material_id: materialId,
+                    color_id: colorsId,
+                    procession_id: processionId
                 };
                 Ext.Ajax.request({
                     url: '/data_bases/update_shoes.json',
@@ -495,8 +518,8 @@ Zm.dataBases.storeOfShoes = {
                 url: '/data_bases/delete_shoes_and_detail_of_shoes.json',
                 method: 'post',
                 jsonData: {
-                   id: selection.getSelected().id,
-                   
+                    id: selection.getSelected().id,
+
                 },
                 success: function() {
                     Ext.getCmp('storeOfShoesGrid').store.load();
@@ -515,18 +538,15 @@ Zm.dataBases.storeOfShoes = {
     // 修改
     updateShoes: function() {
         var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
-        if (!selection.getSelected()) {
-            Ext.Msg.alert('警告', '请选择一条记录');
-        } else {
-            var data = selection.getSelected().data;
-            this.addShoes("修改").show();
-            Ext.getCmp('addShoesId').setValue(data["shoes_id"]);
-            Ext.getCmp('addSuitablePoeple').setValue(data["suitable_people"]);
-            Ext.getCmp('addColor').setValue(data["colors"]);
-            Ext.getCmp('addTypesOfShoes').setValue(data["types_of_shoes"]);
-            Ext.getCmp('addPrice').setValue(data["price"]);
-            Ext.getCmp('addRemark').setValue(data["remark"])
-        }
+        var data = selection.getSelected().data;
+        this.addShoes("修改").show();
+        Ext.getCmp('addShoesId').setValue(data["shoes_id"]);
+        Ext.getCmp('addSuitablePoeple').setValue(data["suitable_people"]);
+        Ext.getCmp('addColor').setValue(data["colors"]);
+        Ext.getCmp('addTypesOfShoes').setValue(data["types_of_shoes"]);
+        Ext.getCmp('addPrice').setValue(data["price"]);
+        Ext.getCmp('addRemark').setValue(data["remark"])
+
     },
 
     sampleDetail: function() {
@@ -542,44 +562,40 @@ Zm.dataBases.storeOfShoes = {
             items: [{
                 layout: 'column',
                 items: [{
-                    title: '图片1',
                     columnWidth: .5,
-                    html: "<img src=images/.jpg width=100% height=100%>"
-
+                    html: '<img src=\'/images/' + Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
                 },
                 {
-                    title: '图片2',
                     columnWidth: .5,
-                    html: "<img src=images/.jpg width=100% height=100%>"
+                    html: '<img src=\'/images/' + Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
                 }]
             }]
         });
 
         var sampleDetailCm = new Ext.grid.ColumnModel([{
             header: '部位',
-            dataIndex: 'region_id'
+            dataIndex: 'region'
         },
         {
             header: '材料',
-            dataIndex: 'material_id'
+            dataIndex: 'material'
         },
         {
             header: '颜色',
-            dataIndex: 'color_id'
+            dataIndex: 'color'
         },
         {
             header: '加工方法',
-            dataIndex: 'procession_id'
-        },
-        {
-            header: '备注',
-            dataIndex: 'remark'
+            dataIndex: 'procession'
         }]);
-
+        var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
         var sampleDetailStore = new Ext.data.JsonStore({
             url: '/data_bases/get_details_of_shoes.json',
-            fields: ['region_id', 'material_id', 'color_id', 'procession_id'],
-            root: 'details_of_shoes',
+            fields: ['region', 'material', 'color', 'procession'],
+            baseParams: {
+                id: selection.getSelected().id
+            },
+            root: 'dos',
             autoLoad: true
         })
 
@@ -599,6 +615,7 @@ Zm.dataBases.storeOfShoes = {
         });
 
         return new Ext.Window({
+            scope: this,
             title: '查看详情',
             region: 'center',
             lableAlign: 'top',

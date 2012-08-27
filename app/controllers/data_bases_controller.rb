@@ -40,13 +40,17 @@ class DataBasesController < ApplicationController
       format.json{ render :json => { :general_shoes => GeneralShoe.all } }
     end
   end
-  def get_details_of_shoes
-    respond_to do |format|
-      format.json{ render :json => { :details_of_shoes => DetailsOfShoe.all } }
+  def get_details
+       render :json => { :details => DetailsOfShoe.where(:general_shoe_id => params[:id]) }
+
     end
-  end
-
-
+  def get_details_of_shoes
+      details_shoes = GeneralShoe.get_details_json( params[:id] )
+      respond_to do|format|
+        format.json{ render :json => { :dos => details_shoes } }
+      end
+    end
+ 
 
   #scope: data_bases/region/region.js
   #scope: data_bases/material/material.js
@@ -66,33 +70,29 @@ class DataBasesController < ApplicationController
     Procession.create!(params[:record])
     render :json => {}
   end  
-   def create_shoes
-     GeneralShoe.create!(params[:record])
-     render :json => {}
+  def create_shoes
+    GeneralShoe.create!(params[:record])
+    render :json => {}
   end
-   def create_details_of_shoes
-     DetailsOfShoe.create!(params[:record])
-     render :json => {}
-   end
+
   def create_shoes_and_details_of_shoes
-    records = params[:record]
-    
-    DetailsOfShoe.create!({ 
-      :general_shoe_id => records[:general_shoe_id],
-      :region_id => records[:region_id],
-      :material_id => records[:material_id],
-      :color_id => records[:color_id],
-      :procession_id =>records[:procession_id]
-    }) 
+    @records = params[:record] 
     GeneralShoe.create!({ 
-        :shoes_id => records[:shoes_id],
-        :suitable_people => records[:suitable_people],
-        :colors => records[:colors],
-        :types_of_shoes => records[:types_of_shoes],
-        :price => records[:price],
-        :remark => records[:remark],
-        :production_date => records[:production_date]
-      })
+      :shoes_id => @records[:shoes_id],
+      :suitable_people => @records[:suitable_people],
+      :colors => @records[:colors],
+      :types_of_shoes => @records[:types_of_shoes],
+      :price => @records[:price],
+      :remark => @records[:remark],
+      :production_date => @records[:production_date],
+
+      :details_of_shoes_attributes =>[{ 
+      :region_id => @records[:region_id],
+      :material_id => @records[:material_id],
+      :color_id => @records[:color_id],
+      :procession_id => @records[:procession_id]
+    }]
+    })
     render :json => {}
   end
 
@@ -115,12 +115,11 @@ class DataBasesController < ApplicationController
     render :json => {}
   end  
   def delete_shoes
-     GeneralShoe.find(params[:id]).destroy
-      render :json => {}
+    GeneralShoe.find(params[:id]).destroy
+    render :json => {}
   end
   def delete_shoes_and_detail_of_shoes
     GeneralShoe.find(params[:id]).destroy
-    #DetailsOfShoe.find(params[:id]).destroy
     render :json => {}
   end
 
@@ -143,7 +142,16 @@ class DataBasesController < ApplicationController
     render :json => {}
   end
   def update_shoes
+    @records = params[:record]
     GeneralShoe.find(params[:record][:id]).update_attributes(params[:record])
+    GeneralShoe.find(params[:record][:id]).details_of_shoes.all.update_attributes(
+      {
+      :region_id => @records[:region_id],
+      :material_id => @records[:material_id],
+      :color_id => @records[:color_id],
+      :procession_id => @records[:procession_id]
+    }
+    )
     render :json => {}
   end
 

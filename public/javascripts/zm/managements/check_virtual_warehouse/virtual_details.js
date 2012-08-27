@@ -1,12 +1,13 @@
 Ext.onReady(function(){
-		var = new Ext.form.FormPanel({
+    var detailsForm = new Ext.form.FormPanel({
+        id: "detailsform",
+        width: 500,
+        height: 240,
 	  		region:'north',
 	  		layout: 'fit',
 	  		frame: true,
        	labelAlign: 'left',
        	labelWidth: 100,
-	  		height: 240,
-	  		width: 500,
 	  		items:[{
       			layout:'column',
          		items: [{
@@ -19,25 +20,22 @@ Ext.onReady(function(){
 	  		    		html:"<img src=images/1-2.jpg width=100% height=100%>"
           	}]
 	  		}]
-		});
+        
+    });
 
-	
-		var cm = new Ext.grid.ColumnModel([
-        new Ext.grid.ColumnModel(),
-      	{header:'部位',dataIndex:'position'},
-      	{header:'材料',dataIndex:'material'},
-      	{header:'颜色',dataIndex:'color'},
-      	{header:'加工方法',dataIndex:'refine'},
-      	{header:'备注',dataIndex:'remark'}
+    var cm = new Ext.grid.ColumnModel([
+        new Ext.grid.RowNumberer(),
+        { header: "aaa", dataIndex: "aaa"}
     ]);
 
     var store = new Ext.data.JsonStore({
         url: "/managements/get_data.json",
-        fields: ["a","b","c"],
+        fields: ["aaa","bbb"],
         root: "data"
     });
 
-    var sampledetailgrid = new Ext.grid.GridPanel({
+    var detailsGrid = new Ext.grid.GridPanel({
+        id: "detailsgrid",
     		region: 'center',
     		height: 360,
     		autoScroll: true,
@@ -46,8 +44,8 @@ Ext.onReady(function(){
     		frame:true,
     		trackMouseOver : true,
     		viewConfig:{forceFit:true},
-       	store: store,
-       	cm: cm,	
+        cm: cm,
+        store: store,
     		bbar: new Ext.PagingToolbar({
            	pageSize: 10,
       			store: store,
@@ -55,11 +53,12 @@ Ext.onReady(function(){
           	displayMsg: '显示第 {0} 条到 {1} 条记录，一共 {2} 条',
           	emptyMsg: "没有记录"
        	})
-    });		
-		
-		sampledetail = new Ext.Window({
-        id: 'sampledetail',
-        title: '样品详细信息',
+        
+    });
+
+    detailsWindow = new Ext.Window({
+        id: "detailswindow",
+        title: "样品详细信息",
 		  	minimizable: true,
 		  	region: 'center',
 		  	labelAlign: 'top',
@@ -70,6 +69,6 @@ Ext.onReady(function(){
 		  	defaultButton: 0,
 		  	constrainHeader: true,
 		  	resizable: false,
-     	 	items: [sampledetail1,sampledetailgrid]
-    });
-});					 
+        items: [detailsForm, detailsGrid],
+    })
+});
