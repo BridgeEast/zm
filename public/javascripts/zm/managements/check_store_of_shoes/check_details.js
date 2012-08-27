@@ -10,13 +10,13 @@ Zm.managements.win = {
 			items: [{
 				layout: 'column',
 				items: [{
-					title: '图片1',
 					columnWidth: .5,
+					html: '<img src=\'/images/shoes/' + Ext.getCmp('csosGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
 
 				},
 				{
-					title: '图片2',
 					columnWidth: .5,
+					html: '<img src=\'/images/shoes/' + Ext.getCmp('csosGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
 
 				}]
 			}]
@@ -24,24 +24,24 @@ Zm.managements.win = {
 
 		var cm = new Ext.grid.ColumnModel([{
 			header: '部位',
-			dataIndex: 'region_id'
+			dataIndex: 'region'
 		},
 		{
 			header: '材料',
-			dataIndex: 'material_id'
+			dataIndex: 'material'
 		},
 		{
 			header: '颜色',
-			dataIndex: 'color_id'
+			dataIndex: 'color'
 		},
 		{
 			header: '加工方法',
-			dataIndex: 'procession_id'
+			dataIndex: 'procession'
 		}]);
 
 		var store = new Ext.data.JsonStore({
 			url: '/managements/get_details.json',
-			fields: ['id', 'region_id', 'material_id', 'color_id', 'procession_id'],
+			fields: ['region', 'material', 'color', 'procession'],
 			method: 'post',
 			baseParams: {
 				id: Zm.managements.check_store_of_shoes.select_id
@@ -49,7 +49,7 @@ Zm.managements.win = {
 			root: 'details',
 			autoLoad: true
 		});
-	
+
 		var grid = new Ext.grid.GridPanel({
 			region: 'center',
 			height: 360,

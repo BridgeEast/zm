@@ -10,13 +10,13 @@ class GeneralShoe < ActiveRecord::Base
 
    def self.get_shoes_details( id ) 
     shoes = self.where( :id => id ).first
-    p shoes
     shoes.details_of_shoes.collect! do |item|
-     { 
+      { 
         :region => item.region.region,
         :material => item.material.material,
         :color => item.color.color,
         :procession => item.procession.procession,
+        :remark => item.region.remark
       }
     end
   end

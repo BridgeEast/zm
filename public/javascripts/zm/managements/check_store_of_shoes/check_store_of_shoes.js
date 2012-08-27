@@ -1,6 +1,6 @@
 Zm.managements.check_store_of_shoes = {
 	init: function() {
-        this.select_id ;  
+		this.select_id;
 		Zm.pages.ViewPort = {
 			layout: 'border',
 			region: 'center',
@@ -16,11 +16,13 @@ Zm.managements.check_store_of_shoes = {
 		var cm = new Ext.grid.ColumnModel([
 		new Ext.grid.RowNumberer(), {
 			header: '鞋图1',
-			dataIndex: 'photo_one'
+			dataIndex: 'photo_one',
+			renderer: title_img
 		},
 		{
 			header: '鞋图2',
-			dataIndex: 'photo_two'
+			dataIndex: 'photo_two',
+			renderer: title_img
 		},
 		{
 			header: '鞋号',
@@ -74,10 +76,10 @@ Zm.managements.check_store_of_shoes = {
 			items: [{
 				id: 'checkDetails',
 				text: '查看详情',
-                scope:this,
+				scope: this,
 				handler: function() {
 					this.select_id = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["id"];
-                    Zm.managements.win.init().show();
+					Zm.managements.win.init().show();
 				}
 			}]
 		});
@@ -127,18 +129,18 @@ Zm.managements.check_store_of_shoes = {
 					id: i + '_' + j,
 					children: [{
 						text: '高跟鞋',
-						id: 'nodeHighHeeledShoe',
+						id: 'nodeHighHeeledShoe' + j + i,
 						leaf: true
 
 					},
 					{
 						text: '平底鞋',
-						id: 'nodeFlats',
+						id: 'nodeFlats' + j + i,
 						leaf: true
 					},
 					{
 						text: '靴子',
-						id: 'nodeBoots',
+						id: 'nodeBoots' + j + i,
 						leaf: true
 					}]
 				});
@@ -148,22 +150,36 @@ Zm.managements.check_store_of_shoes = {
 
 		treeCsos.setRootNode(rootShoes);
 		treeCsos.on('click', function(node) {
-
 			if (node.leaf) {
 				var year = node.parentNode.parentNode.text;
 				var month = node.parentNode.id.split("_")[1];
-				store.proxy = new Ext.data.HttpProxy({
-					url: '/managements/get_data.json',
-					method: 'post',
-					jsonData: {
-						selectYear: year,
-						selectMonth: month,
-						selectType: node.text
-					}
-				}),
-				store.load()
+				var type = node.text
 			}
+			else if (node.text.toString().indexOf("月") != - 1) {
+				 year = node.parentNode.text;
+				 month = node.id.split("_")[1];
+			}
+			else if (node.parentNode.text == '全部鞋') {
+				year = node.text;
+			}
+            else{ 
+            year = null;
+            month = null;
+            type = null
+            }
+
+			store.proxy = new Ext.data.HttpProxy({
+				url: '/managements/get_data.json',
+				method: 'post',
+				jsonData: {
+					selectYear: year,
+					selectMonth: month,
+					selectType: type
+				}
+			}),
+			store.load()
 		})
+
 		return treeCsos
 
 	}

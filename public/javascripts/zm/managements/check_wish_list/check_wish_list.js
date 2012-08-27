@@ -92,10 +92,10 @@ Zm.managements.CheckWishList = {
                       layout: 'column',
                       items:[{ 
                         columnWidth: .5,
-                        html: '<img src=\'/images/' + Ext.getCmp('cwlGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
+                        html: '<img src=\'/images/shoes/' + Ext.getCmp('cwlGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
                       },{ 
                         columnWidth: .5,
-                        html: '<img src=\'/images/' + Ext.getCmp('cwlGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
+                        html: '<img src=\'/images/shoes/' + Ext.getCmp('cwlGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
                       }],
                     }],
                   });

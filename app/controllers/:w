@@ -12,17 +12,24 @@ class ManagementsController < ApplicationController
     
     def get_data
       choices = []
-
-      choices = GeneralShoe.where("types_of_shoes like ? and production_date like ? and production_date like ?","%#{params[:selectType]}%" , "%#{params[:selectMonth]}%" , "%#{params[:selectYear]}%")
       
+      GeneralShoe.all.each do |item|
+        if( item.production_date.to_s.split("-")[1].gsub(/\b(0+)/,"") == params[:selectMonth] and item.production_date.to_s.split("-")[0] == params[:selectYear].to_s and item.types_of_shoes == params[:selectType])
+          choices << item
+        end
+      end
+     
       respond_to do |format|
         format.json{ render :json => { :check_store_of_shoes => choices} }
       end
     end
     
     def get_details
+     
        details = GeneralShoe.get_shoes_details( params[:id] )
-       render :json => { :details => details } 
+       respond_to do|format|
+        format.json{ render :json => { :details => details } }
+      end
     end
 
  
