@@ -57,7 +57,9 @@ class GeneralShoe < ActiveRecord::Base
         :suitable_people => item.suitable_people,
         :colors => item.colors,
         :price => item.price,
-        :remark => item.remark
+        :remark => item.remark,
+        :photo_one => item.photo_one,
+        :photo_two => item.photo_two
       }
     end
   end
@@ -65,20 +67,53 @@ class GeneralShoe < ActiveRecord::Base
   def self.get_details_json( the_shoe_id ) 
     shoes = self.where( :id => the_shoe_id ).first #取出id为the_shoe_id的鞋的对象
     shoes.details_of_shoes.collect! do |record|
-      
       #对同一只多个详情进行筛选组成json
       { 
         :region => record.region.region,
         :material => record.material.material,
         :color => record.color.color,
         :procession => record.procession.procession,
-        :remark => record.region.remark
+        :remark => record.region.remark,
       }
     end
   end
-  ################## 查看号码和数量 ##################
-  def self.get_size_num_json( the_shoe_id )
-    
+  #################### 查看鞋号和码号 ############################
+  def self.get_size_and_num_json( shoes )
+      shoes.collect! do|shoe|
+        { 
+          :id => shoe.id,
+          :shoes_id => shoe.shoes_id,
+          :size_36 => GeneralShoe.get_size_obj( shoe, 36 ),
+          :size_37 => GeneralShoe.get_size_obj( shoe, 37 ),
+          :size_38 => GeneralShoe.get_size_obj( shoe, 38 ),
+          :size_39 => GeneralShoe.get_size_obj( shoe, 39 ),
+          :size_40 => GeneralShoe.get_size_obj( shoe, 40 ),
+          :size_41 => GeneralShoe.get_size_obj( shoe, 41 ),
+          :size_42 => GeneralShoe.get_size_obj( shoe, 42 ),
+          :size_43 => GeneralShoe.get_size_obj( shoe, 43 ),
+          :size_44 => GeneralShoe.get_size_obj( shoe, 44 ),
+        }
+      end
+  end
+  ###################### 获取鞋码为size的size_of_shoes的记录 ######################
+  def self.get_size_obj( shoe, size )
+    size_shoe = shoe.size_of_shoes.where( :size => size )
+    if size_shoe != []
+      if size_shoe.first.necessary_num != nil 
+        nec = size_shoe.first.necessary_num.to_s
+      else
+        nec = "0"
+      end
+      if size_shoe.first.finished_num != nil
+        fin = size_shoe.first.finished_num.to_s
+      else
+        fin = "0"
+      end
+    else
+      fin = "0"
+      nec = "0"
+    end
+    return fin + "/" + nec
   end
 end
 

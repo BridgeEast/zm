@@ -28,7 +28,7 @@ Zm.managements.caoOrCwlTreeNode = {
                      var year = yearNode.id;
                      var monthNode;
                      // 每年所对应的总月份
-                     for( var month = 1; month <= curMonth; month++ ){ 
+                     for( var month = curMonth; month >= 1; month-- ){ 
                        monthNode = new Ext.tree.TreeNode({ id: year + '-' + month, text: Zm.getDate.getMonthName( month ) });
                        this.createOrderNode( monthNode, caoOrCwl );        // 将心愿单或预购单储存下创建两个节点
                        yearNode.appendChild( monthNode );

@@ -38,7 +38,7 @@ Zm.managements.CheckFactoryOrder.cfoTree = {
                      var year = yearNode.id;
                      // 每年所对应的月份
                      var obj = this;
-                     for( var month = 1; month <= curMonth; month++ ){ 
+                     for( var month = curMonth; month >= 1; month-- ){ 
                        monthNode = new Ext.tree.TreeNode({ id: year + '-' + month, text: Zm.getDate.getMonthName( month ), leaf: true })
                        yearNode.appendChild( monthNode );
                      }

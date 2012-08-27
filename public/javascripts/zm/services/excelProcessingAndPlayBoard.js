@@ -15,23 +15,23 @@ Zm.services.excelProcessingAndPlayBoard = {
 		var cm = new Ext.grid.ColumnModel([
 		new Ext.grid.RowNumberer(), {
 			header: '鞋图1',
-			dataIndex: 'photoOne'
+			dataIndex: 'photo_one'
 		},
 		{
 			header: '鞋图2',
-			dataIndex: 'photoTwo'
+			dataIndex: 'photo_two'
 		},
 		{
 			header: '鞋号',
-			dtaIndex: 'shoesId'
+			dataIndex: 'shoes_id'
 		},
 		{
 			header: '鞋型',
-			dataIndex: 'typesOfShoes'
+			dataIndex: 'types_of_shoes'
 		},
 		{
 			header: '适用人群',
-			dataIndex: 'suitablePeople'
+			dataIndex: 'suitable_people'
 		},
 		{
 			header: '颜色',
@@ -43,11 +43,11 @@ Zm.services.excelProcessingAndPlayBoard = {
 		},
 		{
 			header: '确定打板时间',
-			dataIndex: 'sureBoard'
+			dataIndex: 'sure_board'
 		},
 		{
 			header: '完成打板时间',
-			dataIndex: 'doneBoard'
+			dataIndex: 'done_board'
 		},
 		{
 			header: '备注',
@@ -55,25 +55,26 @@ Zm.services.excelProcessingAndPlayBoard = {
 		}]);
 		//------------------------------------------
 		var store = new Ext.data.JsonStore({
-			url: '/data_bases/get_region.json',
-			fields: ['id', 'name', 'remark'],
-			root: 'region',
+			url: '/services/get_excel_shoes.json',
+			fields: ['id','photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'sure_board', 'done_board', 'remark'],
+			root: 'excel_shoes',
 			autoLoad: true
 		});
+		//store.load;
 		var gridTbar = new Ext.Toolbar({
 			defaults: {
 				scope: this
 			},
 			items: [{
 				text: '添加鞋',
-				handler: function() {
-					this.addShoes("添加鞋").show()
+				handler: function() {// 这里一定要先用function，不然会直接引用下面的命令
+          this.addShoes("添加鞋").show()
 				}
 			},
 			'-', {
 				text: '删除所选',
 				handler: function() {
-					this.deleteShoes()
+          this.deleteShoes();
 				}
 			},
 			'-', {
@@ -81,6 +82,39 @@ Zm.services.excelProcessingAndPlayBoard = {
 				handler: function() {
 					this.sendToWishList()
 				}
+			}]
+		});
+
+		var Epapbcontextmenu = new Ext.menu.Menu({ // 这里做了一个菜单，供下面的行的右键可用
+			id: 'Epapbcontextmenu',
+			items: [{ //菜单主要有什么内容，实现什么功能
+				text: '查看详情',
+				handler: function() {
+          this.createCheckDetails().show()
+        }
+			},
+			{
+				text: '修改',
+				handler: function() {}
+			},
+			{
+				text: '与客户交谈',
+				handler: function() {}
+			},
+			{
+				text: '修改确定打板时间',
+				handler: function() {}
+
+			},
+			{
+				text: '修改完成打板时间',
+				handler: function() {}
+
+			},
+			{
+				text: '打印',
+				handler: function() {}
+
 			}]
 		});
 
@@ -99,6 +133,12 @@ Zm.services.excelProcessingAndPlayBoard = {
 				forceFit: true
 			},
 			tbar: gridTbar
+		});
+
+		EpapbGrid.on("rowcontextmenu", function(grid, rowIndex, e) {
+			e.preventDefault();
+			grid.getSelectionModel().selectRow(rowIndex);
+			Epapbcontextmenu.showAt(e.getXY());
 		});
 		return EpapbGrid;
 
@@ -177,138 +217,144 @@ Zm.services.excelProcessingAndPlayBoard = {
 				}]
 			}]
 		});
-		//+++++++++++++++++++++++++++++++++++++++++++++addGrid+++++++++++++++++++++++++++++++
+
 		var addGridEditorRegion = new Ext.grid.GridEditor(
 		new Ext.form.ComboBox({
 			id: 'addGridEditorRegion',
 			store: new Ext.data.JsonStore({
 				url: '/data_bases/get_region.json',
-				method: 'get',// 当用户点击的时候才进行加载。
-				root: 'region',// 表名？
+				method: 'get',
+				// 当用户点击的时候才进行加载。
+				root: 'region',
+				// 表名？
 				fields: ['id', 'region']
 			}),
-			triggerAction: 'all',//选择的一个属性
+			triggerAction: 'all',
+			//选择的一个属性
 			displayField: 'region',
 			valueField: 'id',
 			editable: false
-		})
-    );
+		}));
 
-    var addGridEditorMaterial = new Ext.grid.GridEditor(
+		var addGridEditorMaterial = new Ext.grid.GridEditor(
 		new Ext.form.ComboBox({
 			id: 'addGridEditorMaterial',
 			store: new Ext.data.JsonStore({
 				url: '/data_bases/get_material.json',
-				method: 'get',// 当用户点击的时候才进行加载。
-				root: 'material',// 表名？
+				method: 'get',
+				// 当用户点击的时候才进行加载。
+				root: 'material',
+				// 表名？
 				fields: ['id', 'material']
 			}),
-			triggerAction: 'all',//选择的一个属性
+			triggerAction: 'all',
+			//选择的一个属性
 			displayField: 'material',
 			valueField: 'id',
 			editable: false
-		})
-    );
+		}));
 
-    var addGridEditorColor = new Ext.grid.GridEditor(
+		var addGridEditorColor = new Ext.grid.GridEditor(
 		new Ext.form.ComboBox({
 			id: 'addGridEditorColor',
 			store: new Ext.data.JsonStore({
 				url: '/data_bases/get_color.json',
-				method: 'get',// 当用户点击的时候才进行加载。
-				root: 'color',// 表名？
+				method: 'get',
+				// 当用户点击的时候才进行加载。
+				root: 'color',
+				// 表名？
 				fields: ['id', 'color']
 			}),
-			triggerAction: 'all',//选择的一个属性
+			triggerAction: 'all',
+			//选择的一个属性
 			displayField: 'color',
 			valueField: 'id',
 			editable: false
-		})
-    );
+		}));
 
-    var addGridEditorProcession = new Ext.grid.GridEditor(
+		var addGridEditorProcession = new Ext.grid.GridEditor(
 		new Ext.form.ComboBox({
 			id: 'addGridEditorProcession',
 			store: new Ext.data.JsonStore({
 				url: '/data_bases/get_procession.json',
-				method: 'get',// 当用户点击的时候才进行加载。
-				root: 'procession',// 表名？
+				method: 'get',
+				// 当用户点击的时候才进行加载。
+				root: 'procession',
+				// 表名？
 				fields: ['id', 'procession']
 			}),
-			triggerAction: 'all',//选择的一个属性
+			triggerAction: 'all',
+			//选择的一个属性
 			displayField: 'procession',
 			valueField: 'id',
 			editable: false
-		})
-    );
-    
+		}));
 
 		var addGridCm = new Ext.grid.ColumnModel([
 		new Ext.grid.RowNumberer(), {
 			header: '部位',
 			dataIndex: 'region',
-      editor: addGridEditorRegion,
-      renderer:function(value){ 
-         var combo = Ext.getCmp("addGridEditorRegion");
-                record = combo.findRecord(combo.valueField, value);
-                return record ? record.get(combo.displayField) : combo.valueNotFoundText;
-      }
+			editor: addGridEditorRegion,
+			renderer: function(value) {
+				var combo = Ext.getCmp("addGridEditorRegion");
+				record = combo.findRecord(combo.valueField, value);
+				return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+			}
 		},
 		{
 			header: '材料',
 			dataIndex: 'material',
-      editor: addGridEditorMaterial,
-      renderer:function(value){ 
-         var combo = Ext.getCmp("addGridEditorMaterial");
-                record = combo.findRecord(combo.valueField, value);
-                return record ? record.get(combo.displayField) : combo.valueNotFoundText;
-      }
+			editor: addGridEditorMaterial,
+			renderer: function(value) {
+				var combo = Ext.getCmp("addGridEditorMaterial");
+				record = combo.findRecord(combo.valueField, value);
+				return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+			}
 		},
 		//这里可以不用指定type，但还是要的也好
 		{
 			header: '颜色',
 			dataIndex: 'color',
 			editor: addGridEditorColor,
-      renderer:function(value){ 
-         var combo = Ext.getCmp("addGridEditorColor");
-                record = combo.findRecord(combo.valueField, value);
-                return record ? record.get(combo.displayField) : combo.valueNotFoundText;
-      }
+			renderer: function(value) {
+				var combo = Ext.getCmp("addGridEditorColor");
+				record = combo.findRecord(combo.valueField, value);
+				return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+			}
 
 		},
 		{
 			header: '加工方法',
 			dataIndex: 'procession',
-      editor: addGridEditorProcession,
-      renderer:function(value){ 
-         var combo = Ext.getCmp("addGridEditorProcession");
-                record = combo.findRecord(combo.valueField, value);
-                return record ? record.get(combo.displayField) : combo.valueNotFoundText;
-      }
-
+			editor: addGridEditorProcession,
+			renderer: function(value) {
+				var combo = Ext.getCmp("addGridEditorProcession");
+				record = combo.findRecord(combo.valueField, value);
+				return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+			}
 
 		},
 		// 在下面的stroe里得到的数据，可以不按顺序就能读到这里来
 		]);
-    
-    var data=[];
+
+		var data = [];
 		var addGridStore = new Ext.data.JsonStore({
 			proxy: new Ext.data.MemoryProxy(data),
-            reader: new Ext.data.ArrayReader({},
-            [{
-                name: 'region'
-            },
-            {
-                name: 'material'
-            },
-            {
-                name: 'color'
-            },
-            {
-                name: 'procession'
-            }])
+			reader: new Ext.data.ArrayReader({},
+			[{
+				name: 'region'
+			},
+			{
+				name: 'material'
+			},
+			{
+				name: 'color'
+			},
+			{
+				name: 'procession'
+			}])
 		});
-    addGridStore.load();
+		addGridStore.load();
 
 		var addGridRecord = Ext.data.Record.create([{
 			name: 'region'
@@ -326,7 +372,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 		var addGridTbar = new Ext.Toolbar(['-', {
 			text: '添加一行',
 			handler: function() {
-    			var p = new addGridRecord({
+				var p = new addGridRecord({
 					region: '',
 					material: '',
 					color: '',
@@ -360,7 +406,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			cm: addGridCm,
 			store: addGridStore,
 			tbar: addGridTbar,
-      clicksToEdit: 1,
+			clicksToEdit: 1,
 			viewConfig: {
 				forceFit: true
 			},
@@ -403,15 +449,126 @@ Zm.services.excelProcessingAndPlayBoard = {
 				text: '重置',
 				scope: this
 			},
-      {
-        text: '取消',
-        scope: this,
-      }]
+			{
+				text: '取消',
+				scope: this,
+			}]
+
+		});
+	},
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++deleteShoes++++++++++++++++++++++++
+	deleteShoes: function() {
+		var selection = Ext.getCmp('epapbGrid').getSelectionModel();
+		if (selection.getSelected()) {
+			Ext.Ajax.request({
+				url: '/services/delete_shoes_and_detail_of_shoes.json',
+				method: 'post',
+				jsonData: {
+					id: selection.getSelected().id,
+
+				},
+				success: function() {
+					Ext.getCmp('epapbGrid').store.load();
+					Ext.Msg.alert('删除', '删除成功!');
+				},
+				failure: function() {
+					Ext.Msg.alert('删除', '删除失败!');
+				},
+			})
+		} else {
+			Ext.Msg.alert('警告', '请选择一条记录');
+		}
+
+	},
+  //+++++++++++++++++++++++++++++++send_to_wish_list++++++++++++++++++++++++++++++++++++++++++
+  
+  //++++++++++++++++++++++++++++++++++check_details++++++++++++++++++++++++++++++++++++++++++++
+  // 查看详情
+	createCheckDetails: function() {
+
+		var detailCm = new Ext.grid.ColumnModel([
+		new Ext.grid.RowNumberer(), {
+			header: '部位',
+			dataIndex: 'region',
+		},
+		{
+			header: '材料',
+			dataIndex: 'material'
+		},
+		//这里可以不用指定type，但还是要的也好
+		{
+			header: '颜色',
+			dataIndex: 'color',
+
+		},
+		{
+			header: '加工方法',
+			dataIndex: 'procession',
+
+		},
+		// 在下面的stroe里得到的数据，可以不按顺序就能读到这里来
+		]);
+
+		var data = [];
+		var detailStore = new Ext.data.Store({
+			proxy: new Ext.data.MemoryProxy(data),
+			reader: new Ext.data.ArrayReader({},
+			[{
+				name: 'region'
+			},
+			{
+				name: 'material'
+			},
+			{
+				name: 'color'
+			},
+			{
+				name: 'procession'
+			}])
+		});
+
+		var detailGrid = new Ext.grid.EditorGridPanel({
+			id: 'addGrid ',
+			//title: '部位',
+			region: 'center',
+			height: 200,
+			cm: detailCm,
+			store: detailStore,
+			viewConfig: {
+				forceFit: true
+			},
+		});
+
+		var detailPhoto = new Ext.Panel({
+			id: 'detailPhoto',
+			// title: "xx",
+			// height: 100,
+			// width: 100,
+			layout: 'column',
+			items: [{
+				title: 'photo1',
+				columnWidth: .5
+			},
+			{
+				title: 'photo2',
+				columnWidth: .5
+			}]
+		});
+
+		return new Ext.Window({
+			id: 'detailWin',
+			title: type,
+			modal: true,
+			height: 600,
+			width: 600,
+			constrainHeader: true,
+			//protect the frame out of the page 
+			items: [detailGrid, detailPhoto],
 
 		});
 	},
 
-	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	//+++++++++++++++++++++++++++++++++++EpapbTree+++++++++++++++++++++++++++++++++++++++++++++++
 	createEpapbTree: function() {
 
 		var EpapbTree = new Ext.tree.TreePanel({

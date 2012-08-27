@@ -30,8 +30,8 @@ Zm.managements.CheckWishList = {
                    var sm = new Ext.grid.CheckboxSelectionModel({ handleMouseDown: Ext.emptyFn });
                    var cm = new Ext.grid.ColumnModel([ 
                      sm,
-                     { header: '鞋图1', dataIndex: 'photo_one' ,renderer: title_img },
-                     { header: '鞋图2', dataIndex: 'photo_two' ,renderer: title_img },
+                     { header: '鞋图1', dataIndex: 'photo_one' , renderer: title_img },
+                     { header: '鞋图2', dataIndex: 'photo_two' , renderer: title_img },
                      { header: '客户', dataIndex: 'custom_num' },
                      { header: '鞋号', dataIndex: 'shoes_id' },
                      { header: '鞋型', dataIndex: 'types_of_shoes' },
@@ -92,10 +92,10 @@ Zm.managements.CheckWishList = {
                       layout: 'column',
                       items:[{ 
                         columnWidth: .5,
-                        html: '<img src=\'/images/' + Ext.getCmp('cwlGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
+                        html: '<img src=\'/images/shoes/' + Ext.getCmp('cwlGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
                       },{ 
                         columnWidth: .5,
-                        html: '<img src=\'/images/' + Ext.getCmp('cwlGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
+                        html: '<img src=\'/images/shoes/' + Ext.getCmp('cwlGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
                       }],
                     }],
                   });
