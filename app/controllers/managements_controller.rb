@@ -170,7 +170,7 @@ class ManagementsController < ApplicationController
         end
       end
       general_shoes = GeneralShoe.get_shoes_json( check_shoes ) 
-      general_shoes = { :totalProperty => 100, :cs => general_shoes }
+      general_shoes = { :totalProperty => check_shoes.count, :cs => general_shoes }
       respond_to do|format|
         format.json{ render :json => general_shoes }
       end
@@ -196,7 +196,7 @@ class ManagementsController < ApplicationController
         format.json{ render :json => { :co => orders } }
       end
     end
-   ###########################################################
+    ##################### 点击右键查看码号和数量的进度 ##########################
     def get_shoes_size_num
       shoes = FactoryOrder.where( :id => params[:id] ).first.general_shoes
       size_num = GeneralShoe.get_size_and_num_json( shoes )
@@ -204,6 +204,26 @@ class ManagementsController < ApplicationController
         format.json{ render :json => { :csn => size_num } }
       end
     end
+    #################### 点击查看下载订单 ############################
+    def download_order
+      @order = Orders.find_by_id( params[:id] )
+      if @order == nil
+        :notice => "文件不存在"
+      else
+        order_path = @order.order_url
+        if File.exist?( order_path )
+          order_file = File.open( order_path ) #打开文件
+          bin_order = order_file.binmode       #转化为二进制
+          order_file.send_data( bin_order,     #直接在浏览器打开 
+                               :dispotion => "inline", 
+                               :filename => @order.order_id )
+          order_file.close
+        else
+          :notice => "文件无法打开"
+        end
+      end
+    end
+
 end
 
 
