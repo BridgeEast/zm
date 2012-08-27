@@ -175,21 +175,21 @@ class ManagementsController < ApplicationController
     #################### 点击查看下载订单 ############################
     def download_order
       @order = Orders.find_by_id( params[:id] )
-      if @order == nil
-        :notice => "文件不存在"
-      else
+     # if @order == nil
+     #   :notice => "文件不存在"
+     # else
         order_path = @order.order_url
-        if File.exist?( order_path )
+     #   if File.exist?( order_path )
           order_file = File.open( order_path ) #打开文件
           bin_order = order_file.binmode       #转化为二进制
           order_file.send_data( bin_order,     #直接在浏览器打开 
                                :dispotion => "inline", 
                                :filename => @order.order_id )
           order_file.close
-        else
-          :notice => "文件无法打开"
-        end
-      end
+     #   else
+     #     :notice => "文件无法打开"
+     #   end
+     # end
     end
 
 end
