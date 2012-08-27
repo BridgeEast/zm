@@ -23,23 +23,6 @@ class ManagementsController < ApplicationController
       end
     end
     
-    def get_details
-      
-      #DetailsOfShoe.all.each do |item|
-        #if (item.general_shoe_id == params[:id])
-          #details << item
-        #end
-      #end
-
-      #render :json => { :details => details } 
-     
-       render :json => { :details => DetailsOfShoe.where(:general_shoe_id => params[:id]) }
-
-    end
-
-
-
-  #*********************************************************************************************************
 
 
 
@@ -143,7 +126,7 @@ class ManagementsController < ApplicationController
       else
         cfo_grid = FactoryOrder.create_cfo_json( factory_orders )
       end
-      #回应请求
+     #回应请求
       respond_to do |format|
         format.json{ render :json => { :cfo => cfo_grid } }
       end

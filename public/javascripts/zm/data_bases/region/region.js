@@ -16,12 +16,16 @@ Zm.dataBases.region = {
         ]);
 
         var store = new Ext.data.JsonStore({ 
+            //id:'aji',
             url: '/data_bases/get_region.json',
             fields: ['id','region', 'remark', 'created_date'],
             root: 'region',
             autoLoad: true
         });
+        
+        
 
+     
         return new Ext.grid.GridPanel({ 
             id: 'regionGrid',
             title: '基础数据-部位',
