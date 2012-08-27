@@ -3,7 +3,8 @@ class CreateExcelReceives < ActiveRecord::Migration
     create_table :excel_receives do |t|
 
       t.string :excel_receive_id, :null => false, :unique => true
-      t.string :custom
+      t.string :custom_num
+      t.string :excel_url
 
       t.timestamps
     end

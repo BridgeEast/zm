@@ -118,9 +118,9 @@ namespace :data do
    puts "创建Excel数据"
    ExcelReceive.delete_all
    ExcelReceive.create([
-     {:id => 1, :excel_receive_id => "E1",:custom => "客户1"},
-     {:id => 2, :excel_receive_id => "E2",:custom => "客户3"},
-     {:id => 3, :excel_receive_id => "E3",:custom => "客户2"},
+     {:id => 1, :excel_receive_id => "E1",:custom_num => "客户1",:excel_url => "e1.xls"},
+     {:id => 2, :excel_receive_id => "E2",:custom_num => "客户3",:excel_url => "e2.xls"},
+     {:id => 3, :excel_receive_id => "E3",:custom_num => "客户2",:excel_url => "e3.xls"},
    ]) 
 
    puts "创建工厂订单数据"
@@ -134,9 +134,9 @@ namespace :data do
    puts "创建订单数据"
    Order.delete_all
    Order.create([
-     {:id => 1, :order_id => "O1",:server_num => "客服1",:custom_num => "客户1",:custom_contrast => "合同1", :quality => "Yes", :payment => "已付全款",:total_price => "123.92",:production_date => "2012-7-8",:shipment => "0",:lading_bill => "0", :state => "1",:remark => " "},
-     {:id => 2, :order_id => "O2",:server_num => "客服1",:custom_num => "客户2",:custom_contrast => "合同2", :quality => "Yes", :payment => "已付30%",:total_price => "219.10",:production_date => "2012-7-10",:shipment => "1",:lading_bill => "0", :state => "1",:remark => " "},
-     {:id => 3, :order_id => "O3",:server_num => "客服2",:custom_num => "客户3",:custom_contrast => "合同3", :quality => "No", :payment => "未付款",:total_price => "291.32",:production_date => "2012-8-8",:shipment => "0",:lading_bill => "1", :state => "1",:remark => " "}
+     {:id => 1, :order_id => "O1",:server_num => "客服1",:custom_num => "客户1",:custom_contrast => "合同1",:quality => "Yes", :payment => "已付全款",:order_url => "o1.xls",:total_price => "123.92",:production_date => "2012-7-8",:shipment => "0",:lading_bill => "0", :state => "1",:remark => " "},
+     {:id => 2, :order_id => "O2",:server_num => "客服1",:custom_num => "客户2",:custom_contrast => "合同2",:quality => "Yes", :payment => "已付30%",:order_url => "o2.xls",:total_price => "219.10",:production_date => "2012-7-10",:shipment => "1",:lading_bill => "0", :state => "1",:remark => " "},
+     {:id => 3, :order_id => "O3",:server_num => "客服2",:custom_num => "客户3",:custom_contrast => "合同3",:quality => "No", :payment => "未付款",:order_url => "o3.xls",:total_price => "291.32",:production_date => "2012-8-8",:shipment => "0",:lading_bill => "1", :state => "1",:remark => " "}
    ]) 
 
    puts "创建鞋概述数据"

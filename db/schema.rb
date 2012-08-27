@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120826085955) do
+ActiveRecord::Schema.define(:version => 20120827074417) do
 
   create_table "advanced_orders", :force => true do |t|
     t.string   "advanced_order_id",                                  :null => false
@@ -52,7 +52,8 @@ ActiveRecord::Schema.define(:version => 20120826085955) do
 
   create_table "excel_receives", :force => true do |t|
     t.string   "excel_receive_id", :null => false
-    t.string   "custom"
+    t.string   "custom_num"
+    t.string   "excel_url"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -118,6 +119,7 @@ ActiveRecord::Schema.define(:version => 20120826085955) do
     t.string   "custom_contrast"
     t.string   "quality"
     t.string   "payment"
+    t.string   "order_url"
     t.decimal  "total_price",     :precision => 10, :scale => 0
     t.date     "production_date"
     t.boolean  "shipment"

@@ -7,6 +7,7 @@ class CreateOrders < ActiveRecord::Migration
       t.string :custom_contrast
       t.string :quality
       t.string :payment
+      t.string :order_url
 
       t.decimal :total_price
       t.date :production_date
