@@ -103,6 +103,7 @@ Zm.managements.CheckFactoryOrder = {
                     },{ 
                       text: '查看订单',handler: function(){ 
                               this.checkWindow( this.checkOrders() ).show();
+                                Ext.Ajax.request
                             }
                     }],
                   });
@@ -213,7 +214,7 @@ Zm.managements.CheckFactoryOrder = {
 //--------------------------查看订单
   checkOrders: function(){ 
                  return new Ext.form.FormPanel({
-                   id: 'checkOrderPdf',
+                   id: 'checkOrder',
                    frame: true,
                  });
                },
