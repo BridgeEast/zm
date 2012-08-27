@@ -1,6 +1,7 @@
 class GeneralShoe < ActiveRecord::Base
   has_many :size_of_shoes, :dependent => :destroy
   has_many :details_of_shoes,:dependent => :destroy
+  accepts_nested_attributes_for :details_of_shoes
   has_one :play_board,:dependent => :destroy
 
   belongs_to :advanced_order
