@@ -51,22 +51,8 @@ class ManagementsController < ApplicationController
  #   end
 
     def get_daily_sheet
-      if params[:start].to_i == 0 
-        index =  params[:start].to_i+ 1
-      else
-        index = params[:start].to_i + 2
-      end
-      pageSize = params[:limit].to_i 
       daily_data = []
-      ids = []
-      count = pageSize + index
-      if count > SizeOfShoe.count 
-        count = SizeOfShoe.count
-      end
-      (index..count).each do |id| 
-        ids<< id
-      end
-      SizeOfShoe.find(ids).each do |s|
+      SizeOfShoe.limit(params[:limit].to_i).offset(params[:start].to_i).each do |s|
         daily_data << { :id => s.id, :necessary_num => s.necessary_num, :finished_num => s.finished_num }
       end
       daily_sheet = { :totalProperty => SizeOfShoe.count, :gds => daily_data,  }
