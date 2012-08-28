@@ -59,7 +59,7 @@ Zm.managements.check_store_of_shoes = {
 			url: '/managements/get_check_store_of_shoes.json',
 			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'production_date', 'remark'],
 			root: 'check_store_of_shoes',
-			autoLoad: true
+			autoLoad: false
 		});
 
 		var csosGrid = new Ext.grid.GridPanel({
