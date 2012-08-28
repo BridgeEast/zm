@@ -27,9 +27,7 @@ Zm.managements.CheckWishList = {
                  },
 
   showCwlGrid: function(){ 
-                   var sm = new Ext.grid.CheckboxSelectionModel({ handleMouseDown: Ext.emptyFn });
                    var cm = new Ext.grid.ColumnModel([ 
-                     sm,
                      { header: '鞋图1', dataIndex: 'photo_one' , renderer: title_img },
                      { header: '鞋图2', dataIndex: 'photo_two' , renderer: title_img },
                      { header: '客户', dataIndex: 'custom_num' },
