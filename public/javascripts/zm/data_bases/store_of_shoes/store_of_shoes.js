@@ -211,10 +211,9 @@ Zm.dataBases.storeOfShoes = {
         }]);
 
         // 放到grid里显示的原始数据
-        var data = [];
-
-        var store = new Ext.data.Store({
-            proxy: new Ext.data.MemoryProxy(data),
+        var inpcdata = [];
+        var inpcstore = new Ext.data.Store({
+            proxy: new Ext.data.MemoryProxy(inpcdata),
             reader: new Ext.data.ArrayReader({},
             [{
                 name: 'region'
@@ -227,12 +226,11 @@ Zm.dataBases.storeOfShoes = {
             },
             {
                 name: 'procession'
-            }])
+            }]),
+            pruneModifiedRecords: true //自动清除modified标记
         });
-        store.load();
-        
 
-        var CreateRecord = Ext.data.Record.create([{
+        var inpcRecord = Ext.data.Record.create([{
             name: 'region'
         },
         {
@@ -244,10 +242,12 @@ Zm.dataBases.storeOfShoes = {
         {
             name: 'procession'
         }]);
+        inpcstore.load();
 
         var grid = new Ext.grid.EditorGridPanel({
             id: 'grid',
             region: 'center',
+            stripeRows: true,
             autoScroll: true,
             loadMask: true,
             frame: true,
@@ -255,38 +255,54 @@ Zm.dataBases.storeOfShoes = {
             viewConfig: {
                 forceFit: true
             },
-            store: store,
+            store: inpcstore,
             cm: cm,
+            enableColumnMove: false,
             tbar: new Ext.Toolbar(['-', {
                 text: '添加一行',
                 handler: function() {
-                    var p = new CreateRecord({
+                    var p = new inpcRecord({
                         region: '',
                         material: '',
                         color: '',
                         procession: ''
                     });
                     grid.stopEditing();
-                    store.insert(0, p);
+                    store.insert(num, p);
                     grid.startEditing(0, 0);
+                    num = num + 1;
+                    p.dirty = true;
+                    p.modifild = initValue;
+                    if (inpstore.modifiled.indexOf(p) == -1) {
+                        inpcstore.modifiled.push(p);
+                    }
                 }
             },
             '-', {
                 text: '删除一行',
                 handler: function() {
-                    Ext.Msg.confirm('信息', '确定要删除？', function(btn) {
-                        if (btn == 'yes') {
-                            var sm = grid.getSelectionModel();
-                            var cell = sm.getSelectedCell();
-                            var record = store.getAt(cell[0]);
-                            store.remove(record);
+                    if (num == 0) {
+                        Ext.Msg.alert('提示', '没有数据可以删除')
+                    } else {
+                        var sm = grid.getSelectionModel();
+                        var cell = sm.getSelectedCell();
+                        if (!cell) {
+                            Ext.Msg.alert('提示', '没有选择需要删除的数据行');
                         }
-                    });
+                        else {
+                            Ext.Msg.confirm('信息', '确定要删除？', function(btn) {
+                                if (btn == 'yes') {
+                                    var record = inpcstore.getAt(cell[0]);
+                                    num = num - 1
+                                    inpcstore.remove(record);
+                                }
+                            })
+                        }
+                    }
                 }
             },
             '-'])
         });
-
         //添加窗口
         var sampleForm = new Ext.form.FormPanel({
             region: 'north',
@@ -362,6 +378,7 @@ Zm.dataBases.storeOfShoes = {
 
         //图片窗口
         var samplePhoto = new Ext.form.FormPanel({
+            id: 'photoForm',
             region: 'south',
             frame: true,
             labelAlign: 'right',
@@ -474,7 +491,7 @@ Zm.dataBases.storeOfShoes = {
                 };
 
                 Ext.Ajax.request({
-                    url: '/data_bases/update_shoes.json',
+                    url: '/data_bases/update_shoes_and_details_of_shoes.json',
                     method: 'post',
                     jsonData: {
                         record: record
@@ -483,6 +500,7 @@ Zm.dataBases.storeOfShoes = {
                         Ext.getCmp('storeOfShoesGrid').store.load();
                         Ext.getCmp('addWindow').close();
                         Ext.Msg.alert('修改', '修改成功');
+
                     },
                     failure: function() {
                         Ext.Msg.alert('修改', '修改失败!');
@@ -549,12 +567,12 @@ Zm.dataBases.storeOfShoes = {
         Ext.getCmp('addColor').setValue(data["colors"]);
         Ext.getCmp('addTypesOfShoes').setValue(data["types_of_shoes"]);
         Ext.getCmp('addPrice').setValue(data["price"]);
-        Ext.getCmp('addRemark').setValue(data["remark"])
+        Ext.getCmp('addRemark').setValue(data["remark"]);
 
     },
 
     sampleDetail: function() {
-                    
+
         var sampleDetailForm = new Ext.form.FormPanel({
             region: 'north',
             frame: true,
