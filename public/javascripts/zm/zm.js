@@ -8,5 +8,8 @@ Zm = {
     managements: {},
     getDate: {},
     //the services, 对应着相对应的controller器----aji
-    services:{}
+    services:{},
+     //客户
+    guests:{}
+    
 }

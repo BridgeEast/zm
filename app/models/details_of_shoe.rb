@@ -5,4 +5,7 @@ class DetailsOfShoe < ActiveRecord::Base
   belongs_to :procession
 
   belongs_to :general_shoe
-end
+
+ 
+  end
+

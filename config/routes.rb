@@ -89,6 +89,16 @@ Zm::Application.routes.draw do
    end
  end
 
+  resources :guests do
+   collection do
+     get"scanning_store_of_shoes"
+     get"get_general_shoes"
+     get"load_tree"
+     get"get_scanning_detail"
+     get"change_board_kind"
+   end
+ end
+
  resources :services do
    collection do
      get "excelProcessingAndPlayBoard"
