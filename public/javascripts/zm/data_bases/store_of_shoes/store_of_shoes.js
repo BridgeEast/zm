@@ -212,24 +212,6 @@ Zm.dataBases.storeOfShoes = {
 
         // 放到grid里显示的原始数据
         var inpcdata = [];
-        var inpcstore = new Ext.data.Store({
-            proxy: new Ext.data.MemoryProxy(inpcdata),
-            reader: new Ext.data.ArrayReader({},
-            [{
-                name: 'region'
-            },
-            {
-                name: 'material'
-            },
-            {
-                name: 'color'
-            },
-            {
-                name: 'procession'
-            }]),
-            pruneModifiedRecords: true //自动清除modified标记
-        });
-
         var inpcRecord = Ext.data.Record.create([{
             name: 'region'
         },
@@ -242,8 +224,24 @@ Zm.dataBases.storeOfShoes = {
         {
             name: 'procession'
         }]);
-        inpcstore.load();
-
+        if (type == '修改') {
+            var inpcstore = new Ext.data.JsonStore({
+                url: '/data_bases/get_details_of_shoes.json',
+                fields: ['region', 'material', 'color', 'procession'],
+                baseParams: {
+                    id: Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().id
+                },
+                root: 'dos',
+            })
+            inpcstore.load();
+        }else{ 
+        var inpcstore = new Ext.data.Store({ 
+            proxy: new Ext.data.MemoryProxy(inpcdata),
+            reader: new Ext.data.ArrayReader({},
+              [{ name: 'region' }, { name: 'material' }, { name: 'color' }, { name: 'procession' }]
+              )
+        })
+        };
         var grid = new Ext.grid.EditorGridPanel({
             id: 'grid',
             region: 'center',
@@ -261,36 +259,38 @@ Zm.dataBases.storeOfShoes = {
             tbar: new Ext.Toolbar(['-', {
                 text: '添加一行',
                 handler: function() {
-                  var initValue={region: "", material:"", color:"", procession:""};
+                    var initValue = {
+                        region: "",
+                        material: "",
+                        color: "",
+                        procession: ""
+                    };
                     var p = new inpcRecord(initValue);
                     grid.stopEditing();
                     inpcstore.insert(0, p);
                     grid.startEditing(0, 0);
                     p.dirty = true;
                     p.modifild = initValue;
-                    if (inpcstore.modified.indexOf(p)==-1) {
-                        inpcstore.modifiled.push(p);
-                    }
                 }
             },
             '-', {
                 text: '删除一行',
                 handler: function() {
-                        var sm = grid.getSelectionModel();
-                        var cell = sm.getSelectedCell();
-                        if (!cell) {
-                            Ext.Msg.alert('提示', '没有选择需要删除的数据行');
-                        }
-                        else {
-                            Ext.Msg.confirm('信息', '确定要删除？', function(btn) {
-                                if (btn == 'yes') {
-                                    var record = inpcstore.getAt(cell[0]);
-                                    inpcstore.remove(record);
-                                }
-                            })
-                        }
+                    var sm = grid.getSelectionModel();
+                    var cell = sm.getSelectedCell();
+                    if (!cell) {
+                        Ext.Msg.alert('提示', '没有选择需要删除的数据行');
                     }
-                },
+                    else {
+                        Ext.Msg.confirm('信息', '确定要删除？', function(btn) {
+                            if (btn == 'yes') {
+                                var record = inpcstore.getAt(cell[0]);
+                                inpcstore.remove(record);
+                            }
+                        })
+                    }
+                }
+            },
             '-'])
         });
         //添加窗口
@@ -429,8 +429,44 @@ Zm.dataBases.storeOfShoes = {
             items: [form]
         });
     },
+      createData: function() {
+        var region_id = [];
+        var material_id = [];
+        var color_id = [];
+         var procession_id = [];
+        var store = Ext.getCmp('grid').getStore();
+        Ext.Msg.alert("aji",store.getCount);
+        for (i = 0; i < store.getCount(); i++) {
+            var data = store.getAt(i).data;
+
+            region_id.push({
+                region_id: data.region_id
+            });
+            material_id.push({
+                material_id: data.material_id
+            });
+            color_id.push({
+                color_id: data.color_id
+            });
+            procession_id.push({
+                procession_id: data.procession_id
+            })
+        }
+        var result = {
+            region_ids: region_id,
+            material_ids: material_id,
+            color_ids: color_id,
+            procession_ids: procession_id
+        }
+        Ext.Msg.alert("xxx",result.region_ids[0].region_id);
+        return result;
+
+    },
+
+    
 
     checkForShoes: function(type) {
+                  //   this.createData
         var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
         var shoesId = Ext.getCmp('addShoesId').getValue();
         var suitablePeople = Ext.getCmp('addSuitablePoeple').getValue();
@@ -439,10 +475,6 @@ Zm.dataBases.storeOfShoes = {
         var price = Ext.getCmp('addPrice').getValue();
         var remark = Ext.getCmp('addRemark').getValue();
         var productionDate = date2str(new Date());
-        var regionId = Ext.getCmp('addRegion').store.getValue();
-        var materialId = Ext.getCmp('addMaterial').getValue();
-        var colorsId = Ext.getCmp('addColors').getValue();
-        var processionId = Ext.getCmp('addProcession').getValue();
         var win
         var record = {
             shoes_id: shoesId,
@@ -452,10 +484,10 @@ Zm.dataBases.storeOfShoes = {
             price: price,
             remark: remark,
             production_date: productionDate,
-            region_id: regionId,
-            material_id: materialId,
-            color_id: colorsId,
-            procession_id: processionId
+            region_id: this.createData().region_ids,
+            material_id: this.createData().material_ids,
+            color_id: this.createData().color_ids,
+            procession_id: this.createData().procession_ids
         };
         function date2str(d) {
             var ret = d.getFullYear() + "-"
@@ -474,12 +506,12 @@ Zm.dataBases.storeOfShoes = {
                     price: price,
                     remark: remark,
                     production_date: productionDate,
-                    region_id: regionId,
-                    material_id: materialId,
-                    color_id: colorsId,
-                    procession_id: processionId
+                    region_id: this.createData().region_ids,
+                    material_id: this.createData().material_ids,
+                    color_id: this.createData().color_ids,
+                    procession_id: this.createData().procession_ids
                 };
-
+                
                 Ext.Ajax.request({
                     url: '/data_bases/update_shoes_and_details_of_shoes.json',
                     method: 'post',
@@ -490,7 +522,7 @@ Zm.dataBases.storeOfShoes = {
                         Ext.getCmp('storeOfShoesGrid').store.load();
                         Ext.getCmp('addWindow').close();
                         Ext.Msg.alert('修改', '修改成功');
-
+                        Ext.Msg.alert('',this.createData.region_id)
                     },
                     failure: function() {
                         Ext.Msg.alert('修改', '修改失败!');
@@ -521,6 +553,9 @@ Zm.dataBases.storeOfShoes = {
             Ext.Msg.alert('警告', '样品号不能为空!');
         }
     },
+
+  
+   
 
     //删除所选
     deleteShoes: function() {

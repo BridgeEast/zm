@@ -58,13 +58,6 @@ Zm.managements.win = {
 			},
 			store: store,
 			cm: cm,
-			bbar: new Ext.PagingToolbar({
-				pageSize: 10,
-				store: store,
-				displayInfo: true,
-				diaplayMsg: '显示第{0}条到{1}条记录，一共{2}条',
-				emptyMsg: "没有记录"
-			})
 		});
 
 		check_detail = new Ext.Window({
