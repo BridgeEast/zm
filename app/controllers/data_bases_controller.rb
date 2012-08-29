@@ -40,15 +40,12 @@ class DataBasesController < ApplicationController
       format.json{ render :json => { :general_shoes => GeneralShoe.all } }
     end
   end
-  def get_details
-    render :json => { :details => DetailsOfShoe.where(:general_shoe_id => params[:id]) }
-  end
   def get_details_of_shoes
-      details_shoes = GeneralShoe.get_details_json( params[:id] )
-      respond_to do|format|
-        format.json{ render :json => { :dos => details_shoes } }
-      end
+    details_shoes = GeneralShoe.get_details_json( params[:id] )
+    respond_to do|format|
+      format.json{ render :json => { :dos => details_shoes } }
     end
+  end
  
 
   #scope: data_bases/region/region.js
