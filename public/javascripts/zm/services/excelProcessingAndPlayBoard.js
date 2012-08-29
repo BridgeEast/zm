@@ -15,11 +15,13 @@ Zm.services.excelProcessingAndPlayBoard = {
 		var cm = new Ext.grid.ColumnModel([
 		new Ext.grid.RowNumberer(), {
 			header: '鞋图1',
-			dataIndex: 'photo_one'
+			dataIndex: 'photo_one',
+      renderer: title_img
 		},
 		{
 			header: '鞋图2',
-			dataIndex: 'photo_two'
+			dataIndex: 'photo_two',
+      renderer: title_img
 		},
 		{
 			header: '鞋号',
@@ -92,9 +94,11 @@ Zm.services.excelProcessingAndPlayBoard = {
 				text: '查看详情',
 				handler: function() {
           var shoes_id = Ext.getCmp('epapbGrid').getSelectionModel().getSelected().data.id;
+          var photo_one = Ext.getCmp('epapbGrid').getSelectionModel().getSelected().data.photo_one;
+          var photo_two = Ext.getCmp('epapbGrid').getSelectionModel().getSelected().data.photo_two;
           // Ext.Msg.alert("xxx",shoes_id);
           //this.cwlWindow( this.checkDetailsForm(), this.checkDetailsGrid() ).show();
-          Zm.services.checkDetail.createCheckDetails(shoes_id).show();
+          Zm.services.checkDetail.createCheckDetails(shoes_id,photo_one,photo_two).show();
           //var store = Ext.getCmp('detailGrid').store;
           //store.setBaseParam('id', shoes_id );
           //store.reload();
@@ -106,7 +110,9 @@ Zm.services.excelProcessingAndPlayBoard = {
 			},
 			{
 				text: '与客户交谈',
-				handler: function() {}
+				handler: function() {
+          Zm.services.communicateWithGuest.createCommunicateWithGuest().show();
+        }
 			},
 			{
 				text: '修改确定打板时间',

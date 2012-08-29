@@ -60,6 +60,8 @@ Zm::Application.routes.draw do
    collection do
 ####### 好，这部分是我的路由,不要改我的 ###########
      get "check_guest_order"
+     get "get_jing"
+     get "get_guest_progress"
      get "get_daily_sheet"
      get "get_guest_order"
      get "check_virtual_warehouse"
@@ -89,6 +91,16 @@ Zm::Application.routes.draw do
      get "get_cao_grid"
 
      post "open_order"
+   end
+ end
+
+  resources :guests do
+   collection do
+     get"scanning_store_of_shoes"
+     get"get_general_shoes"
+     get"load_tree"
+     get"get_scanning_detail"
+     get"change_board_kind"
    end
  end
 

@@ -2,6 +2,7 @@ class ManagementsController < ApplicationController
  
   #*********************************************查看鞋库****************************************************
 
+
     def check_store_of_shoes
     end
 
@@ -12,68 +13,97 @@ class ManagementsController < ApplicationController
     def get_data
       choices = []
 
-      choices = GeneralShoe.where("types_of_shoes like ? and production_date like ? and production_date like ?","%#{params[:selectType]}%" , "%#{params[:selectMonth]}%" , "%#{params[:selectYear]}%")
+      choices = GeneralShoe.where("types_of_shoes like ? and production_date like ? ","%#{params[:selectType]}%" , "%#{params[:selectDate]}%" ).order("production_date  DESC")
       
-      respond_to do |format|
-        format.json{ render :json => { :check_store_of_shoes => choices} }
-      end
+      render :json => { :check_store_of_shoes => choices} 
     end
     
-
     def get_details
        details = GeneralShoe.get_shoes_details( params[:id] )
        render :json => { :details => details } 
     end
 
-
+ 
   #*********************************************************************************************************
 
-###############  以下部分是我的，别碰我的东西 #####################################################################
-    #guest_contex
-    def get_detail
-      render :json => { :guest_detail => GeneralShoe.all }
+
+    def get_jing
+      guest_size = []
+      aa = [] 
+      aa << Order.find(1) 
+      guest_size << { :general_shoe_id => "jing", :size_38 => Order.find(1).id, :size_39 => 39, :size_40 => 40, :size_41 => 41, :size_42 => 42, :size_43 => 43, :size_44 => 44 }
+      render :json => { :progress => guest_size }
     end
 
- #   def get_daily_sheet
- #     render :json => { :daily_data => SizeOfShoe.all }
- #   end
 
+#    def get_jing
+#      guest_size = []
+#      SizeOfShoe.all.each do |s|
+#        m = 1
+#        for i in m..SizeOfShoe.count
+#          if SizeOfShoe.find(i).general_shoe_id == s.general_shoe_id
+#            case s.size
+#            when 38
+#              size38 = s.size
+#            when 39
+#              size39 = s.size
+#            when 40
+#              size40 = s.size
+#            when 41
+#              size41 = s.size
+#            when 42
+#              size42 = s.size
+#            when 43
+#              size43 = s.size
+#            when 44
+#              size44 = s.size
+#            end
+#          end
+#          guest_size << { :size_38 => size38, :size_39 => size39, :size_40 => size40, :size_41 => size41, :size_42 => size42, :size_43 => size43, :size_44 => size44 }
+#        end
+#        m += 1
+#      end
+#      render :json => { :progress =>  guest_size }
+#    end
+    
+#    def get_jing
+#      render :json => { :progress => Order.find(:all, :conditions => "order_id = 'O2'")}
+#    end
+
+    def get_guest_progress
+      render :json => { :progress => Order.all }
+    end
+
+#    def get_guest_progress
+#      a = []
+#      Order.all.each do |s|
+#        a << { :id => s.id.to_s + "/" + s.order_id.to_s }
+#      end
+#      render :json => { :progress => a }
+#    end
+
+    #分页显示示例
     def get_daily_sheet
       daily_data = []
       SizeOfShoe.limit(params[:limit].to_i).offset(params[:start].to_i).each do |s|
         daily_data << { :id => s.id, :necessary_num => s.necessary_num, :finished_num => s.finished_num }
       end
-      daily_sheet = { :totalProperty => SizeOfShoe.count, :gds => daily_data,  }
+      daily_sheet = { :totalProperty => SizeOfShoe.count, :gds => daily_data }
       render :json => daily_sheet
     end
-
 
     #guest     
     def check_guest_order
     end
-
-    #guest
-    def get_check_guest_order
-      render :json => { :check_guest_order => Order.all }
-    end
-    
-    #guest
-    def get_guest_order
-      render :json => { :check_guest_order => Order.find_by_sql("select * from orders where production_date like '#{params[:date]}%'") }
-    end
-
-    #virtual
+  
     def check_virtual_warehouse
     end
-    
-    #virtual
+
     def get_contract
       render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id") }
       end
 
     
-
-
 
     def get_check_virtual_warehouse
         render :json => { :general_shoe => SizeOfShoe.find(:all, :conditions => ["created_at like ?", params[:date] + "%" ])}
@@ -89,18 +119,17 @@ class ManagementsController < ApplicationController
     def get_check_guest_order
       render :json => { :check => GeneralShoe.find_by_sql("select id, photo_one, photo_two from general_shoes")}
     end
-    
-    #virtual
+
     def get_check_virtual_warehouse_node
-      render :json => {}
+      render :json => { :virtual_warehouse => GeneralShoe.all }
     end
-    
-    #virtual
+ 
     def get_tree_node
-      render :json => { :tree_node => FactoryOrder.all }
+      respond_to do |format|
+        format.json{ render :json => { :tree_node => FactoryOrder.all } }
+      end
     end
-    
-    #virtual
+
     def get_check_virtual_warehouse
       render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where general_shoes.id = size_of_shoes.general_shoe.id ")}
     end
@@ -123,7 +152,7 @@ class ManagementsController < ApplicationController
       else
         cfo_grid = FactoryOrder.create_cfo_json( factory_orders )
       end
-     #回应请求
+      #回应请求
       respond_to do |format|
         format.json{ render :json => { :cfo => cfo_grid } }
       end
@@ -162,6 +191,7 @@ class ManagementsController < ApplicationController
       # 按照第几页显示10条数据
       for i in index.to_i...count
         tmp = FactoryOrder.find( params[:id] ).general_shoes[ i ]
+        p tmp
         if tmp != nil then
           check_shoes << tmp
           i += 1
