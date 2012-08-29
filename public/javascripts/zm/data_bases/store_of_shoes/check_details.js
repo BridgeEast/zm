@@ -11,12 +11,12 @@ Zm.managements.win = {
 				layout: 'column',
 				items: [{
 					columnWidth: .5,
-					html: '<img src=\'/images/shoes/' + Ext.getCmp('csosGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
+					html: '<img src=\'/images/shoes/' + Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
 
 				},
 				{
 					columnWidth: .5,
-					html: '<img src=\'/images/shoes/' + Ext.getCmp('csosGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
+					html: '<img src=\'/images/shoes/' + Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
 
 				}]
 			}]
@@ -38,17 +38,17 @@ Zm.managements.win = {
 			header: '加工方法',
 			dataIndex: 'procession'
 		}]);
-
+    
+    var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
 		var store = new Ext.data.JsonStore({
-			url: '/managements/get_details.json',
-			fields: ['region', 'material', 'color', 'procession'],
-			method: 'post',
-			baseParams: {
-				id: Zm.managements.check_store_of_shoes.select_id
-			},
-			root: 'details',
-			autoLoad: true
-		});
+			url: '/data_bases/get_details_of_shoes.json',
+            fields: ['region', 'material', 'color', 'procession'],
+            baseParams: {
+                id: selection.getSelected().id
+            },
+            root: 'dos',
+            autoLoad: true
+        });
 
 		var grid = new Ext.grid.GridPanel({
 			region: 'center',

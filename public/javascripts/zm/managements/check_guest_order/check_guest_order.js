@@ -34,24 +34,37 @@ Zm.managements.check_guest_order= {
         });
 
         var grid = new Ext.grid.GridPanel({ 
-            id: 'regionGrid',
+            id: 'guestgrid',
             region: 'center',
             cm: cm,
             store: store,
             viewConfig: { forceFit: true },
-          //  tbar:[{text: "ssssss",handler: function(){ chen_node3.remove(); } }]
+            tbar:[{text: "ssssss",handler: function(){ progressWindow.show();} }]
+             
         });                  
    
-        var clientorderenquirycontextmenu = new Ext.menu.Menu({
+        var guestContexMenu = new Ext.menu.Menu({
          		id: 'theContextMenu',
           	items: [{
               	text: '查看鞋', 
                 handler: function(){ guestDetailWindow.show(); }
   	    		},{
                	text: '查看订单进度',
-                handler: function(){ chen_node3.remove(); }
+                handler: function(){ 
+                var orderid = Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_id"];
+                    Ext.Ajax.request({
+                        url: "/managements/get_guest_progress.json",
+                        method: "post",
+                        jsonData: { orderid: orderid },
+                    });
+                    progressWindow.show(); 
+                    Ext.getCmp('progressgrid').store.load();
+                    
+                }
   	    		},{				
-  	    		    text: '打开提单',
+  	    		    text: '打开提单', handler: function(){ 
+                    alert(Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_d"]); 
+                }
   	    		},{				
   	    			  text: '下载提单',	
   	    		},{			
@@ -64,9 +77,9 @@ Zm.managements.check_guest_order= {
       	grid.on("rowcontextmenu", function(grid, rowIndex, e){
           	e.preventDefault();
           	grid.getSelectionModel().selectRow(rowIndex);
-          	clientorderenquirycontextmenu.showAt(e.getXY());
+          	guestContexMenu.showAt(e.getXY());
       	});
-
+        
         var chen_year_nodes = [];  //全局变量，暂时没其他办法，先用着
 
         var root=new Ext.tree.AsyncTreeNode({   

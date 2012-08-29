@@ -118,9 +118,9 @@ namespace :data do
    puts "创建Excel数据"
    ExcelReceive.delete_all
    ExcelReceive.create([
-     {:id => 1, :excel_receive_id => "E1",:custom_num => "客户1",:excel_url => "e1.xls"},
-     {:id => 2, :excel_receive_id => "E2",:custom_num => "客户3",:excel_url => "e2.xls"},
-     {:id => 3, :excel_receive_id => "E3",:custom_num => "客户2",:excel_url => "e3.xls"},
+     {:id => 1, :excel_receive_id => "E1",:custom_num => "客户1",:excel_url => "e1.xls",:receiving_date => "2012-8-1"},
+     {:id => 2, :excel_receive_id => "E2",:custom_num => "客户3",:excel_url => "e2.xls",:receiving_date => "2012-7-12"},
+     {:id => 3, :excel_receive_id => "E3",:custom_num => "客户2",:excel_url => "e3.xls",:receiving_date => "2012-8-5"},
    ]) 
 
    puts "创建工厂订单数据"

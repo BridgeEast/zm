@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(:version => 20120827074417) do
     t.string   "excel_receive_id", :null => false
     t.string   "custom_num"
     t.string   "excel_url"
+    t.date     "receiving_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
