@@ -41,9 +41,8 @@ class DataBasesController < ApplicationController
     end
   end
   def get_details
-       render :json => { :details => DetailsOfShoe.where(:general_shoe_id => params[:id]) }
-
-    end
+    render :json => { :details => DetailsOfShoe.where(:general_shoe_id => params[:id]) }
+  end
   def get_details_of_shoes
       details_shoes = GeneralShoe.get_details_json( params[:id] )
       respond_to do|format|
