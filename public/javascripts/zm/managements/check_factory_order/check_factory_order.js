@@ -102,8 +102,16 @@ Zm.managements.CheckFactoryOrder = {
                             } 
                     },{ 
                       text: '查看订单',handler: function(){ 
+                              var order_id = Ext.getCmp("checkShoes").getSelectionModel().getSelected().data.id;
+                                Ext.Ajax.request({
+                                  method: 'POST',
+                                  url: '/managements/open_order.json',
+                                  jsonData: { id: order_id },
+                                  //callback: function(){ Ext.Msg.alert(notice); }
+                                  success: function(){ 
+                                  }
+                                });
                               this.checkWindow( this.checkOrders() ).show();
-                                Ext.Ajax.request
                             }
                     }],
                   });
@@ -161,6 +169,7 @@ Zm.managements.CheckFactoryOrder = {
                           }]
                         }],
                       });
+
                     },
 
   checkDetailsGrid: function(){ 

@@ -82,10 +82,13 @@ Zm::Application.routes.draw do
 
      get "check_factory_order"
      get "get_cfo_grid"
+
      get "check_wish_list"
      get "get_cwl_grid"
      get "check_advanced_order"
      get "get_cao_grid"
+
+     post "open_order"
    end
  end
 
