@@ -56,6 +56,12 @@ Zm::Application.routes.draw do
    end
  end
 
+ resources :guest do
+   collection do
+     get "wish_list"
+   end
+ end
+
  resources :managements do
    collection do
 ####### 好，这部分是我的路由,不要改我的 ###########

@@ -11,7 +11,6 @@ class GeneralShoe < ActiveRecord::Base
 
    def self.get_shoes_details( id ) 
     shoes = self.where( :id => id ).first
-    p shoes
     shoes.details_of_shoes.collect! do |item|
      { 
         :region => item.region.region,
@@ -21,6 +20,7 @@ class GeneralShoe < ActiveRecord::Base
       }
     end
   end
+
   ########### 获取心愿单所需记录 ##########
   def self.get_cwl_record( param_node )
     rec = Array.new

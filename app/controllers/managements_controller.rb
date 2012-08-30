@@ -15,84 +15,24 @@ class ManagementsController < ApplicationController
 
       choices = GeneralShoe.where("types_of_shoes like ? and production_date like ? ","%#{params[:selectType]}%" , "%#{params[:selectDate]}%" ).order("production_date  DESC")
       
-      render :json => { :check_store_of_shoes => choices} 
+        render :json => { :check_store_of_shoes => choices} 
     end
     
     def get_details
+
        details = GeneralShoe.get_shoes_details( params[:id] )
-       render :json => { :details => details } 
+       render :json => { :shoes => details }
+
     end
 
- 
+#.limit(params[:limit].to_i).offset(params[:start].to_i)
+       #shoes  = { :totalProperty => GeneralShoe.get_shoes_details( params[:id] ).count , :data => shoes } 
+
   #*********************************************************************************************************
 
 
-    def get_jing
-      guest_size = []
-      aa = [] 
-      aa << Order.find(1) 
-      guest_size << { :general_shoe_id => "jing", :size_38 => Order.find(1).id, :size_39 => 39, :size_40 => 40, :size_41 => 41, :size_42 => 42, :size_43 => 43, :size_44 => 44 }
-      render :json => { :progress => guest_size }
-    end
 
 
-#    def get_jing
-#      guest_size = []
-#      SizeOfShoe.all.each do |s|
-#        m = 1
-#        for i in m..SizeOfShoe.count
-#          if SizeOfShoe.find(i).general_shoe_id == s.general_shoe_id
-#            case s.size
-#            when 38
-#              size38 = s.size
-#            when 39
-#              size39 = s.size
-#            when 40
-#              size40 = s.size
-#            when 41
-#              size41 = s.size
-#            when 42
-#              size42 = s.size
-#            when 43
-#              size43 = s.size
-#            when 44
-#              size44 = s.size
-#            end
-#          end
-#          guest_size << { :size_38 => size38, :size_39 => size39, :size_40 => size40, :size_41 => size41, :size_42 => size42, :size_43 => size43, :size_44 => size44 }
-#        end
-#        m += 1
-#      end
-#      render :json => { :progress =>  guest_size }
-#    end
-    
-#    def get_jing
-#      render :json => { :progress => Order.find(:all, :conditions => "order_id = 'O2'")}
-#    end
-
-    def get_guest_progress
-      render :json => { :progress => Order.all }
-    end
-
-#    def get_guest_progress
-#      a = []
-#      Order.all.each do |s|
-#        a << { :id => s.id.to_s + "/" + s.order_id.to_s }
-#      end
-#      render :json => { :progress => a }
-#    end
-
-    #分页显示示例
-    def get_daily_sheet
-      daily_data = []
-      SizeOfShoe.limit(params[:limit].to_i).offset(params[:start].to_i).each do |s|
-        daily_data << { :id => s.id, :necessary_num => s.necessary_num, :finished_num => s.finished_num }
-      end
-      daily_sheet = { :totalProperty => SizeOfShoe.count, :gds => daily_data }
-      render :json => daily_sheet
-    end
-
-    #guest     
     def check_guest_order
     end
   
@@ -102,6 +42,15 @@ class ManagementsController < ApplicationController
     def get_contract
       render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id") }
       end
+ 
+    def get_daily_sheet
+      daily_data = []
+      SizeOfShoe.limit(params[:limit].to_i).offset(params[:start].to_i).each do |s|
+        daily_data << { :id => s.id, :necessary_num => s.necessary_num, :finished_num => s.finished_num }
+      end
+      daily_sheet = { :totalProperty => SizeOfShoe.count, :gds => daily_data }
+      render :json => daily_sheet
+    end
 
     
 
@@ -254,7 +203,6 @@ class ManagementsController < ApplicationController
      # end
     end
 
+
+
 end
-
-
-
