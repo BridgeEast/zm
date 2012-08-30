@@ -56,7 +56,7 @@ Zm::Application.routes.draw do
    end
  end
 
- resources :guest do
+ resources :guests do
    collection do
      get "wish_list"
    end
