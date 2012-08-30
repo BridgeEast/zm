@@ -56,11 +56,6 @@ Zm::Application.routes.draw do
    end
  end
 
- resources :guests do
-   collection do
-     get "wish_list"
-   end
- end
 
  resources :managements do
    collection do
@@ -107,11 +102,17 @@ Zm::Application.routes.draw do
 
   resources :guests do
    collection do
+
      get"scanning_store_of_shoes"
      get"get_general_shoes"
      get"load_tree"
      get"get_scanning_detail"
      get"change_board_kind"
+
+     #**************心愿单***********
+     get "wish_list"
+     get "wish_list_data"
+     #*******************************
    end
  end
 

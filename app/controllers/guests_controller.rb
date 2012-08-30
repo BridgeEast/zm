@@ -6,6 +6,20 @@ class GuestsController < ApplicationController
     def wish_list
     end
 
+   
+
+    def wish_list_data
+      wish_list = GeneralShoe.get_cwl_record( params[:id] )
+      if wish_list == [] then
+        data = ""
+      else
+        data = GeneralShoe.wish_list_data( wish_list )
+        
+      end
+       render :json => { :wish_list_data => data }
+    end
+
+
   #*********************************************************************
 
   

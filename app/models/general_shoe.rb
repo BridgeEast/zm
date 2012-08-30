@@ -11,13 +11,33 @@ class GeneralShoe < ActiveRecord::Base
   belongs_to :factory_order
 
    def self.get_shoes_details( id ) 
-    shoes = self.where( :id => id ).first
+    shoes = self.where( :id => id ).first   #where返回1个数组
     shoes.details_of_shoes.collect! do |item|
      { 
         :region => item.region.region,
         :material => item.material.material,
         :color => item.color.color,
         :procession => item.procession.procession,
+      }
+    end
+  end
+
+   def self.wish_list_data( cwl )
+    cwl.collect! do|item|
+      { 
+         :id => item.id,
+         :photo_one => item.photo_one,
+         :photo_two => item.photo_two,
+         :shoes_id => item.shoes_id,
+         :types_of_shoes => item.types_of_shoes,
+         :suitable_people => item.suitable_people,
+         :colors => item.colors,
+         :price => item.price,
+         :sure_board => item.play_board.sure_board,
+         :done_board => item.play_board.done_board,
+         :production_date => item.production_date ,
+         :communication => item.play_board.communication,
+         :remark => item.remark
       }
     end
   end

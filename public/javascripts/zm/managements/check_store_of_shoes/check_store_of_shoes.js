@@ -82,7 +82,7 @@ Zm.managements.check_store_of_shoes = {
 				handler: function() {
 					this.select_id = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["id"];
                     this.photo_one = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["photo_one"];
-                    this.photo_two = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["photo_two"]
+                    this.photo_two = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["photo_two"];
 					Zm.managements.win.init().show();
 				}
 			}]
