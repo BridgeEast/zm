@@ -290,7 +290,6 @@ class ManagementsController < ApplicationController
                      :disposition => "inline", 
                      :filename => @order.order_id ) 
 
-
           order_file.close
     #    else
     #      raise "文件无法打开"
