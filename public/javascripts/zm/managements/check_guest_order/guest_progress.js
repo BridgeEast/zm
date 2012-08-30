@@ -14,19 +14,20 @@ Ext.onReady(function(){
     var store = new Ext.data.JsonStore({
         url: "/managements/get_order_progress.json",
         fields: ["shoes_id", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
-        baseParam: { id: "null"},
+        totalProperty: "totalProperty",
         root: "progress",
     });
+    store.load({ params: { start: 0, limit: 20 } })
 
     var progressGrid = new Ext.grid.GridPanel({
         id: "progressgrid",
-        height: 380,
-        width: 640,
+        height: 491,
+        width: 788,
         viewConfig: { forceFit: true },
         cm: cm,
         store: store,
         bbar: new Ext.PagingToolbar({
-            pageSize: 10,
+            pageSize: 20,
             store: store,
             displayInfo: true,
             displayMsg: "第{0}条到第{1}条记录，一共{2}条记录",
@@ -37,8 +38,8 @@ Ext.onReady(function(){
 
     progressWindow = new Ext.Window({
         id: "progresswindow",
-        height: 413,
-        width: 654,
+        height: 527,
+        width: 800,
         closeAction: "hide",
         resizable: false,
         items: [progressGrid],
@@ -50,7 +51,7 @@ Ext.onReady(function(){
                 method: "post",
                 jsonData: { orderid: order},
             });
-            store.reload();
+            store.load({ params: { start: 0, limit: 20 } });
             }
           }
         },

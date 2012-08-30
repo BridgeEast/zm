@@ -17,7 +17,7 @@ Ext.onReady(function(){
         totalProperty: "totalProperty",
         root: "daily_sheet",
     });
-    store.load({ params: { start: 0, limit: 10 } });
+    store.load({ params: { start: 0, limit: 20 } });
 
     var dailySheetGrid = new Ext.grid.GridPanel({
         id: "dailysheetgird",
@@ -35,7 +35,7 @@ Ext.onReady(function(){
             id: "datefield"
         }],
         bbar: new Ext.PagingToolbar({
-            pageSize:10, 
+            pageSize: 20, 
             store: store,
             displayInfo: true,
             displayMsg: "第{0}条到{1}条记录，一共{2}条",

@@ -46,7 +46,19 @@ class ManagementsController < ApplicationController
         shoe_name << n
       end
       size_num = SizeOfShoe.sheet_shoe_size_num( shoe_name )
-      render :json => { :daily_sheet => size_num }
+  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^^^
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > size_num.length
+        max = size_num.length
+      end
+      for i in n..max - 1
+        root << size_num[i]
+      end
+      all_data = { :totalProperty => size_num.length, :daily_sheet => root }
+      render :json => all_data
     end
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   月报表   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -56,6 +68,7 @@ class ManagementsController < ApplicationController
       proym = params[:pro_ym] 
       InboundAndOutbound.all.each do |m|
         a = []
+        root_data = []
         a = m.inbound_and_outbound_date.to_s.split("-")
         pro = a[0].to_s + "-" + a[1].to_s
         if pro == "#{proym}"
@@ -66,7 +79,19 @@ class ManagementsController < ApplicationController
         shoe_name << n
       end
       size_num = SizeOfShoe.sheet_shoe_size_num( shoe_name )
-      render :json => { :mouth_sheet => size_num }
+  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^^^
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > size_num.length
+        max = size_num.length
+      end
+      for i in n..max - 1
+        root << size_num[i]
+      end
+      all_data= { :totalProperty => size_num.length, :mouth_sheet => root }
+      render :json => all_data 
     end
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  日发货单  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -83,7 +108,19 @@ class ManagementsController < ApplicationController
         shoe_name << n
       end
       size_num = SizeOfShoe.dispatch_shoe_size_num( shoe_name )
-      render :json => { :daily_dispatch => size_num }
+  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^^^
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > size_num.length
+        max = size_num.length
+      end
+      for i in n..max - 1
+        root << size_num[i]
+      end
+      all_data= { :totalProperty => size_num.length, :daily_dispatch => root }
+      render :json => all_data 
     end
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  月发货单  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -103,7 +140,19 @@ class ManagementsController < ApplicationController
         shoe_name << n
       end
       size_num = SizeOfShoe.dispatch_shoe_size_num( shoe_name )
-      render :json => { :mouth_dispatch => size_num }
+  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > size_num.length
+        max = size_num.length
+      end
+      for i in n..max - 1
+        root << size_num[i]
+      end
+      all_data = { :totalProperty => size_num.length, :mouth_dispatch => root }
+      render :json => all_data 
     end
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  订单进度  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -111,12 +160,24 @@ class ManagementsController < ApplicationController
       ids = []
       Order.all.each do |s|
         if s.order_id == "#{params[:orderid]}" 
-        ids << s.id
+          ids << s.id
         end
       end
       shoes = Order.where( :id => ids ).first.general_shoes
       size_num = GeneralShoe.get_progress_num_and_size( shoes )
-      render :json => { :progress => size_num }
+  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > size_num.length
+        max = size_num.length
+      end
+      for i in n..max - 1
+        root << size_num[i]
+      end
+      all_data = { :totalProperty => size_num.length, :progress => root }
+      render :json => all_data 
     end    
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  分页显示示例  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -129,14 +190,30 @@ class ManagementsController < ApplicationController
       render :json => daily_sheet
     end
 
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    #guest     
     def check_guest_order
     end
-  
+
     def check_virtual_warehouse
     end
 
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def get_contract
-      render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id") }
+      size_num = GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id")
+  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > size_num.length
+        max = size_num.length
+      end
+      for i in n..max - 1
+        root << size_num[i]
+      end
+      all_data = { :totalProperty => size_num.length, :virtual_warehouse => root }
+      render :json => all_data 
       end
  
     def get_daily_sheet
@@ -148,10 +225,25 @@ class ManagementsController < ApplicationController
       render :json => daily_sheet
     end
 
-    def get_virtualing
-      render :json => {:virtual_warehouse => {}}
+##^^^^^^^^^^^^^^^^^^^^^^ 虚拟仓库加载页面时的数据  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def get_virtuals
+      size_num = GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where general_shoes.id = size_of_shoes.general_shoe_id")
+  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > size_num.length
+        max = size_num.length
+      end
+      for i in n..max - 1
+        root << size_num[i]
+      end
+      all_data = { :totalProperty => size_num.length, :virtual_warehouse => root }
+      render :json => all_data 
     end 
 
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def get_check_virtual_warehouse
         render :json => { :general_shoe => SizeOfShoe.find(:all, :conditions => ["created_at like ?", params[:date] + "%" ])}
     end
@@ -160,11 +252,27 @@ class ManagementsController < ApplicationController
     def get_check_guest_order
       render :json => { :check_guest_order => Order.all }
     end
-    
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     #guest
     def get_guest_order
-      render :json => { :check_guest_order => Order.find_by_sql("select * from orders where production_date like '#{params[:date]}%'") }
+      size_num = Order.find_by_sql("select * from orders where production_date like '#{params[:date]}%'")
+  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > size_num.length
+        max = size_num.length
+      end
+      for i in n..max - 1
+        root << size_num[i]
+      end
+      all_data = { :totalProperty => size_num.length, :check_guest_order => root }
+      render :json => all_data 
     end
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     def get_tree_node
       respond_to do |format|
