@@ -60,11 +60,7 @@ Zm.managements.win = {
 			cm: checkDetailsCm,
 		});
 
-<<<<<<< HEAD
 		var checkDetails = new Ext.Window({
-=======
-		 var check_detail = new Ext.Window({
->>>>>>> 更新代码
 			layout: 'border',
 			closeAction: 'hide',
 			height: 600,

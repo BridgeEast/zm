@@ -7,8 +7,8 @@ Zm.dataBases.storeOfShoes = {
         };
     },
 
+//**********************************************************************************************
     createStoreOfShoes: function() {
-
         //用于显示鞋库的gridpanel
         var shoesCm = new Ext.grid.ColumnModel([
         new Ext.grid.RowNumberer(), {
@@ -118,11 +118,9 @@ Zm.dataBases.storeOfShoes = {
         });
     },
 
+//**********************************************************************************************
     // 添加新样品
     addShoes: function(type) {
-      
-       // Ext.Msg.alert('xx',Ext.getCmp('storeOfShoesGrid').getStore().getCount());
-     
         var cm = new Ext.grid.ColumnModel([{
             header: '部位',
             dataIndex: 'region',
@@ -277,7 +275,6 @@ Zm.dataBases.storeOfShoes = {
                     }
                     return value;
                 }
-
                 return function(value) {
                     if (combo.store.getCount() == 0 && gridId) {
                         combo.store.on('load', function() {
@@ -291,7 +288,6 @@ Zm.dataBases.storeOfShoes = {
                         });
                         return value;
                     }
-
                     return getValue(value);
                 };
             },
@@ -438,7 +434,6 @@ Zm.dataBases.storeOfShoes = {
             scope: this,
             inputType: 'file',
             handler: function(){ 
-            })
             }
 
         })
@@ -478,46 +473,7 @@ Zm.dataBases.storeOfShoes = {
             items: [form]
         });
     },
-<<<<<<< HEAD
-      createData: function() {
-       // var region_id = [];
-        //var material_id = [];
-        //var color_id = [];
-         //var procession_id = [];
-       
- var result=new Array(3);
- result[0] = new Array();
- result[1] = new Array();
- result[2] = new Array();
- result[3] = new Array();
-   
-   //  var result[1]=[];
-    // var result[2]=[];
-    // var result[3]=[];
-     
-        var store = Ext.getCmp('grid').getStore();
-        console.log("count",Ext.getCmp('grid').getStore().getCount());
-        //Ext.Msg.alert('xx',Ext.getCmp('grid').getStore().getAt(1).data.region);
-        for (i = 0; i < store.getCount(); i++) {
-            var data = store.getAt(i).data;
-            result[0].push(data.region);
-            result[1].push(data.material);
-            result[2].push(data.color);
-            result[3].push(data.procession);
 
-        }
-
-        console.log('result',result);
-        //var result = {
-         //   region_ids: region_id,
-          //  material_ids: material_id,
-         //   color_ids: color_id,
-         //   procession_ids: procession_id
-      //  }
-        //Ext.Msg.alert("xxx",store.getAt(0).data.region);
-        return result;
-
-=======
     createData: function() {
         var items = [];
         var store = Ext.getCmp('grid').getStore();
@@ -530,21 +486,11 @@ Zm.dataBases.storeOfShoes = {
                 procession_id: data.procession
             });
         }
-        return items;
->>>>>>> 更新代码
+        return items
     },
-
+//******************************************************************************************************************
     checkForShoes: function(type) {
-<<<<<<< HEAD
-                  var result=this.createData();
-                  console.log('xx',result[0]);
-                  console.log('xx',result[1]);
-                  console.log('xx',result[2]);
-                  console.log('xx',result[3]);
-              //var result=this.checkForShoes();
-=======
         var _this = this
->>>>>>> 更新代码
         var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
         var shoesId = Ext.getCmp('addShoesId').getValue();
         var suitablePeople = Ext.getCmp('addSuitablePoeple').getValue();
@@ -555,19 +501,6 @@ Zm.dataBases.storeOfShoes = {
         var productionDate = date2str(new Date());
         var win
         var record = {
-<<<<<<< HEAD
-            shoes_id: shoesId,
-            suitable_people: suitablePeople,
-            colors: color,
-            types_of_shoes: typesOfShoes,
-            price: price,
-            remark: remark,
-            production_date: productionDate,
-           region_id: result[0],
-            material_id: result[1],
-           color_id: result[2],
-            procession_id: result[3],
-=======
             shoes_id                    : shoesId,
             suitable_people             : suitablePeople,
             colors                      : color,
@@ -576,7 +509,6 @@ Zm.dataBases.storeOfShoes = {
             remark                      : remark,
             production_date             : productionDate,
             details_of_shoes_attributes : _this.createData()
->>>>>>> 更新代码
         };
         function date2str(d) {
             var ret = d.getFullYear() + "-"
@@ -637,7 +569,7 @@ Zm.dataBases.storeOfShoes = {
             Ext.Msg.alert('警告', '样品号不能为空!');
         }
     },
-
+//***************************************************************************************
     //删除所选
     deleteShoes: function() {
         var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
@@ -662,7 +594,7 @@ Zm.dataBases.storeOfShoes = {
         }
 
     },
-
+//***************************************************************************************************
     // 修改
     updateShoes: function() {
         var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
