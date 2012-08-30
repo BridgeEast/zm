@@ -120,7 +120,9 @@ Zm.dataBases.storeOfShoes = {
 
     // 添加新样品
     addShoes: function(type) {
-
+      
+       // Ext.Msg.alert('xx',Ext.getCmp('storeOfShoesGrid').getStore().getCount());
+     
         var cm = new Ext.grid.ColumnModel([{
             header: '部位',
             dataIndex: 'region',
@@ -397,7 +399,7 @@ Zm.dataBases.storeOfShoes = {
             text: '确定',
             scope: this,
             handler: function() {
-                this.checkForShoes(type)
+                this.checkForShoes(type);
             }
         });
 
@@ -430,35 +432,41 @@ Zm.dataBases.storeOfShoes = {
         });
     },
       createData: function() {
-        var region_id = [];
-        var material_id = [];
-        var color_id = [];
-         var procession_id = [];
+       // var region_id = [];
+        //var material_id = [];
+        //var color_id = [];
+         //var procession_id = [];
+       
+ var result=new Array(3);
+ result[0] = new Array();
+ result[1] = new Array();
+ result[2] = new Array();
+ result[3] = new Array();
+   
+   //  var result[1]=[];
+    // var result[2]=[];
+    // var result[3]=[];
+     
         var store = Ext.getCmp('grid').getStore();
-        Ext.Msg.alert("aji",store.getCount);
+        console.log("count",Ext.getCmp('grid').getStore().getCount());
+        //Ext.Msg.alert('xx',Ext.getCmp('grid').getStore().getAt(1).data.region);
         for (i = 0; i < store.getCount(); i++) {
             var data = store.getAt(i).data;
+            result[0].push(data.region);
+            result[1].push(data.material);
+            result[2].push(data.color);
+            result[3].push(data.procession);
 
-            region_id.push({
-                region_id: data.region_id
-            });
-            material_id.push({
-                material_id: data.material_id
-            });
-            color_id.push({
-                color_id: data.color_id
-            });
-            procession_id.push({
-                procession_id: data.procession_id
-            })
         }
-        var result = {
-            region_ids: region_id,
-            material_ids: material_id,
-            color_ids: color_id,
-            procession_ids: procession_id
-        }
-        Ext.Msg.alert("xxx",result.region_ids[0].region_id);
+
+        console.log('result',result);
+        //var result = {
+         //   region_ids: region_id,
+          //  material_ids: material_id,
+         //   color_ids: color_id,
+         //   procession_ids: procession_id
+      //  }
+        //Ext.Msg.alert("xxx",store.getAt(0).data.region);
         return result;
 
     },
@@ -466,7 +474,12 @@ Zm.dataBases.storeOfShoes = {
     
 
     checkForShoes: function(type) {
-                  //   this.createData
+                  var result=this.createData();
+                  console.log('xx',result[0]);
+                  console.log('xx',result[1]);
+                  console.log('xx',result[2]);
+                  console.log('xx',result[3]);
+              //var result=this.checkForShoes();
         var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
         var shoesId = Ext.getCmp('addShoesId').getValue();
         var suitablePeople = Ext.getCmp('addSuitablePoeple').getValue();
@@ -484,10 +497,10 @@ Zm.dataBases.storeOfShoes = {
             price: price,
             remark: remark,
             production_date: productionDate,
-            region_id: this.createData().region_ids,
-            material_id: this.createData().material_ids,
-            color_id: this.createData().color_ids,
-            procession_id: this.createData().procession_ids
+           region_id: result[0],
+            material_id: result[1],
+           color_id: result[2],
+            procession_id: result[3],
         };
         function date2str(d) {
             var ret = d.getFullYear() + "-"
