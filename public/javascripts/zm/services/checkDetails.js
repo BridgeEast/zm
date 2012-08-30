@@ -1,6 +1,6 @@
 Zm.services.checkDetail = {
 	// ++++++++++++++++++++++++++++++++++++++++++++++++查看详情+++++++++++++++++++++++++++
-	createCheckDetails: function(shoes_id) {
+	createCheckDetails: function(shoes_id,photo_one,photo_two) {
     //Ext.Msg.alert("xxx",shoes_id);
 
 		var detailCm = new Ext.grid.ColumnModel([
@@ -44,6 +44,7 @@ Zm.services.checkDetail = {
 			//title: '部位',
 			region: 'center',
 			height: 200,
+      frame: true,
 			cm: detailCm,
 			store: detailStore,
 			viewConfig: {
@@ -54,16 +55,21 @@ Zm.services.checkDetail = {
 		var detailPhoto = new Ext.Panel({
 			id: 'detailPhoto',
 			// title: "xx",
-			// height: 100,
+			 height: 300,
+       //frame: true,
+       resizable: true,
 			// width: 100,
 			layout: 'column',
+      region: 'north',
 			items: [{
-				title: 'photo1',
-				columnWidth: .5
+				//title: 'photo1',
+				columnWidth: .5,
+        html: '<img src=\'/images/shoes/' + photo_one + '\' width=100% height=100%>'
 			},
 			{
-				title: 'photo2',
-				columnWidth: .5
+			//	title: 'photo2',
+				columnWidth: .5,
+        html: '<img src=\'/images/shoes/' + photo_two + '\' width=100% height=100%>'
 			}]
 		});
  
@@ -72,11 +78,12 @@ Zm.services.checkDetail = {
 			id: 'detailWin',
 			//title: type,
 			modal: true,
-			height: 600,
+			height: 500,
 			width: 600,
+      layout: 'border',
 			constrainHeader: true,
 			//protect the frame out of the page 
-			items: [detailGrid, detailPhoto],
+			items: [detailPhoto,detailGrid ],
 
 		});
 	},

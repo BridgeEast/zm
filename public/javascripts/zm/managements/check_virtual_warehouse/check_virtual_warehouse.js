@@ -3,81 +3,56 @@ Zm.managements.check_virtual_warehouse = {
         Zm.pages.ViewPort = {
             layout: 'border',
             region: 'center',
-            items: [{
-                region: 'north',
-                layout: 'fit',
-                height: '90',
-                title: '管理层-虚拟仓库管理'
-            },
-            {
-                region: 'center',
-                layout: 'fit',
-                items: [grid]
-            },
-            {
-                region: 'west',
-                collapsible: true,
-                layout: 'fit',
-                width: '180',
-                items: [cvw_tree]
-            }]
+            items: [{ region: 'north', layout: 'fit', height: '90', title: '管理层-虚拟仓库管理' },
+                    { region: 'center', layout: 'fit', items: [grid] },
+                    { region: 'west', collapsible: true, layout: 'fit', width: '180', items: [cvw_tree] }
+                   ]
         };
     },
 };
 
 var cm = new Ext.grid.ColumnModel([
-new Ext.grid.RowNumberer(), {
-    header: '图鞋1',
-    dataIndex: 'photo_one'
-},
-{
-    header: '图鞋2',
-    dataIndex: 'photo_two'
-},
-{
-    header: '鞋号',
-    dataIndex: 'shoes_id'
-},
-{
-    header: '鞋型',
-    dataIndex: 'types_of_shoes'
-},
-{
-    header: '适合人群',
-    dataIndex: 'suitable_people'
-},
-{
-    header: '颜色',
-    dataIndex: 'colors'
-},
-{
-    header: '码号',
-    dataIndex: 'size'
-},
-{
-    header: '价格',
-    dataIndex: 'price'
-},
-{
-    header: '数量',
-    dataIndex: 'necessary_num'
-},
-{
-    header: '已完成数量',
-    dataIndex: 'finished_num'
-},
-{
-    header: '仓库数量',
-    dataIndex: 'store_remaining'
-},
-{
-    header: '制作日期',
-    dataIndex: 'production_date'
-},
+        new Ext.grid.RowNumberer(), {
+            header: '图鞋1',
+            dataIndex: 'photo_one'
+        },{
+            header: '图鞋2',
+            dataIndex: 'photo_two'
+        },{
+            header: '鞋号',
+            dataIndex: 'shoes_id'
+        },{
+            header: '鞋型',
+            dataIndex: 'types_of_shoes'
+        },{
+            header: '适合人群',
+            dataIndex: 'suitable_people'
+        },{
+            header: '颜色',
+            dataIndex: 'colors'
+        },{
+            header: '码号',
+            dataIndex: 'size'
+        },{
+            header: '价格',
+            dataIndex: 'price'
+        },{
+            header: '数量',
+            dataIndex: 'necessary_num'
+        },{
+            header: '已完成数量',
+            dataIndex: 'finished_num'
+        },{
+        header: '仓库数量',
+        dataIndex: 'store_remaining'
+    },{
+        header: '制作日期',
+        dataIndex: 'production_date'
+    }
 ]);
 
 var store = new Ext.data.JsonStore({
-    url: "/managements/get_check_virtual_warehouse_node.json",
+    url: "/managements/get_virtualing.json",
     fields: ['photo_one', 'photo_two', 'shoes_id', 'suitable_people', 'colors', 'size', 'types_of_shoes', 'price', 'production_date', 'necessary_num', 'finished_num', 'store_remaining'],
     root: 'virtual_warehouse',
     autoLoad: false
@@ -96,26 +71,22 @@ var grid = new Ext.grid.GridPanel({
         handler: function() {
             dailySheetWindow.show();
         }
-    },
-    '-', {
+    },'-',{
         text: '月报表查询',
         handler: function() {
             mouthSheetWindow.show();
         }
-    },
-    '-', {
+    },'-',{
         text: '日发货查询',
         handler: function() {
             dailyDispatchWindow.show();
         }
-    },
-    '-', {
+    },'-',{
         text: '月发货查询',
         handler: function() {
             mouthDispatchWindow.show();
         }
-    },
-    '-']),
+    }, '-']),
     bbar: new Ext.PagingToolbar({
         pageSize: 10,
         store: store,

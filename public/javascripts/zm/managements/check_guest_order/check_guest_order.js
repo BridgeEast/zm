@@ -27,10 +27,10 @@ Zm.managements.check_guest_order= {
         ]);
 
         var store = new Ext.data.JsonStore({ 
-            url: '/anagements/get_check_guest_order.json',
+            url: '/managements/get_check_guest_order.json',
             fields: ['order_id','custom_num', 'custom_contrast','quality','total_price','shipment','payment','lading_bill','production_date','remark'],
             root: 'check_guest_order',
-            autoLoad: true
+            autoLoad: false
         });
 
         var grid = new Ext.grid.GridPanel({ 
@@ -39,8 +39,6 @@ Zm.managements.check_guest_order= {
             cm: cm,
             store: store,
             viewConfig: { forceFit: true },
-            tbar:[{text: "ssssss",handler: function(){ progressWindow.show();} }]
-             
         });                  
    
         var guestContexMenu = new Ext.menu.Menu({
@@ -50,20 +48,10 @@ Zm.managements.check_guest_order= {
                 handler: function(){ guestDetailWindow.show(); }
   	    		},{
                	text: '查看订单进度',
-                handler: function(){ 
-                var orderid = Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_id"];
-                    Ext.Ajax.request({
-                        url: "/managements/get_guest_progress.json",
-                        method: "post",
-                        jsonData: { orderid: orderid },
-                    });
-                    progressWindow.show(); 
-                    Ext.getCmp('progressgrid').store.load();
-                    
-                }
+                handler: function(){ progressWindow.show(); }
   	    		},{				
   	    		    text: '打开提单', handler: function(){ 
-                    alert(Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_d"]); 
+                    alert(Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_id"]); 
                 }
   	    		},{				
   	    			  text: '下载提单',	
