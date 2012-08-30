@@ -24,12 +24,12 @@ Ext.onReady(function(){
     ]);
 
     var store = new Ext.data.JsonStore({
-        url: "/manngements/get_mouth_sheet.json",
+        url: "/managements/get_virtual_mouth_sheet.json",
         fields: ["shoes_id", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
-        totalProperty: "totalProperty"
+        totalProperty: "totalProperty",
         root: "mouth_sheet"
     });
-    store.load({ params: { start: 0, limit: 3 } });
+    store.load({ params: { start: 0, limit: 20 } });
 
     var mouthSheetGrid = new Ext.grid.GridPanel({
         id: "mouthsheetgrid",
@@ -60,7 +60,7 @@ Ext.onReady(function(){
             displayField: "combo"
         }],
         bbar: new Ext.PagingToolbar({
-            pageSize: 3,
+            pageSize: 20,
             store: store,
             displayInfo: true,
             displayMsg: "第{0}条到第{1}条记录，一共有{2}条",

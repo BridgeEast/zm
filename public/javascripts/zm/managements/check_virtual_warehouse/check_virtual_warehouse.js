@@ -3,7 +3,8 @@ Zm.managements.check_virtual_warehouse = {
         Zm.pages.ViewPort = {
             layout: 'border',
             region: 'center',
-            items: [{ region: 'north', layout: 'fit', height: '90', title: '管理层-虚拟仓库管理' },
+            items: [
+                    { region: 'north', layout: 'fit', height: '90', title: '管理层-虚拟仓库管理' },
                     { region: 'center', layout: 'fit', items: [grid] },
                     { region: 'west', collapsible: true, layout: 'fit', width: '180', items: [cvw_tree] }
                    ]
@@ -12,51 +13,28 @@ Zm.managements.check_virtual_warehouse = {
 };
 
 var cm = new Ext.grid.ColumnModel([
-        new Ext.grid.RowNumberer(), {
-            header: '图鞋1',
-            dataIndex: 'photo_one'
-        },{
-            header: '图鞋2',
-            dataIndex: 'photo_two'
-        },{
-            header: '鞋号',
-            dataIndex: 'shoes_id'
-        },{
-            header: '鞋型',
-            dataIndex: 'types_of_shoes'
-        },{
-            header: '适合人群',
-            dataIndex: 'suitable_people'
-        },{
-            header: '颜色',
-            dataIndex: 'colors'
-        },{
-            header: '码号',
-            dataIndex: 'size'
-        },{
-            header: '价格',
-            dataIndex: 'price'
-        },{
-            header: '数量',
-            dataIndex: 'necessary_num'
-        },{
-            header: '已完成数量',
-            dataIndex: 'finished_num'
-        },{
-        header: '仓库数量',
-        dataIndex: 'store_remaining'
-    },{
-        header: '制作日期',
-        dataIndex: 'production_date'
-    }
+        new Ext.grid.RowNumberer(),
+        { header: '图鞋1', dataIndex: 'photo_one' },
+        { header: '图鞋2', dataIndex: 'photo_two' },
+        { header: '鞋号', dataIndex: 'shoes_id' },
+        { header: '鞋型', dataIndex: 'types_of_shoes' },
+        { header: '适合人群', dataIndex: 'suitable_people' },
+        { header: '颜色', dataIndex: 'colors' },
+        { header: '码号', dataIndex: 'size' },
+        { header: '价格', dataIndex: 'price' },
+        { header: '数量', dataIndex: 'necessary_num' },
+        { header: '已完成数量', dataIndex: 'finished_num' },
+        { header: '仓库数量', dataIndex: 'store_remaining' },
+        { header: '制作日期', dataIndex: 'production_date' }
 ]);
 
 var store = new Ext.data.JsonStore({
-    url: "/managements/get_virtualing.json",
+    url: "/managements/get_virtuals.json",
     fields: ['photo_one', 'photo_two', 'shoes_id', 'suitable_people', 'colors', 'size', 'types_of_shoes', 'price', 'production_date', 'necessary_num', 'finished_num', 'store_remaining'],
+    totalProperty: "totalProperty",
     root: 'virtual_warehouse',
-    autoLoad: false
 });
+store.load({ params: { start: 0, limit: 30} });
 
 var grid = new Ext.grid.GridPanel({
     id: 'virtualWarehouseEnquiryGrid',
@@ -88,7 +66,7 @@ var grid = new Ext.grid.GridPanel({
         }
     }, '-']),
     bbar: new Ext.PagingToolbar({
-        pageSize: 10,
+        pageSize: 30,
         store: store,
         displayInfo: true,
         displayMsg: "显示第{0}条到{1}条记录，一共{2}条",
@@ -264,11 +242,9 @@ cvw_tree.on("click", function(node) {
         store.proxy = new Ext.data.HttpProxy({
             url: "/managements/get_contract.json",
             method: "post",
-            jsonData: {
-                record: record
-            }
+            jsonData: { record: record },
         });
-        store.reload();
+        store.load({ params: { start: 0, limit: 30 } });
     }
 });
 

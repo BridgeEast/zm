@@ -66,29 +66,10 @@ class DataBasesController < ApplicationController
     Procession.create!(params[:record])
     render :json => {}
   end  
-  def create_shoes
-    GeneralShoe.create!(params[:record])
-    render :json => {}
-  end
 
   def create_shoes_and_details_of_shoes
     @records = params[:record] 
-    GeneralShoe.create!({ 
-      :shoes_id => @records[:shoes_id],
-      :suitable_people => @records[:suitable_people],
-      :colors => @records[:colors],
-      :types_of_shoes => @records[:types_of_shoes],
-      :price => @records[:price],
-      :remark => @records[:remark],
-      :production_date => @records[:production_date],
-
-      :details_of_shoes_attributes =>[{ 
-      :region_id => @records[:region_id],
-      :material_id => @records[:material_id],
-      :color_id => @records[:color_id],
-      :procession_id => @records[:procession_id]
-    }]
-    })
+    GeneralShoe.create!(params[:record])
     render :json => {}
   end
 
@@ -110,10 +91,7 @@ class DataBasesController < ApplicationController
     Procession.find(params[:id]).destroy
     render :json => {}
   end  
-  def delete_shoes
-    GeneralShoe.find(params[:id]).destroy
-    render :json => {}
-  end
+  
   def delete_shoes_and_detail_of_shoes
     GeneralShoe.find(params[:id]).destroy
     render :json => {}
@@ -138,25 +116,7 @@ class DataBasesController < ApplicationController
     render :json => {}
   end
   def update_shoes_and_details_of_shoes
-    @records = params[:record]
-    GeneralShoe.find(params[:record][:id]).update_attributes({ 
-      :shoes_id => @records[:shoes_id],
-      :suitable_people => @records[:suitable_people],
-      :colors => @records[:colors],
-      :types_of_shoes => @records[:types_of_shoes],
-      :price => @records[:price],
-      :remark => @records[:remark],
-      :production_date => @records[:production_date],
-
-      :details_of_shoes_attributes =>[{ 
-      :region_id => @records[:region_id],
-      :material_id => @records[:material_id],
-      :color_id => @records[:color_id],
-      :procession_id => @records[:procession_id]
-    }]
-    })
-    
-    
+    GeneralShoe.find(params[:record][:id]).update_attributes(params[:record])
     render :json => {}
   end
 

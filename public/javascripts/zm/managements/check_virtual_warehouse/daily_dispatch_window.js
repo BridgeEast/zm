@@ -14,8 +14,10 @@ Ext.onReady(function(){
     var store = new Ext.data.JsonStore({
         url: "/managements/get_data.json",
         fields: ["shoes_id", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
+        totalProperty: "totalProperty",
         root: "daily_dispatch"
     });
+    store.load({ params: { start: 0, limit: 2 } });
 
     var dailyDispatchGrid = new Ext.grid.GridPanel({
         id: "dailydispatchgrid",
@@ -33,7 +35,7 @@ Ext.onReady(function(){
             id: "datefield2"
         }],
         bbar: new Ext.PagingToolbar({
-            pagSize: 6,
+            pageSize: 2,
             store: store,
             displayInfo: true,
             displayMsg: "第 {0} 到 {1} 条记录，共 {2} 条",

@@ -25,15 +25,17 @@ Ext.onReady(function(){
     ]);
 
     var store = new Ext.data.JsonStore({
-        url: "/manngements/get_mouth_sheet.json",
+        url: "/managements/get_virtual_mouth_sheet.json",
         fields: ["shoes_id", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
+        totalProperty: "totalProperty",
         root: "mouth_dispatch"
     });
+    store.load({ params: { start: 0, limit: 20 } });
 
     var mouthDispatchGrid= new Ext.grid.GridPanel({
         id: "mouthdispatchgrid",
         width: 788,
-        height: 487,
+        height: 491,
         frame: true,
         viewConfig: { forceFit: true },
         cm: cm,
@@ -60,7 +62,7 @@ Ext.onReady(function(){
 
         }],
         bbar: new Ext.PagingToolbar({
-            pagSize: 6,
+            pageSize: 20,
             store: store,
             displayInfo: true,
             displayMsg: "第 {0} 条到第 {1} 条记录，一共有 {2} 条",
@@ -72,7 +74,7 @@ Ext.onReady(function(){
         id: "mouthdispatchwindow",
         title: "工作月发货单查询",
         width: 800,
-        height: 550,
+        height: 554,
         closeAction: "hide",
         resizable: false,
         items: [mouthDispatchGrid],
@@ -96,7 +98,7 @@ Ext.onReady(function(){
                 store.reload();
             }
         },{
-            text: "关闭", handler: function(){
+            text: "重置", handler: function(){
                 Ext.getCmp("comboy").reset();
                 Ext.getCmp("combom").reset()
             }

@@ -27,11 +27,13 @@ Zm.managements.check_guest_order= {
         ]);
 
         var store = new Ext.data.JsonStore({ 
-            url: '/managements/get_check_guest_order.json',
+            url: '/managements/get_guest_order.json',
             fields: ['order_id','custom_num', 'custom_contrast','quality','total_price','shipment','payment','lading_bill','production_date','remark'],
+            totalProperty: "totalProperty",
             root: 'check_guest_order',
-            autoLoad: false
+            autoLoad: true
         });
+        store.load({ params: { start: 0, limit: 30 } });
 
         var grid = new Ext.grid.GridPanel({ 
             id: 'guestgrid',
@@ -39,6 +41,13 @@ Zm.managements.check_guest_order= {
             cm: cm,
             store: store,
             viewConfig: { forceFit: true },
+            bbar: new Ext.PagingToolbar({
+                pageSize: 30,
+                store:store,
+                displayInfo: true,
+                displayMsg: "第{0}条到{1}第条，一共{2}条",
+                emptyMsg: "没有记录"
+            })
         });                  
    
         var guestContexMenu = new Ext.menu.Menu({
@@ -50,9 +59,8 @@ Zm.managements.check_guest_order= {
                	text: '查看订单进度',
                 handler: function(){ progressWindow.show(); }
   	    		},{				
-  	    		    text: '打开提单', handler: function(){ 
-                    alert(Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_id"]); 
-                }
+  	    		    text: '打开提单',
+                handler: function(){ }
   	    		},{				
   	    			  text: '下载提单',	
   	    		},{			
@@ -133,6 +141,6 @@ Zm.managements.check_guest_order= {
                          method: "post",
                          jsonData: { date: date }
                      });
-                     store.reload();
+                     store.reload({ params: { start: 0, limit: 30 } });
              }
          });
