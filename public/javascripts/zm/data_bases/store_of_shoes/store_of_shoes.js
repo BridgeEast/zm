@@ -132,7 +132,7 @@ Zm.dataBases.storeOfShoes = {
                     url: '/data_bases/get_region.json',
                     method: 'get',
                     root: 'region',
-                    fields: ['id', 'region']
+                    fields: ['id', 'region'],
                 }),
                 triggerAction: 'all',
                 displayField: 'region',
@@ -236,13 +236,23 @@ Zm.dataBases.storeOfShoes = {
                 root: 'dos',
             })
             inpcstore.load();
-        }else{ 
-        var inpcstore = new Ext.data.Store({ 
-            proxy: new Ext.data.MemoryProxy(inpcdata),
-            reader: new Ext.data.ArrayReader({},
-              [{ name: 'region' }, { name: 'material' }, { name: 'color' }, { name: 'procession' }]
-              )
-        })
+        } else {
+            var inpcstore = new Ext.data.Store({
+                proxy: new Ext.data.MemoryProxy(inpcdata),
+                reader: new Ext.data.ArrayReader({},
+                [{
+                    name: 'region'
+                },
+                {
+                    name: 'material'
+                },
+                {
+                    name: 'color'
+                },
+                {
+                    name: 'procession'
+                }])
+            })
         };
         var grid = new Ext.grid.EditorGridPanel({
             id: 'grid',
@@ -257,6 +267,34 @@ Zm.dataBases.storeOfShoes = {
             },
             store: inpcstore,
             cm: cm,
+            renderer: function(combo, gridId) {
+                var gridId = 'grid';
+                var getValue = function(value) {
+                    var idx = combo.store.find(combo.valueField, value);
+                    var rec = combo.store.getAt(idx);
+                    if (rec) {
+                        return rec.get(combo.displayField);
+                    }
+                    return value;
+                }
+
+                return function(value) {
+                    if (combo.store.getCount() == 0 && gridId) {
+                        combo.store.on('load', function() {
+                            var grid = Ext.getCmp(gridId);
+                            if (grid) {
+                                grid.getView().refresh();
+                            }
+                        },
+                        {
+                            single: true
+                        });
+                        return value;
+                    }
+
+                    return getValue(value);
+                };
+            },
             enableColumnMove: false,
             tbar: new Ext.Toolbar(['-', {
                 text: '添加一行',
@@ -395,6 +433,15 @@ Zm.dataBases.storeOfShoes = {
         });
 
         // 窗体上的按钮
+        var btnPhoto = new Ext.form.TextField({ 
+            text: '上传图片',
+            scope: this,
+            inputType: 'file',
+            handler: function(){ 
+            })
+            }
+
+        })
         var btnSubmit = new Ext.Button({
             text: '确定',
             scope: this,
@@ -421,7 +468,7 @@ Zm.dataBases.storeOfShoes = {
             width: 600,
             resizable: true,
             items: [sampleForm, grid, samplePhoto],
-            buttons: [btnSubmit, btnReset]
+            buttons: [btnPhoto,btnSubmit, btnReset]
         });
         return new Ext.Window({
             id: 'addWindow',
@@ -431,6 +478,7 @@ Zm.dataBases.storeOfShoes = {
             items: [form]
         });
     },
+<<<<<<< HEAD
       createData: function() {
        // var region_id = [];
         //var material_id = [];
@@ -469,17 +517,34 @@ Zm.dataBases.storeOfShoes = {
         //Ext.Msg.alert("xxx",store.getAt(0).data.region);
         return result;
 
+=======
+    createData: function() {
+        var items = [];
+        var store = Ext.getCmp('grid').getStore();
+        for (i = 0; i < store.getCount(); i++) {
+            var data = store.getAt(i).data;
+            items.push({
+                region_id: data.region,
+                material_id: data.material,
+                color_id: data.color,
+                procession_id: data.procession
+            });
+        }
+        return items;
+>>>>>>> 更新代码
     },
 
-    
-
     checkForShoes: function(type) {
+<<<<<<< HEAD
                   var result=this.createData();
                   console.log('xx',result[0]);
                   console.log('xx',result[1]);
                   console.log('xx',result[2]);
                   console.log('xx',result[3]);
               //var result=this.checkForShoes();
+=======
+        var _this = this
+>>>>>>> 更新代码
         var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
         var shoesId = Ext.getCmp('addShoesId').getValue();
         var suitablePeople = Ext.getCmp('addSuitablePoeple').getValue();
@@ -490,6 +555,7 @@ Zm.dataBases.storeOfShoes = {
         var productionDate = date2str(new Date());
         var win
         var record = {
+<<<<<<< HEAD
             shoes_id: shoesId,
             suitable_people: suitablePeople,
             colors: color,
@@ -501,6 +567,16 @@ Zm.dataBases.storeOfShoes = {
             material_id: result[1],
            color_id: result[2],
             procession_id: result[3],
+=======
+            shoes_id                    : shoesId,
+            suitable_people             : suitablePeople,
+            colors                      : color,
+            types_of_shoes              : typesOfShoes,
+            price                       : price,
+            remark                      : remark,
+            production_date             : productionDate,
+            details_of_shoes_attributes : _this.createData()
+>>>>>>> 更新代码
         };
         function date2str(d) {
             var ret = d.getFullYear() + "-"
@@ -511,20 +587,16 @@ Zm.dataBases.storeOfShoes = {
         if (shoesId) {
             if (type == "修改") {
                 var record = {
-                    id: selection.getSelected().id,
-                    shoes_id: shoesId,
-                    suitable_people: suitablePeople,
-                    colors: color,
-                    types_of_shoes: typesOfShoes,
-                    price: price,
-                    remark: remark,
-                    production_date: productionDate,
-                    region_id: this.createData().region_ids,
-                    material_id: this.createData().material_ids,
-                    color_id: this.createData().color_ids,
-                    procession_id: this.createData().procession_ids
+                    id                           : selection.getSelected().id,
+                    shoes_id                     : shoesId,
+                    suitable_people              : suitablePeople,
+                    colors                       : color,
+                    types_of_shoes               : typesOfShoes,
+                    price                        : price,
+                    remark                       : remark,
+                    production_date              : productionDate,
+                    details_of_shoes_attributes  : _this.createData()
                 };
-                
                 Ext.Ajax.request({
                     url: '/data_bases/update_shoes_and_details_of_shoes.json',
                     method: 'post',
@@ -535,7 +607,6 @@ Zm.dataBases.storeOfShoes = {
                         Ext.getCmp('storeOfShoesGrid').store.load();
                         Ext.getCmp('addWindow').close();
                         Ext.Msg.alert('修改', '修改成功');
-                        Ext.Msg.alert('',this.createData.region_id)
                     },
                     failure: function() {
                         Ext.Msg.alert('修改', '修改失败!');
@@ -566,9 +637,6 @@ Zm.dataBases.storeOfShoes = {
             Ext.Msg.alert('警告', '样品号不能为空!');
         }
     },
-
-  
-   
 
     //删除所选
     deleteShoes: function() {
@@ -609,4 +677,31 @@ Zm.dataBases.storeOfShoes = {
 
     }
 }
+/*renderer: function(combo, gridId) {
+    var getValue = function(value) {
+        var idx = combo.store.find(combo.valueField, value);
+        var rec = combo.store.getAt(idx);
+        if (rec) {
+            return rec.get(combo.displayField);
+        }
+        return value;
+    }
+
+    return function(value) {
+        if (combo.store.getCount() == 0 && gridId) {
+            combo.store.on('load', function() {
+                var grid = Ext.getCmp(gridId);
+                if (grid) {
+                    grid.getView().refresh();
+                }
+            },
+            {
+                single: true
+            });
+            return value;
+        }
+
+        return getValue(value);
+    };
+};*/
 
