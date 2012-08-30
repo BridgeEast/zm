@@ -128,7 +128,6 @@ class ManagementsController < ApplicationController
       daily_sheet = { :totalProperty => SizeOfShoe.count, :gds => daily_data }
       render :json => daily_sheet
     end
->>>>>>> cb7c684dc520019130b925c1d93b80609667a5f1
 
     def check_guest_order
     end
@@ -291,7 +290,6 @@ class ManagementsController < ApplicationController
                      :disposition => "inline", 
                      :filename => @order.order_id ) 
 
-=
           order_file.close
     #    else
     #      raise "文件无法打开"
