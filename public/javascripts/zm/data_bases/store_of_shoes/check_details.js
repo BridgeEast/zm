@@ -1,6 +1,6 @@
 Zm.managements.win = {
 	init: function() {
-		var form = new Ext.form.FormPanel({
+		var checkDetailsForm = new Ext.form.FormPanel({
 			region: 'north',
 			layout: 'fit',
 			frame: true,
@@ -22,7 +22,7 @@ Zm.managements.win = {
 			}]
 		});
 
-		var cm = new Ext.grid.ColumnModel([{
+		var checkDetailsCm = new Ext.grid.ColumnModel([{
 			header: '部位',
 			dataIndex: 'region'
 		},
@@ -39,45 +39,38 @@ Zm.managements.win = {
 			dataIndex: 'procession'
 		}]);
     
-    var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
-		var store = new Ext.data.JsonStore({
+    var checkDetailsSelection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
+		var checkDetailsStore = new Ext.data.JsonStore({
 			url: '/data_bases/get_details_of_shoes.json',
             fields: ['region', 'material', 'color', 'procession'],
             baseParams: {
-                id: selection.getSelected().id
+                id: checkDetailsSelection.getSelected().id
             },
             root: 'dos',
             autoLoad: true
         });
 
-		var grid = new Ext.grid.GridPanel({
+		var checkDetailsGrid = new Ext.grid.GridPanel({
 			region: 'center',
 			height: 360,
 			viewConfig: {
 				forceFit: true
 			},
-			store: store,
-			cm: cm,
-			bbar: new Ext.PagingToolbar({
-				pageSize: 10,
-				store: store,
-				displayInfo: true,
-				diaplayMsg: '显示第{0}条到{1}条记录，一共{2}条',
-				emptyMsg: "没有记录"
-			})
+			store: checkDetailsStore,
+			cm: checkDetailsCm,
 		});
 
-		check_detail = new Ext.Window({
+		var checkDetails = new Ext.Window({
 			layout: 'border',
 			closeAction: 'hide',
 			height: 600,
 			width: 500,
 			constrainHeader: true,
 			resizable: false,
-			items: [form, grid]
+			items: [checkDetailsForm, checkDetailsGrid]
 		});
 
-		return check_detail
+		return checkDetails
 	}
 }
 

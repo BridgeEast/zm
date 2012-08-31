@@ -1,8 +1,11 @@
-Zm.managements.wish_list = {
+Zm.guests.wish_list = {
 	init: function() {
+        this.select_id;
+        this.photo_one;
+        this.photo_two;
 		Zm.pages.ViewPort = {
 			layout: 'border',
-      region: 'center',
+			region: 'center',
 			items: [{
 				region: 'north',
 				title: '客户-心愿单'
@@ -12,14 +15,19 @@ Zm.managements.wish_list = {
 	},
 
 	create_wl_grid: function() {
+        var sm = new Ext.grid.CheckboxSelectionModel();
 		var cm = new Ext.grid.ColumnModel([
-		new Ext.grid.RowNumberer(), {
+		new Ext.grid.RowNumberer(),
+        sm, 
+        {
 			header: '鞋图1',
-			dataIndex: 'photo_one'
+			dataIndex: 'photo_one',
+			renderer: title_img
 		},
 		{
 			header: '鞋图2',
-			dataIndex: 'photo_two'
+			dataIndex: 'photo_two',
+			renderer: title_img
 		},
 		{
 			header: '鞋号',
@@ -34,7 +42,7 @@ Zm.managements.wish_list = {
 			dataIndex: 'suitable_people'
 		},
 		{
-			headeri: '颜色',
+			header: '颜色',
 			dataIndex: 'colors'
 		},
 		{
@@ -44,54 +52,92 @@ Zm.managements.wish_list = {
 		{
 			header: '确定打板时间',
 			dataIndex: 'sure_board',
-			renderer: Ext.util.Format.dateRenderer('Y/m/d')
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
 		},
 		{
 			header: '完成打板时间',
 			dataIndex: 'done_board',
-			renderer: Ext.util.Format.dateRenderer('Y/m/d')
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
 		},
 		{
 			header: '制作日期',
 			dataIndex: 'production_date',
-			renderer: Ext.util.Format.dateRenderer('Y/m/d')
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
 		},
-		{    
+		{
 			header: '谈话',
-			dataIndex: 'communication'		
-    },
-		{    
+			dataIndex: 'communication'
+		},
+		{
 			header: '备注',
 			dataIndex: 'remark'
 		},
 		]);
 
-
-		store = new Ext.data.JsonStore({
-			url: '/managements/get_check_store_of_shoes.json',
-			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'sure_board','done_board','production_date', 'remark'],
-			root: 'wish_list',
-			autoLoad: true
+		var store = new Ext.data.JsonStore({
+			url: '/guests/wish_list_data.json',
+			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'sure_board', 'done_board', 'production_date', 'communication' ,'remark'],
+			root: 'wish_list_data',
+			baseParams: { id: 'null' }
 		});
 
+		var tbar = new Ext.Toolbar({
+			defaults: {
+				scope: this
+			},
+			items: [{
+				text: '发送Excel添加到开发板',
+				handler: function() {
+					Zm.guests.send_excel.init().show()
+				}
+			},
+			'-', {
+				text: '添加到确认板',
+				handler: function() {}
+			},
+			'-', {
+				text: '添加到预购单',
+				handler: function() {Zm.guests.add_to_advanced_order.init().show()}
+			},
+			'-', {
+				text: '删除所选',
+				handler: function() {}
+			},
+			'-', {
+				text: '添加到订单',
+				handler: function() {Zm.guests.add_to_order.init().show()}
+			}]
+		});
 		var wlGrid = new Ext.grid.GridPanel({
 			id: 'wlGrid',
 			region: 'center',
 			cm: cm,
+            sm: sm,
 			store: store,
 			viewConfig: {
 				forceFit: true
-			}
+			},
+			tbar: tbar
 		});
 
 		var contextmenu = new Ext.menu.Menu({
 			items: [{
-				id: 'checkDetails',
+				id: 'check_details',
 				text: '查看详情',
-				handler: function() {
-					check_detail.show()
+                scope: this,
+				handler: function() {	
+                    this.select_id = Ext.getCmp('wlGrid').getSelectionModel().getSelected().data["id"];
+                    this.photo_one = Ext.getCmp('wlGrid').getSelectionModel().getSelected().data["photo_one"];
+                    this.photo_two = Ext.getCmp('wlGrid').getSelectionModel().getSelected().data["photo_two"];
+					Zm.guests.win.init().show();
 				}
-			}]
+			},{ 
+              id:'communicate_with_service',
+            text: '与客服交谈',
+            handler: function(){ 
+              Zm.guests.communicate.init().show();
+            }
+            }]
 		});
 		wlGrid.on("rowcontextmenu", function(grid, rowIndex, e) {
 			e.preventDefault();
@@ -102,12 +148,12 @@ Zm.managements.wish_list = {
 
 	},
 
-	create_csos_tree: function() {
+	create_wl_tree: function() {
 
-		var treeCsos = new Ext.tree.TreePanel({
+		var wlTree = new Ext.tree.TreePanel({
 			autoScroll: true,
 			region: 'west',
-			id: 'treeCsos',
+			id: 'wlTree',
 			width: '180'
 		});
 
@@ -134,21 +180,15 @@ Zm.managements.wish_list = {
 			for (j = months; j > 0; j--) {
 				var month = new Ext.tree.AsyncTreeNode({
 					text: j + '月',
-					id: i + '_' + j,
+					id: i + '-' + j,
 					children: [{
-						text: '高跟鞋',
-						id: 'nodeHighHeeledShoe' + i + j,
-						leaf: true
-
-					},
-					{
-						text: '平底鞋',
-						id: 'nodeFlats',
+						text: '开发板',
+						id:  i + '-' + j + '-' + '开发板' ,
 						leaf: true
 					},
 					{
-						text: '靴子',
-						id: 'nodeBoots',
+						text: '确认板',
+						id:  i + '-' + j + '-' + '确认板', 
 						leaf: true
 					}]
 				});
@@ -156,25 +196,13 @@ Zm.managements.wish_list = {
 			};
 		};
 
-		treeCsos.setRootNode(rootShoes);
-		treeCsos.on('click', function(node) {
-         
-			if (node.leaf) {
-				var year = node.parentNode.parentNode.text;
-				var month = node.parentNode.id.split("_")[1];
-				store.proxy = new Ext.data.HttpProxy({
-					url: '/managements/get_data.json',
-					method: 'post',
-					jsonData: {
-						selectYear: year,
-						selectMonth: month,
-						selectType: node.text
-					}
-				}),
-				store.load()
-			}
+		wlTree.setRootNode(rootShoes);
+		wlTree.on('click', function(node) {
+          var store = Ext.getCmp('wlGrid').store;
+          store.setBaseParam("id" , node.id);
+          store.reload();
 		})
-		return treeCsos
+		return wlTree
 
 	}
 

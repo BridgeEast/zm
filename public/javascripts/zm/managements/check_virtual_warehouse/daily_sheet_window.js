@@ -1,9 +1,9 @@
 Ext.onReady(function(){
     var cm = new Ext.grid.ColumnModel([
         new Ext.grid.RowNumberer(),
-        { header: "样品", dataIndex: "id"},
-        { header: "38", dataIndex: "necessary_num"},
-        { header: "39", dataIndex: "finished_num"},
+        { header: "鞋号", dataIndex: "shoes_id"},
+        { header: "38", dataIndex: "size_38"},
+        { header: "39", dataIndex: "size_39"},
         { header: "40", dataIndex: "size_40"},
         { header: "41", dataIndex: "size_41"},
         { header: "42", dataIndex: "size_42"},
@@ -13,16 +13,16 @@ Ext.onReady(function(){
 
     var store = new Ext.data.JsonStore({
         url: "/managements/get_daily_sheet.json",
-        fields: ["id", "necessary_num", "finished_num", "size_40", "size_41", "size_42", "size_43", "size_44"],
+        fields: ["shoes_id", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
         totalProperty: "totalProperty",
-        root: "gds",
+        root: "roots",
     });
-    store.load({ params: { start: 0, limit: 10 } });
+    store.load({ params: { start: 0, limit: 20 } });
 
     var dailySheetGrid = new Ext.grid.GridPanel({
         id: "dailysheetgird",
-        width: 585,
-        height: 305,
+        width: 788,
+        height: 487,
         frame: true,
         viewConfig: { forceFit: true },
         cm: cm,
@@ -32,12 +32,13 @@ Ext.onReady(function(){
             text:"选择日期"
         },{
             xtype: "datefield",
+            id: "datefield"
         }],
         bbar: new Ext.PagingToolbar({
-            pageSize:10, 
+            pageSize: 20, 
             store: store,
             displayInfo: true,
-            displayMsg: "第 {0} 到 {1} 条记录，共 {2} 条",
+            displayMsg: "第{0}条到{1}条记录，一共{2}条",
             emptyMsg: "没有记录"
         })
     });
@@ -45,15 +46,54 @@ Ext.onReady(function(){
     dailySheetWindow = new Ext.Window({
         id: "sheetwindow",
         title: "工作日报表查询",
-        width: 600,
-        height: 365,
+        width: 800,
+        height: 550,
         closeAction: "hide",
         resizable: false,
         items: [dailySheetGrid],
         buttons: [{
-            text: "确定", handler: function(){  }
+            text: "确定",
+            handler: function(){
+                var day = new Array();
+                day = String(Ext.getCmp("datefield").getValue()).split(" ");
+                if(day[0] == "Jan"){ 
+                    month = "-01-"
+                }else if(day[1] == "Feb"){
+                    month = "-02-" 
+                }else if(day[1] == "Mar"){
+                    month = "-03-" 
+                }else if(day[1] == "Apr"){
+                    month = "-04-" 
+                }else if(day[1] == "May"){
+                    month = "-05-" 
+                }else if(day[1] == "Jun"){
+                    month = "-06-" 
+                }else if(day[1] == "Jul"){
+                    month = "-07-" 
+                }else if(day[1] == "Aug"){
+                    month = "-08-" 
+                }else if(day[1] == "Sep"){
+                    month = "-09-" 
+                }else if(day[1] == "Oct"){
+                    month = "-10-" 
+                }else if(day[1] == "Nov"){
+                    month = "-11-" 
+                }else{
+                    month = "-12-" 
+                };
+                var pro = day[3] + month + day[2];
+                store.proxy = new Ext.data.HttpProxy({
+                    url: "/managements/get_virtual_daily_sheet.json",
+                    method: "post",
+                    jsonData: { pro_date: pro },
+                });
+                store.reload();
+            }
         },{
-            text: "关闭", handler: function(){ dailySheetWindow.hide(); }
+            text: "重置",
+            handler: function(){
+                Ext.getCmp("datefield").reset();
+            }
         }]
     });
 });

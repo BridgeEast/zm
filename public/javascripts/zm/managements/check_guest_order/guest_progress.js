@@ -1,7 +1,7 @@
 Ext.onReady(function(){
     var cm = new Ext.grid.ColumnModel([
         new Ext.grid.RowNumberer(),
-        { header: "鞋号", dataIndex: "general_shoe_id" },
+        { header: "鞋号", dataIndex: "shoes_id" },
         { header: "38", dataIndex: "size_38" },
         { header: "39", dataIndex: "size_39" },
         { header: "40", dataIndex: "size_40" },
@@ -12,25 +12,22 @@ Ext.onReady(function(){
     ]);
 
     var store = new Ext.data.JsonStore({
-        url: "/managements/get_guest_progress.json",
-        fields: ["payment", "id", "order_id", "general_shoe_id", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
-        root: "progress",
-        autoLoad: true
+        url: "/managements/get_order_progress.json",
+        fields: ["shoes_id", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
+        totalProperty: "totalProperty",
+        root: "roots",
     });
+    store.load({ params: { start: 0, limit: 20 } })
 
     var progressGrid = new Ext.grid.GridPanel({
         id: "progressgrid",
-        height: 380,
-        width: 640,
+        height: 491,
+        width: 788,
         viewConfig: { forceFit: true },
         cm: cm,
         store: store,
-        tbar:[{text: "ing", handler: function(){
-
-        }
-        }],
         bbar: new Ext.PagingToolbar({
-            pageSize: 10,
+            pageSize: 20,
             store: store,
             displayInfo: true,
             displayMsg: "第{0}条到第{1}条记录，一共{2}条记录",
@@ -41,20 +38,19 @@ Ext.onReady(function(){
 
     progressWindow = new Ext.Window({
         id: "progresswindow",
-        height: 413,
-        width: 654,
+        height: 527,
+        width: 800,
         closeAction: "hide",
         resizable: false,
         items: [progressGrid],
-        listeners:{ show:function(){
-            var orderid = Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_id"];
-        store.proxy = new Ext.data.HttpProxy({
-            url: "/managements/get_jing.json",
-            method: "post",
-            jsonData: { orderid: orderid }
-        });
-        store.reload();
-                    }
-        }
+        listeners: {'show':{fn: function(){
+            var order = Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_id"];
+            store.proxy = new Ext.data.HttpProxy({
+                url: "/managements/get_order_progress.json",
+                method: "post",
+                jsonData: { orderid: order},
+            });
+            store.load({ params: { start: 0, limit: 20 } });
+        }}}
     });
 });

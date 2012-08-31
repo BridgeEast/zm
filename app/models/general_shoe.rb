@@ -11,8 +11,7 @@ class GeneralShoe < ActiveRecord::Base
   belongs_to :factory_order
 
    def self.get_shoes_details( id ) 
-    shoes = self.where( :id => id ).first
-    p shoes
+    shoes = self.where( :id => id ).first   #where返回1个数组
     shoes.details_of_shoes.collect! do |item|
      { 
         :region => item.region.region,
@@ -22,6 +21,27 @@ class GeneralShoe < ActiveRecord::Base
       }
     end
   end
+
+   def self.wish_list_data( cwl )
+    cwl.collect! do|item|
+      { 
+         :id => item.id,
+         :photo_one => item.photo_one,
+         :photo_two => item.photo_two,
+         :shoes_id => item.shoes_id,
+         :types_of_shoes => item.types_of_shoes,
+         :suitable_people => item.suitable_people,
+         :colors => item.colors,
+         :price => item.price,
+         :sure_board => item.play_board.sure_board,
+         :done_board => item.play_board.done_board,
+         :production_date => item.production_date ,
+         :communication => item.play_board.communication,
+         :remark => item.remark
+      }
+    end
+  end
+
   ########### 获取心愿单所需记录 ##########
   def self.get_cwl_record( param_node )
     rec = Array.new
@@ -110,6 +130,24 @@ class GeneralShoe < ActiveRecord::Base
         }
       end
   end
+
+##^^^^^^^^^^^^^^^^^^^^^^  订单进度  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  def self.get_progress_num_and_size( shoes )
+      shoes.collect! do|shoe|
+        { 
+          :shoes_id => shoe.shoes_id,
+          :size_36 => GeneralShoe.get_size_obj( shoe, 36 ),
+          :size_37 => GeneralShoe.get_size_obj( shoe, 37 ),
+          :size_38 => GeneralShoe.get_size_obj( shoe, 38 ),
+          :size_39 => GeneralShoe.get_size_obj( shoe, 39 ),
+          :size_40 => GeneralShoe.get_size_obj( shoe, 40 ),
+          :size_41 => GeneralShoe.get_size_obj( shoe, 41 ),
+          :size_42 => GeneralShoe.get_size_obj( shoe, 42 ),
+          :size_43 => GeneralShoe.get_size_obj( shoe, 43 ),
+          :size_44 => GeneralShoe.get_size_obj( shoe, 44 ),
+        }
+      end
+  end
   ###################### 获取鞋码为size的size_of_shoes的记录 ######################
   def self.get_size_obj( shoe, size )
     size_shoe = shoe.size_of_shoes.where( :size => size )
@@ -169,5 +207,41 @@ end
 end
 
 ####################################################################################################################
-end
 
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^  日报表数据  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  def self.get_virtual_daily_num_size( prodate )
+      prodate.collect! do|shoe|
+        { 
+          :shoes_id => shoe.shoes_id,
+          :size_36 => GeneralShoe.get_virtual_num( shoe, 36 ),
+          :size_37 => GeneralShoe.get_virtual_num( shoe, 37 ),
+          :size_38 => GeneralShoe.get_virtual_num( shoe, 38 ),
+          :size_39 => GeneralShoe.get_virtual_num( shoe, 39 ),
+          :size_40 => GeneralShoe.get_virtual_num( shoe, 40 ),
+          :size_41 => GeneralShoe.get_virtual_num( shoe, 41 ),
+          :size_42 => GeneralShoe.get_virtual_num( shoe, 42 ),
+          :size_43 => GeneralShoe.get_virtual_num( shoe, 43 ),
+          :size_44 => GeneralShoe.get_virtual_num( shoe, 44 ),
+        }
+      end
+  end
+
+##^^^^^^^^^^^^^^^^^^ 日报表选日期  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  
+  def self.get_virtual_num( shoe, size )
+    size_shoe = shoe.size_of_shoes.where( :size => size )
+    if size_shoe != []
+      if size_shoe.first.finished_num != nil
+        fin = size_shoe.first.finished_num.to_s
+      else
+        fin = "0"
+      end
+    else
+      fin = "0"
+    end
+    return fin
+  end
+
+
+
+end

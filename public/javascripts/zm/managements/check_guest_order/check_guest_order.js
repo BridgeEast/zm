@@ -27,11 +27,12 @@ Zm.managements.check_guest_order= {
         ]);
 
         var store = new Ext.data.JsonStore({ 
-            url: '/anagements/get_check_guest_order.json',
+            url: '/managements/guest_order.json',
             fields: ['order_id','custom_num', 'custom_contrast','quality','total_price','shipment','payment','lading_bill','production_date','remark'],
-            root: 'check_guest_order',
-            autoLoad: true
+            totalProperty: "totalProperty",
+            root: 'roots',
         });
+        store.load({ params: { start: 0, limit: 30 } });
 
         var grid = new Ext.grid.GridPanel({ 
             id: 'guestgrid',
@@ -39,8 +40,13 @@ Zm.managements.check_guest_order= {
             cm: cm,
             store: store,
             viewConfig: { forceFit: true },
-            tbar:[{text: "ssssss",handler: function(){ progressWindow.show();} }]
-             
+            bbar: new Ext.PagingToolbar({
+                pageSize: 30,
+                store:store,
+                displayInfo: true,
+                displayMsg: "第{0}条到{1}第条，一共{2}条",
+                emptyMsg: "没有记录"
+            })
         });                  
    
         var guestContexMenu = new Ext.menu.Menu({
@@ -50,21 +56,10 @@ Zm.managements.check_guest_order= {
                 handler: function(){ guestDetailWindow.show(); }
   	    		},{
                	text: '查看订单进度',
-                handler: function(){ 
-                var orderid = Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_id"];
-                    Ext.Ajax.request({
-                        url: "/managements/get_guest_progress.json",
-                        method: "post",
-                        jsonData: { orderid: orderid },
-                    });
-                    progressWindow.show(); 
-                    Ext.getCmp('progressgrid').store.load();
-                    
-                }
+                handler: function(){ progressWindow.show(); }
   	    		},{				
-  	    		    text: '打开提单', handler: function(){ 
-                    alert(Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_d"]); 
-                }
+  	    		    text: '打开提单',
+                handler: function(){ }
   	    		},{				
   	    			  text: '下载提单',	
   	    		},{			
@@ -85,6 +80,7 @@ Zm.managements.check_guest_order= {
         var root=new Ext.tree.AsyncTreeNode({   
             id: 'cgo_root',
             text: '全部订单',
+            expandable: true,
             children: []
         });  
               
@@ -96,11 +92,11 @@ Zm.managements.check_guest_order= {
         		var myDate = new Date();
         		var month_nodes = [];
         				if(node.id == "cgo_root"){
-           			    for(i = 2010; i < myDate.getFullYear()+1; i++ ){
+           			    for(i = myDate.getFullYear(); i > 2009; i--){
            		          chen_year_nodes[i] = new Ext.tree.TreeNode({ text: i, id: "nodes" + i });
            	     	  		root.appendChild(chen_year_nodes[i]);
                         if(i == myDate.getFullYear()){
-                            for(j = 1; j < myDate.getMonth() + 2; j++){
+                            for(j = myDate.getMonth() + 1; j > 0; j--){
                                 if(j > 9){
                                     month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "nodes" + i + j });
                                     chen_year_nodes[i].appendChild(month_nodes[j]);
@@ -110,7 +106,7 @@ Zm.managements.check_guest_order= {
                                 }
                             }
                         }else{
-           			            for(j = 1; j < 13; j++){
+           			            for(j = 12; j >= 1; j--){
                                 if(j > 9){
            		 		        		      month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "nodes" + i + j });
            		 		                  chen_year_nodes[i].appendChild(month_nodes[j]);
@@ -122,15 +118,12 @@ Zm.managements.check_guest_order= {
                         }
         			      }
                 }
-             chen_node3.remove();
          });
 
          cgo_tree.on("collapsenode", function(node){  
              if(node.id=="cgo_root"){
                  var myDate = new Date();
                  for(i = 2010; i <= myDate.getFullYear(); i++){ chen_year_nodes[i].remove() };
-                 chen_node3 = new Ext.tree.TreeNode({text: "2010", id: "Linshi2010"});
-                 root.appendChild(chen_node3);
              }
                  store.removeAll();
          });
@@ -145,6 +138,6 @@ Zm.managements.check_guest_order= {
                          method: "post",
                          jsonData: { date: date }
                      });
-                     store.reload();
+                     store.reload({ params: { start: 0, limit: 30 } });
              }
          });

@@ -25,13 +25,16 @@ Ext.onReady(function(){
 
     var cm = new Ext.grid.ColumnModel([
         new Ext.grid.RowNumberer(),
-        { header: "aaa", dataIndex: "aaa"}
+        { header: "部位", dataIndex: "rigion" },
+        { header: "材料", dataIndex: "material" },
+        { header: "颜色", dataIndex: "color" },
+        { header: "加工方法", dataIndex: "procession" },
     ]);
 
     var store = new Ext.data.JsonStore({
-        url: "/managements/get_data.json",
-        fields: ["aaa","bbb"],
-        root: "data"
+        url: "/managements/get_virtual_detail_data.json",
+        fields: ["rigion", "material", "color", "procession"],
+        root: "detail_data"
     });
 
     var detailsGrid = new Ext.grid.GridPanel({
@@ -66,9 +69,21 @@ Ext.onReady(function(){
        	closeAction: 'hide',
 		  	height: 600,
 		  	width: 500,
-		  	defaultButton: 0,
+		 // 	defaultButton: 0,   加上这个属性后监听函数不可用
 		  	constrainHeader: true,
 		  	resizable: false,
         items: [detailsForm, detailsGrid],
+        listeners: {'show':{fn: function(){
+            var shoeId = Ext.getCmp('virtualgrid').getSelectionModel().getSelected().data["shoes_id"];
+            store.proxy = new Ext.data.HttpProxy({
+                url: "/managements/get_virtual_detail_data.json",
+//                method: "post",
+//                jsonData: { shoeId: "S6" },
+                success: function(){alert("succ");},
+                failure: function(){alert("fail");}
+            });
+            store.reload();
+        }}}
+
     })
 });

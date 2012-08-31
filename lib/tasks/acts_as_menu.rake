@@ -9,9 +9,9 @@ namespace :menu do
       { :name => "客户",
         :s_menus_attributes => [
           { :name => "浏览鞋库", :url => "/guests/scanning_store_of_shoes" },
-          { :name => "心愿单", :url => "" },
+          { :name => "心愿单", :url => "/guests/wish_list" },
           { :name => "预购单管理", :url => "" },
-          { :name => "订单管理", :url => "" },
+          { :name => "订单管理", :url => "/guests/order_management" },
         ]
       },
       { :name => "客服",

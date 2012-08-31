@@ -1,5 +1,30 @@
 #encoding: utf-8
 class GuestsController < ApplicationController
+  
+  #*******************************心愿单********************************
+
+    def wish_list
+    end
+    def order_management
+    end
+
+   
+
+    def wish_list_data
+      wish_list = GeneralShoe.get_cwl_record( params[:id] )
+      if wish_list == [] then
+        data = ""
+      else
+        data = GeneralShoe.wish_list_data( wish_list )
+        
+      end
+       render :json => { :wish_list_data => data }
+    end
+
+
+  #*********************************************************************
+
+  
   ################################浏览鞋库##############################   
   def scanning_store_of_shoes
   end

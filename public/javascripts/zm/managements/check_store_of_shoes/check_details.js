@@ -11,12 +11,12 @@ Zm.managements.win = {
 				layout: 'column',
 				items: [{
 					columnWidth: .5,
-					html: '<img src=\'/images/shoes/' + Ext.getCmp('csosGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
+					html: '<img src=\'/images/shoes/' + Zm.managements.check_store_of_shoes.photo_one + '\' width=100% height=100%>'
 
 				},
 				{
 					columnWidth: .5,
-					html: '<img src=\'/images/shoes/' + Ext.getCmp('csosGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
+					html: '<img src=\'/images/shoes/' + Zm.managements.check_store_of_shoes.photo_two + '\' width=100% height=100%>'
 
 				}]
 			}]
@@ -46,9 +46,12 @@ Zm.managements.win = {
 			baseParams: {
 				id: Zm.managements.check_store_of_shoes.select_id
 			},
-			root: 'details',
-			autoLoad: true
+           /* totalProperty: 'totalProperty' ,*/
+			root: 'shoes',
+            autoLoad: true
 		});
+
+        //store.load({ params: { start: 0 , limit: 2 } });
 
 		var grid = new Ext.grid.GridPanel({
 			region: 'center',

@@ -1,6 +1,8 @@
 Zm.managements.check_store_of_shoes = {
 	init: function() {
 		this.select_id;
+        this.photo_one;
+        this.photo_two;
 		Zm.pages.ViewPort = {
 			layout: 'border',
 			region: 'center',
@@ -79,6 +81,8 @@ Zm.managements.check_store_of_shoes = {
 				scope: this,
 				handler: function() {
 					this.select_id = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["id"];
+                    this.photo_one = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["photo_one"];
+                    this.photo_two = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["photo_two"];
 					Zm.managements.win.init().show();
 				}
 			}]

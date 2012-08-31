@@ -13,15 +13,16 @@ class ManagementsController < ApplicationController
 
       choices = GeneralShoe.where("types_of_shoes like ? and production_date like ? and production_date like ?","%#{params[:selectType]}%" , "%#{params[:selectMonth]}%" , "%#{params[:selectYear]}%")
       
-      respond_to do |format|
-        format.json{ render :json => { :check_store_of_shoes => choices} }
-      end
+
+        render :json => { :check_store_of_shoes => choices} 
     end
     
 
     def get_details
+
        details = GeneralShoe.get_shoes_details( params[:id] )
-       render :json => { :details => details } 
+       render :json => { :shoes => details }
+
     end
 
 
@@ -47,46 +48,153 @@ class ManagementsController < ApplicationController
     end
 
 
-    #guest     
-    def check_guest_order
+
+
+  #*********************************************************************************************************
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  virtual查看详情  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def get_virtual_detail_data
+      
+#      shoes = GeneralShoe.where( :id => 1 ).first.details_of_shoes.first
+#      size_num = DetailsOfShoe.find_details_num( shoes )
+#      render :json => { :detail_data => size_num }
+    end
+
+    ##^^^^^^^^^^^^^  分页  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def paging(array)
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > array.length
+        max = array.length
+      end
+      for i in n..max - 1
+        root << array[i]
+      end
+      all_data = { :totalProperty => array.length, :roots => root }
+      render :json => all_data
+    end
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  guest查看详情  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def get_guest_details
+      a = Order.where( :order_id => params[:idd] ).first.id
+      paging(GeneralShoe.find(:all, :conditions => "order_id = '#{a}'"))
+    end
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  日报表    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def get_virtual_daily_sheet
+      prodate = []
+      shoe_name = []
+      pro = params[:pro_date]
+      InboundAndOutbound.all.each do |m|
+        if m.inbound_and_outbound_date.to_s == "#{pro}"
+          prodate << m.size_of_shoe_id
+        end
+      end
+      SizeOfShoe.where( :id => prodate ).each do |n|
+        shoe_name << n
+      end
+      paging(SizeOfShoe.sheet_shoe_size_num( shoe_name ))
+    end
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   月报表   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def get_virtual_mouth_sheet
+      shoe_name = []
+      prodate = []
+      proym = params[:pro_ym] 
+      InboundAndOutbound.all.each do |m|
+        a = []
+        root_data = []
+        a = m.inbound_and_outbound_date.to_s.split("-")
+        pro = a[0].to_s + "-" + a[1].to_s
+        if pro == "#{proym}"
+          prodate << m.size_of_shoe_id
+        end
+      end
+      SizeOfShoe.where( :id => prodate ).each do |n|
+        shoe_name << n
+      end
+      paging(SizeOfShoe.sheet_shoe_size_num( shoe_name ))
+    end
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  日发货单  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def get_virtual_daily_dispatch
+      prodate = []
+      shoe_name = []
+      pro = params[:pro_date]
+      InboundAndOutbound.all.each do |m|
+        if m.inbound_and_outbound_date.to_s == "#{pro}"
+          prodate << m.size_of_shoe_id
+        end
+      end
+      SizeOfShoe.where( :id => prodate ).each do |n|
+        shoe_name << n
+      end
+      paging(SizeOfShoe.dispatch_shoe_size_num( shoe_name ))
+    end
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  月发货单  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def get_virtual_mouth_dispatch
+      shoe_name = []
+      prodate = []
+      proym = params[:pro_ym] 
+      InboundAndOutbound.all.each do |m|
+        a = []
+        a = m.inbound_and_outbound_date.to_s.split("-")
+        pro = a[0].to_s + "-" + a[1].to_s
+        if pro == "#{proym}"
+          prodate << m.size_of_shoe_id
+        end
+      end
+      SizeOfShoe.where( :id => prodate ).each do |n|
+        shoe_name << n
+      end
+      paging(SizeOfShoe.dispatch_shoe_size_num( shoe_name ))
+    end
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  订单进度  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def get_order_progress
+      shoes = Order.where( :order_id => params[:orderid] ).first.general_shoes
+      paging(GeneralShoe.get_progress_num_and_size( shoes ))
+    end    
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    def check_virtual_warehouse
+    end
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def get_contract
+      contract = GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id")
+      paging(contract)
+      end
+ 
+    def get_daily_sheet
+      daily_data = []
+      SizeOfShoe.limit(params[:limit].to_i).offset(params[:start].to_i).each do |s|
+        daily_data << { :id => s.id, :necessary_num => s.necessary_num, :finished_num => s.finished_num }
+      end
+      daily_sheet = { :totalProperty => SizeOfShoe.count, :gds => daily_data }
+      render :json => daily_sheet
+    end
+
+##^^^^^^^^^^^^^^^^^^^^^^ 虚拟仓库加载页面时的数据  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def get_virtuals
+      virtuals = GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where general_shoes.id = size_of_shoes.general_shoe_id and general_shoes.id='#{params[:id]}'")
+    paging(virtuals)
+    end 
+
+
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def get_check_virtual_warehouse
+        render :json => { :general_shoe => SizeOfShoe.find(:all, :conditions => ["created_at like ?", params[:date] + "%" ])}
     end
 
     #guest
     def get_check_guest_order
       render :json => { :check_guest_order => Order.all }
-    end
-    
-    #guest
-    def get_guest_order
-      render :json => { :check_guest_order => Order.find_by_sql("select * from orders where production_date like '#{params[:date]}%'") }
-    end
-
-    #virtual
-    def check_virtual_warehouse
-    end
-    
-    #virtual
-    def get_contract
-      render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id") }
-      end
-
-    
-
-
-
-    def get_check_virtual_warehouse
-        render :json => { :general_shoe => SizeOfShoe.find(:all, :conditions => ["created_at like ?", params[:date] + "%" ])}
-    end
- #   def get_check_guest_order
- #     grids = []
- #     GeneralShoe.all.each do |s|
- #       grids << { :id => s.id, :photo_one => s.photo_one, :photo_two => s.photo_two }
- #     end
- #     render :json => grids
- #   end
-
-    def get_check_guest_order
-      render :json => { :check => GeneralShoe.find_by_sql("select id, photo_one, photo_two from general_shoes")}
     end
     
     #virtual
@@ -95,6 +203,19 @@ class ManagementsController < ApplicationController
     end
     
     #virtual
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    #guest
+    def get_guest_order
+      paging( Order.find_by_sql("select * from orders where production_date like '#{params[:date]}%'") )
+    end
+
+    def guest_order
+      paging(Order.all)
+    end
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
     def get_tree_node
       render :json => { :tree_node => FactoryOrder.all }
     end
@@ -104,7 +225,6 @@ class ManagementsController < ApplicationController
       render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where general_shoes.id = size_of_shoes.general_shoe.id ")}
     end
 
-###############  这部分是我的，别碰我的东西   ##################################################################
 
     ##############################################################################################
     def check_factory_order
