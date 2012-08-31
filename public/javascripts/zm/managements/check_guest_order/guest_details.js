@@ -1,6 +1,4 @@
-
 Ext.onReady(function(){
-			
 			var cm = new Ext.grid.ColumnModel([
           new Ext.grid.RowNumberer(),      
         	{header:'鞋号',dataIndex:'shoes_id'},
@@ -12,11 +10,11 @@ Ext.onReady(function(){
     	]);
 
     	var store = new Ext.data.JsonStore({
-          url:"/managements/get_guest_details.json",
-          method: "post",
-          jsonData: { idd: "O2"},
+          url:"/managements/guest_order.json",
           fields: ['shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'remark'],
+          totalProperty: "totalProperty",
           root: "roots",
+          autoLoad: true
     	});
       store.load({ params: { start: 0, limit: 20 } });
   
@@ -50,7 +48,7 @@ Ext.onReady(function(){
 			},{
             	text: '查看合同',
 			},{
-            	text: '下载合同',	handler: function(){ Ext.Msg.alert('Hello','Jing'); }
+            	text: '下载合同',	
         	}]
     	});
 
@@ -71,14 +69,14 @@ Ext.onReady(function(){
 	    		constrainHeader: true,
 	    		resizable: false,
        	 	items: [guestDetailGrid],
-          listeners: {"show": {fn: function(){
+          listeners: { "show": { fn: function(){
               var idd = Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_id"];
               store.proxy = new Ext.data.HttpProxy({
                   url: "/managements/get_guest_details.json",
                   method: "post",
-                  jsonData: { idd: idd },
+                  jsonData: { idd: idd }
               });
               store.load({ params: { start: 0, limit: 20 } });
           }}}
     	});
-	});
+	});					 
