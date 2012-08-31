@@ -56,14 +56,12 @@ Zm::Application.routes.draw do
    end
  end
 
-
  resources :guests do
    collection do
      get "wish_list"
      get "order_management"
    end
  end
-
 
  resources :managements do
    collection do

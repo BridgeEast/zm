@@ -52,14 +52,6 @@ class ManagementsController < ApplicationController
 
   #*********************************************************************************************************
 
-##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  virtual查看详情  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    def get_virtual_detail_data
-      
-#      shoes = GeneralShoe.where( :id => 1 ).first.details_of_shoes.first
-#      size_num = DetailsOfShoe.find_details_num( shoes )
-#      render :json => { :detail_data => size_num }
-    end
-
     ##^^^^^^^^^^^^^  分页  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def paging(array)
       m = params[:limit].to_i
@@ -74,12 +66,6 @@ class ManagementsController < ApplicationController
       end
       all_data = { :totalProperty => array.length, :roots => root }
       render :json => all_data
-    end
-
-##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  guest查看详情  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    def get_guest_details
-      a = Order.where( :order_id => params[:idd] ).first.id
-      paging(GeneralShoe.find(:all, :conditions => "order_id = '#{a}'"))
     end
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  日报表    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -153,69 +139,41 @@ class ManagementsController < ApplicationController
       paging(SizeOfShoe.dispatch_shoe_size_num( shoe_name ))
     end
 
-##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  订单进度  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ##订单进度
     def get_order_progress
       shoes = Order.where( :order_id => params[:orderid] ).first.general_shoes
       paging(GeneralShoe.get_progress_num_and_size( shoes ))
     end    
 
-##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    def check_virtual_warehouse
+    ##guest查看详情
+    def get_guest_details
+      a = Order.where( :order_id => params[:idd] ).first.id
+      paging(GeneralShoe.find(:all, :conditions => "order_id = '#{a}'"))
     end
 
-##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ##vitrual主界面数据
     def get_contract
       contract = GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id")
       paging(contract)
-      end
- 
-    def get_daily_sheet
-      daily_data = []
-      SizeOfShoe.limit(params[:limit].to_i).offset(params[:start].to_i).each do |s|
-        daily_data << { :id => s.id, :necessary_num => s.necessary_num, :finished_num => s.finished_num }
-      end
-      daily_sheet = { :totalProperty => SizeOfShoe.count, :gds => daily_data }
-      render :json => daily_sheet
     end
-
-##^^^^^^^^^^^^^^^^^^^^^^ 虚拟仓库加载页面时的数据  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+    ##virtual第一次加载数据，不显示
     def get_virtuals
-      virtuals = GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where general_shoes.id = size_of_shoes.general_shoe_id and general_shoes.id='#{params[:id]}'")
-    paging(virtuals)
+      render :json => {}
     end 
 
 
-
-##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    def get_check_virtual_warehouse
-        render :json => { :general_shoe => SizeOfShoe.find(:all, :conditions => ["created_at like ?", params[:date] + "%" ])}
-    end
-
-    #guest
-    def get_check_guest_order
-      render :json => { :check_guest_order => Order.all }
-    end
-    
-    #virtual
-    def get_check_virtual_warehouse_node
-      render :json => {}
-    end
-    
-    #virtual
-
-##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    #guest
+    #guest显示主界面数据
     def get_guest_order
       paging( Order.find_by_sql("select * from orders where production_date like '#{params[:date]}%'") )
     end
 
+    ##guest第一次加载数据，不显示数据
     def guest_order
-      paging(Order.all)
+      render :json => {}
     end
 
-##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+    ##从数据库读取数据生成树节点
     def get_tree_node
       render :json => { :tree_node => FactoryOrder.all }
     end
@@ -224,7 +182,6 @@ class ManagementsController < ApplicationController
     def get_check_virtual_warehouse
       render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where general_shoes.id = size_of_shoes.general_shoe.id ")}
     end
-
 
     ##############################################################################################
     def check_factory_order
