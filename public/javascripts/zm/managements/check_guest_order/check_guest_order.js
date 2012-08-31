@@ -30,8 +30,7 @@ Zm.managements.check_guest_order= {
             url: '/managements/guest_order.json',
             fields: ['order_id','custom_num', 'custom_contrast','quality','total_price','shipment','payment','lading_bill','production_date','remark'],
             totalProperty: "totalProperty",
-            root: 'check_guest_order',
-            autoLoad: true
+            root: 'roots',
         });
         store.load({ params: { start: 0, limit: 30 } });
 
@@ -47,7 +46,7 @@ Zm.managements.check_guest_order= {
                 displayInfo: true,
                 displayMsg: "第{0}条到{1}第条，一共{2}条",
                 emptyMsg: "没有记录"
-            }),
+            })
         });                  
    
         var guestContexMenu = new Ext.menu.Menu({

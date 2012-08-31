@@ -5,6 +5,8 @@ class GuestsController < ApplicationController
 
     def wish_list
     end
+    def order_management
+    end
 
    
 

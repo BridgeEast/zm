@@ -56,28 +56,30 @@ Zm::Application.routes.draw do
    end
  end
 
+ resources :guests do
+   collection do
+     get "wish_list"
+     get "order_management"
+   end
+ end
 
  resources :managements do
    collection do
-####### 好，这部分是我的路由,不要改我的 ###########
+
+   ## guest & virtual
      get "check_guest_order"
+     get "guest_order"
+     get "get_guest_details"
      get "get_virtuals"
-     post "get_mouth_sheet"
      get "get_virtual_daily_dispatch"
      get "get_virtual_mouth_sheet"
      get "get_virtual_mouth_dispatch"
-     get "get_virtual_daily_num_size"
      get "get_virtual_daily_sheet"
      get "get_order_progress"
-     get "get_daily_sheet"
      get "get_guest_order"
      get "check_virtual_warehouse"
      get "get_tree_node"
-     get "get_check_guest_order"
-     get "get_check_virtual_warehouse"
-     get "get_check_virtual_warehouse_node"
-     get "get_detail"
-####### 好，这部分是我的路由 ######################
+   ################
 
      get "check_store_of_shoes"
      get "get_data"

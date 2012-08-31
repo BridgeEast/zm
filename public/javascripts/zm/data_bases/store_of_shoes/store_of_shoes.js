@@ -9,7 +9,7 @@ Zm.dataBases.storeOfShoes = {
 
 //**********************************************************************************************
     createStoreOfShoes: function() {
-        //用于显示鞋库的gridpanel
+        //------------------------------用于显示鞋库的gridpanel
         var shoesCm = new Ext.grid.ColumnModel([
         new Ext.grid.RowNumberer(), {
             header: '样品图1',
@@ -119,7 +119,7 @@ Zm.dataBases.storeOfShoes = {
     },
 
 //**********************************************************************************************
-    // 添加新样品
+    //----------------------------------- 添加新样品
     addShoes: function(type) {
         var cm = new Ext.grid.ColumnModel([{
             header: '部位',
@@ -210,7 +210,7 @@ Zm.dataBases.storeOfShoes = {
             }
         }]);
 
-        // 放到grid里显示的原始数据
+        // ---------------------------放到grid里显示的原始数据
         var inpcdata = [];
         var inpcRecord = Ext.data.Record.create([{
             name: 'region'
@@ -329,7 +329,7 @@ Zm.dataBases.storeOfShoes = {
             },
             '-'])
         });
-        //添加窗口
+        //---------------------------------------添加窗口
         var sampleForm = new Ext.form.FormPanel({
             region: 'north',
             frame: true,
@@ -402,7 +402,7 @@ Zm.dataBases.storeOfShoes = {
             }]
         });
 
-        //图片窗口
+        //------------------------------图片窗口
         var samplePhoto = new Ext.form.FormPanel({
             id: 'photoForm',
             region: 'south',
@@ -428,7 +428,7 @@ Zm.dataBases.storeOfShoes = {
             }]
         });
 
-        // 窗体上的按钮
+        //----------------------------- 窗体上的按钮
         var btnPhoto = new Ext.form.TextField({ 
             text: '上传图片',
             scope: this,
@@ -436,7 +436,7 @@ Zm.dataBases.storeOfShoes = {
             handler: function(){ 
             }
 
-        })
+        });
         var btnSubmit = new Ext.Button({
             text: '确定',
             scope: this,
@@ -453,7 +453,7 @@ Zm.dataBases.storeOfShoes = {
             }
         });
 
-        //addShoesForm
+        //-------------------------------addShoesForm
         var form = new Ext.form.FormPanel({
             id: 'form',
             layout: 'border',
@@ -473,7 +473,7 @@ Zm.dataBases.storeOfShoes = {
             items: [form]
         });
     },
-
+//***************************************************************************************************************
     createData: function() {
         var items = [];
         var store = Ext.getCmp('grid').getStore();
@@ -570,7 +570,7 @@ Zm.dataBases.storeOfShoes = {
         }
     },
 //***************************************************************************************
-    //删除所选
+    //-------------------------删除所选
     deleteShoes: function() {
         var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
         if (selection.getSelected()) {
@@ -595,7 +595,7 @@ Zm.dataBases.storeOfShoes = {
 
     },
 //***************************************************************************************************
-    // 修改
+    //-------------------------------------- 修改
     updateShoes: function() {
         var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
         var data = selection.getSelected().data;
