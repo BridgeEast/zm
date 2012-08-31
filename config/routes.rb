@@ -56,6 +56,15 @@ Zm::Application.routes.draw do
    end
  end
 
+<<<<<<< HEAD
+=======
+ resources :guests do
+   collection do
+     get "wish_list"
+     get "order_management"
+   end
+ end
+>>>>>>> 添加订单管理界面
 
  resources :managements do
    collection do
