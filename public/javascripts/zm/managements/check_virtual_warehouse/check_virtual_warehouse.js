@@ -77,12 +77,7 @@ store.load();
 
 var virtualwarehouseenquiry2contextmenu = new Ext.menu.Menu({
     id: 'theContextMenu',
-    items: [{
-        text: '查看详情',
-        handler: function() {
-            detailsWindow.show();
-        }
-    }]
+    items: [{ text: '查看详情', handler: function(){ } }]
 });
 
 grid.on("rowcontextmenu", function(grid, rowIndex, e) {

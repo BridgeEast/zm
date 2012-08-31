@@ -25,34 +25,9 @@ class ManagementsController < ApplicationController
 
     end
 
-
   #*********************************************************************************************************
 
-###############  以下部分是我的，别碰我的东西 #####################################################################
-    #guest_contex
-    def get_detail
-      render :json => { :guest_detail => GeneralShoe.all }
-    end
-
- #   def get_daily_sheet
- #     render :json => { :daily_data => SizeOfShoe.all }
- #   end
-
-    def get_daily_sheet
-      daily_data = []
-      SizeOfShoe.limit(params[:limit].to_i).offset(params[:start].to_i).each do |s|
-        daily_data << { :id => s.id, :necessary_num => s.necessary_num, :finished_num => s.finished_num }
-      end
-      daily_sheet = { :totalProperty => SizeOfShoe.count, :gds => daily_data,  }
-      render :json => daily_sheet
-    end
-
-
-
-
-  #*********************************************************************************************************
-
-    ##^^^^^^^^^^^^^  分页  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ##^^^^^^^^^^^^^  分页  ^^^^^^^^^^^^^^
     def paging(array)
       m = params[:limit].to_i
       n = params[:start].to_i
@@ -176,11 +151,6 @@ class ManagementsController < ApplicationController
     ##从数据库读取数据生成树节点
     def get_tree_node
       render :json => { :tree_node => FactoryOrder.all }
-    end
-    
-    #virtual
-    def get_check_virtual_warehouse
-      render :json => { :virtual_warehouse => GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where general_shoes.id = size_of_shoes.general_shoe.id ")}
     end
 
     ##############################################################################################
