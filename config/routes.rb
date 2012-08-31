@@ -109,11 +109,10 @@ Zm::Application.routes.draw do
      get"load_tree"
      get"get_scanning_detail"
      get"change_board_kind"
-
-     #**************心愿单***********
      get "wish_list"
      get "wish_list_data"
-     #*******************************
+     post"change_board_kind"
+     get"get_data"
    end
  end
 
@@ -124,7 +123,10 @@ Zm::Application.routes.draw do
      get "scanningGuestWishLists"
      post "delete_shoes_and_detail_of_shoes"
      get "get_details_of_shoes"
-     
+     get "guest_order_management"
+     get "get_orders"
+     get "get_order_data"
+     get "get_order_shoes_detail"
    end
  end
 

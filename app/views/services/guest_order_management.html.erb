@@ -1,0 +1,9 @@
+<%= javascript_include_tag "zm/zm.js", "zm/services/guest_order_management/guest_order_management.js","zm/services/guest_order_management/guest_order_detail.js","zm/services/guest_order_management/order_detail.js" %>
+<!--go to the public javascripts-->
+<script>
+  Ext.onReady(function() { 
+    Zm.services.guest_order_management.init();
+  });
+
+</script>
+

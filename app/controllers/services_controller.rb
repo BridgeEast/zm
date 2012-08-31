@@ -45,12 +45,73 @@ class ServicesController < ApplicationController
 
 
 
-
   def scanningGuestWishList
   end
 
 
 
 
+
   #----------------------------------aji
+
+########################################################查看订单############################################################
+  def guest_order_management
+  end
+   
+
+  def get_orders
+    respond_to do |format|
+      format.json{ render :json => { :orders => Order.all } }
+     end
+   end
+
+  def get_order_data
+     orderselects =[]
+     Order.all.each do |orderitem|
+       if(orderitem.production_date.to_s.split("-")[1].gsub(/\b(0+)/,"")==params[:selectordermonth].to_s and orderitem.production_date.to_s.split("-")[0]==params[:selectorderyear])
+        orderselects << orderitem
+       end
+     end
+     respond_to do |format|
+       format.json{  render :json =>{ :orders =>orderselects }}
+     end
+  end
+
+  def get_order_shoes_detail
+      check_shoes=[]
+     GeneralShoe.all.each do |aa|
+       act = params[:id].delete("O")
+      if(aa.order_id== act.to_i)
+        check_shoes << aa
+      end
+    end
+  #   details_shoes = GeneralShoe.get_shoes_json( check_shoes)
+      respond_to do |format|
+        format.json{ render :json =>{ :order_shoes_detail =>   check_shoes   } }
+      end
+  end
+
+   def get_order_shoes_detail_second
+      details_shoes = GeneralShoe.get_details_json( params[:id] )
+      respond_to do|format|
+        format.json{ render :json => { :order_shoes_detail_second => details_shoes } }
+      end
+   end
+
+#########################################################################################################################################################
+  def upload_order
+    @order = Order.new( params[:order] )
+    origin_path = params[:order][:order_url]                   # 取出传过来的订单的本地文件路径
+    order_path = upload_file( origin_path, File::File_target ) # 将文件写入服务器并返回文件名及其后缀
+    @order.set_order_url( order_path )                         # 设置路径在数据库
+    @order.save
+  end
+  
+  def upload_file( file, target_dir )
+      filename = file.original_filename                            # 文件名
+      File.open( File.join( target_dir, filename ),'wb' ) do |f|   # 打开的文件并准备写入
+        f.write( file.read )                                       # 向文件夹中写入文件
+        return filename #返回文件名和其后缀
+    end
+  end
 end
