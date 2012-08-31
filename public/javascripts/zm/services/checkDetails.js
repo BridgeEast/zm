@@ -27,6 +27,7 @@ Zm.services.checkDetail = {
 		]);
 
 		var detailStore = new Ext.data.JsonStore({
+      id:'detailStore',
 			url: '/managements/get_details_of_shoes.json',
 			fields: ['color','material','procession','region','remark'],
 			baseParams: {
@@ -84,8 +85,12 @@ Zm.services.checkDetail = {
 			constrainHeader: true,
 			//protect the frame out of the page 
 			items: [detailPhoto,detailGrid ],
+      bbar: new Ext.Toolbar({ 
+        items: [{ text: "aji", handler:function(){ console.log("dataDos",detailStore.getCount()); } }]
+      }),
 
 		});
+
 	},
 }
 

@@ -125,7 +125,7 @@ Zm::Application.routes.draw do
      get"get_data"
    end
  end
-
+#----------------------------------------aji
  resources :services do
    collection do
      get "excelProcessingAndPlayBoard"
@@ -137,6 +137,11 @@ Zm::Application.routes.draw do
      get "get_orders"
      get "get_order_data"
      get "get_order_shoes_detail"
+     post "create_in_generalanddetail"
+     post "updata_in_generalanddetail"
+     get "get_details_of_shoes_all_id"
+     
+>>>>>>> refresh
    end
  end
 

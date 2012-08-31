@@ -32,6 +32,25 @@ class ServicesController < ApplicationController
     end
   end
 
+  #------------------------------ 添加数据在general_shoes and details_of_shoes
+  def create_in_generalanddetail
+    GeneralShoe.create!(params[:record])
+    render :json =>{}
+  end
+  #------------------------------ 修改数据在general_shoes and details_of_shoes
+  def updata_in_generalanddetail
+     GeneralShoe.find(params[:record][:id]).update_attributes(params[:record])
+    render :json => {}
+  end
+  #--------------------------- 点修改后弹出的显示，这里返回的是一串id！妈的个b
+  def get_details_of_shoes_all_id
+    details_shoes = GeneralShoe.get_details_ids_json( params[:id] )
+      respond_to do|format|
+        format.json{ render :json => { :dos => details_shoes } }
+      end
+  end
+
+
 
 
 
