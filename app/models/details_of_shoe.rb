@@ -11,8 +11,9 @@ class DetailsOfShoe < ActiveRecord::Base
       { 
         :region => shoe.region.region,
         :material => shoe.material.material,
-        :color => shoe.color.color
+        :color => shoe.color.color,
         :procession => shoe.procession.procession
       }
     end
   end
+end
