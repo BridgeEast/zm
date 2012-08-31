@@ -68,6 +68,7 @@ Zm::Application.routes.draw do
 
    ## guest & virtual
      get "check_guest_order"
+     get "guest_order"
      get "get_guest_details"
      get "get_virtuals"
      get "get_virtual_daily_dispatch"

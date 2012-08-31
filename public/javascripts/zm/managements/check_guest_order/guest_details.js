@@ -12,6 +12,7 @@ Ext.onReady(function(){
     	var store = new Ext.data.JsonStore({
           url:"/managements/guest_order.json",
           fields: ['shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'remark'],
+          totalProperty: "totalProperty",
           root: "roots",
           autoLoad: true
     	});
