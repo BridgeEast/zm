@@ -68,7 +68,7 @@ Zm::Application.routes.draw do
      get "get_virtual_mouth_dispatch"
      get "get_virtual_daily_num_size"
      get "get_virtual_daily_sheet"
-     post "get_order_progress"
+     get "get_order_progress"
      get "get_daily_sheet"
      get "get_guest_order"
      get "check_virtual_warehouse"

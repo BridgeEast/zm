@@ -191,9 +191,6 @@ class ManagementsController < ApplicationController
     end
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    #guest     
-    def check_guest_order
-    end
 
     def check_virtual_warehouse
     end
@@ -227,20 +224,8 @@ class ManagementsController < ApplicationController
 
 ##^^^^^^^^^^^^^^^^^^^^^^ 虚拟仓库加载页面时的数据  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def get_virtuals
-      size_num = GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where general_shoes.id = size_of_shoes.general_shoe_id")
-  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^
-      m = params[:limit].to_i
-      n = params[:start].to_i
-      root = []
-      max = m + n
-      if max > size_num.length
-        max = size_num.length
-      end
-      for i in n..max - 1
-        root << size_num[i]
-      end
-      all_data = { :totalProperty => size_num.length, :virtual_warehouse => root }
-      render :json => all_data 
+      size_num = GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where general_shoes.id = size_of_shoes.general_shoe_id and general_shoes.id='#{params[:id]}'")
+      render :json => { :virtual_warehouse => size_num }
     end 
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -258,6 +243,22 @@ class ManagementsController < ApplicationController
     def get_guest_order
       size_num = Order.find_by_sql("select * from orders where production_date like '#{params[:date]}%'")
   #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > size_num.length
+        max = size_num.length
+      end
+      for i in n..max - 1
+        root << size_num[i]
+      end
+      all_data = { :totalProperty => size_num.length, :check_guest_order => root }
+      render :json => all_data 
+    end
+
+    def guest_order
+      size_num = Order.all
       m = params[:limit].to_i
       n = params[:start].to_i
       root = []

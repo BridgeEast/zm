@@ -79,7 +79,7 @@ Ext.onReady(function(){
                 store.reload();
             }
         },{
-            text: "关闭", handler: function(){ dailySheetWindow.hide(); }
+            text: "重置", handler: function(){ dailySheetWindow.hide(); }
         }]
     });
 });

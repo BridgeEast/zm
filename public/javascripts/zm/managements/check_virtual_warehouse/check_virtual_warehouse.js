@@ -98,12 +98,14 @@ var treeStore = new Ext.data.JsonStore({
     autoLoad: true
 });
 
-var jing_year_nodes = []; //全局变量数组，暂时没有好的方法，先用着 
 var root = new Ext.tree.AsyncTreeNode({
     id: "cvwRoot",
     text: "全部合同",
+    expandable: true,   //节点的“+”或“-”一直显示
     children: []
 });
+
+var jing_year_nodes = [];
 
 var cvw_tree = new Ext.tree.TreePanel({
     root: root
@@ -119,7 +121,7 @@ cvw_tree.on("expandnode", function(node) { //树的展开时执行的事件
         record[m] = treeStore.getAt(m);
     }
     if (node.id == "cvwRoot") {
-        for (i = 2010; i < myDate.getFullYear() + 1; i++) {
+        for (i = myDate.getFullYear(); i >= 2010 ; i--) {
             jing_year_nodes[i] = new Ext.tree.TreeNode({
                 text: i,
                 id: "node" + i
@@ -127,7 +129,7 @@ cvw_tree.on("expandnode", function(node) { //树的展开时执行的事件
             root.appendChild(jing_year_nodes[i]);
 
             if (i == myDate.getFullYear()) {
-                for (j = 1; j < myDate.getMonth() + 2; j++) {
+                for (j = myDate.getMonth() + 1; j >= 1 ; j--) {
                     if (j > 9) {
                         month_nodes[j] = new Ext.tree.TreeNode({
                             text: j + "月",
@@ -167,7 +169,7 @@ cvw_tree.on("expandnode", function(node) { //树的展开时执行的事件
                     }
                 }
             } else {
-                for (j = 1; j < 13; j++) {
+                for (j = 12; j > 0; j--) {
                     if (j > 9) {
                         month_nodes[j] = new Ext.tree.TreeNode({
                             text: j + "月",
@@ -208,7 +210,6 @@ cvw_tree.on("expandnode", function(node) { //树的展开时执行的事件
                 }
             }
         }
-        jing_node3.remove();
     }
 });
 
@@ -218,11 +219,6 @@ cvw_tree.on("collapsenode", function(node) { //树的闭合事件
         for (i = 2010; i <= myDate.getFullYear(); i++) {
             jing_year_nodes[i].remove()
         };
-        jing_node3 = new Ext.tree.TreeNode({
-            text: "2010",
-            id: "linshi"
-        });
-        root.appendChild(jing_node3);
     }
     store.removeAll();
 });
