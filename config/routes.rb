@@ -70,6 +70,8 @@ Zm::Application.routes.draw do
    collection do
 ####### 好，这部分是我的路由,不要改我的 ###########
      get "check_guest_order"
+     get "get_guest_details"
+     get "get_virtual_detail_data"
      get "get_virtuals"
      post "get_mouth_sheet"
      get "get_virtual_daily_dispatch"

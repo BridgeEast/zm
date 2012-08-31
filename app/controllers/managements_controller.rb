@@ -30,7 +30,35 @@ class ManagementsController < ApplicationController
 
   #*********************************************************************************************************
 
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  virtual查看详情  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def get_virtual_detail_data
+      
+#      shoes = GeneralShoe.where( :id => 1 ).first.details_of_shoes.first
+#      size_num = DetailsOfShoe.find_details_num( shoes )
+#      render :json => { :detail_data => size_num }
+    end
 
+    ##^^^^^^^^^^^^^  分页  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def paging(array)
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > array.length
+        max = array.length
+      end
+      for i in n..max - 1
+        root << array[i]
+      end
+      all_data = { :totalProperty => array.length, :roots => root }
+      render :json => all_data
+    end
+
+##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  guest查看详情  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def get_guest_details
+      a = Order.where( :order_id => params[:idd] ).first.id
+      paging(GeneralShoe.find(:all, :conditions => "order_id = '#{a}'"))
+    end
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  日报表    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def get_virtual_daily_sheet
@@ -45,20 +73,7 @@ class ManagementsController < ApplicationController
       SizeOfShoe.where( :id => prodate ).each do |n|
         shoe_name << n
       end
-      size_num = SizeOfShoe.sheet_shoe_size_num( shoe_name )
-  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^^^
-      m = params[:limit].to_i
-      n = params[:start].to_i
-      root = []
-      max = m + n
-      if max > size_num.length
-        max = size_num.length
-      end
-      for i in n..max - 1
-        root << size_num[i]
-      end
-      all_data = { :totalProperty => size_num.length, :daily_sheet => root }
-      render :json => all_data
+      paging(SizeOfShoe.sheet_shoe_size_num( shoe_name ))
     end
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   月报表   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -78,20 +93,7 @@ class ManagementsController < ApplicationController
       SizeOfShoe.where( :id => prodate ).each do |n|
         shoe_name << n
       end
-      size_num = SizeOfShoe.sheet_shoe_size_num( shoe_name )
-  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^^^
-      m = params[:limit].to_i
-      n = params[:start].to_i
-      root = []
-      max = m + n
-      if max > size_num.length
-        max = size_num.length
-      end
-      for i in n..max - 1
-        root << size_num[i]
-      end
-      all_data= { :totalProperty => size_num.length, :mouth_sheet => root }
-      render :json => all_data 
+      paging(SizeOfShoe.sheet_shoe_size_num( shoe_name ))
     end
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  日发货单  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -107,20 +109,7 @@ class ManagementsController < ApplicationController
       SizeOfShoe.where( :id => prodate ).each do |n|
         shoe_name << n
       end
-      size_num = SizeOfShoe.dispatch_shoe_size_num( shoe_name )
-  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^^^
-      m = params[:limit].to_i
-      n = params[:start].to_i
-      root = []
-      max = m + n
-      if max > size_num.length
-        max = size_num.length
-      end
-      for i in n..max - 1
-        root << size_num[i]
-      end
-      all_data= { :totalProperty => size_num.length, :daily_dispatch => root }
-      render :json => all_data 
+      paging(SizeOfShoe.dispatch_shoe_size_num( shoe_name ))
     end
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  月发货单  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -139,56 +128,14 @@ class ManagementsController < ApplicationController
       SizeOfShoe.where( :id => prodate ).each do |n|
         shoe_name << n
       end
-      size_num = SizeOfShoe.dispatch_shoe_size_num( shoe_name )
-  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^
-      m = params[:limit].to_i
-      n = params[:start].to_i
-      root = []
-      max = m + n
-      if max > size_num.length
-        max = size_num.length
-      end
-      for i in n..max - 1
-        root << size_num[i]
-      end
-      all_data = { :totalProperty => size_num.length, :mouth_dispatch => root }
-      render :json => all_data 
+      paging(SizeOfShoe.dispatch_shoe_size_num( shoe_name ))
     end
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  订单进度  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def get_order_progress
-      ids = []
-      Order.all.each do |s|
-        if s.order_id == "#{params[:orderid]}" 
-          ids << s.id
-        end
-      end
-      shoes = Order.where( :id => ids ).first.general_shoes
-      size_num = GeneralShoe.get_progress_num_and_size( shoes )
-  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^
-      m = params[:limit].to_i
-      n = params[:start].to_i
-      root = []
-      max = m + n
-      if max > size_num.length
-        max = size_num.length
-      end
-      for i in n..max - 1
-        root << size_num[i]
-      end
-      all_data = { :totalProperty => size_num.length, :progress => root }
-      render :json => all_data 
+      shoes = Order.where( :order_id => params[:orderid] ).first.general_shoes
+      paging(GeneralShoe.get_progress_num_and_size( shoes ))
     end    
-
-##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  分页显示示例  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    def get_daily_sheet
-      daily_data = []
-      SizeOfShoe.limit(params[:limit].to_i).offset(params[:start].to_i).each do |s|
-        daily_data << { :id => s.id, :necessary_num => s.necessary_num, :finished_num => s.finished_num }
-      end
-      daily_sheet = { :totalProperty => SizeOfShoe.count, :gds => daily_data }
-      render :json => daily_sheet
-    end
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -197,20 +144,8 @@ class ManagementsController < ApplicationController
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def get_contract
-      size_num = GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id")
-  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^
-      m = params[:limit].to_i
-      n = params[:start].to_i
-      root = []
-      max = m + n
-      if max > size_num.length
-        max = size_num.length
-      end
-      for i in n..max - 1
-        root << size_num[i]
-      end
-      all_data = { :totalProperty => size_num.length, :virtual_warehouse => root }
-      render :json => all_data 
+      contract = GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where factory_order_id='#{params[:record][:contract]}' and general_shoes.production_date like '#{params[:record][:date]}%' and general_shoes.id = size_of_shoes.general_shoe_id")
+      paging(contract)
       end
  
     def get_daily_sheet
@@ -224,8 +159,8 @@ class ManagementsController < ApplicationController
 
 ##^^^^^^^^^^^^^^^^^^^^^^ 虚拟仓库加载页面时的数据  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def get_virtuals
-      size_num = GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where general_shoes.id = size_of_shoes.general_shoe_id and general_shoes.id='#{params[:id]}'")
-      render :json => { :virtual_warehouse => size_num }
+      virtuals = GeneralShoe.find_by_sql("select general_shoes.*, size_of_shoes.* from general_shoes, size_of_shoes where general_shoes.id = size_of_shoes.general_shoe_id and general_shoes.id='#{params[:id]}'")
+    paging(virtuals)
     end 
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -241,36 +176,11 @@ class ManagementsController < ApplicationController
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     #guest
     def get_guest_order
-      size_num = Order.find_by_sql("select * from orders where production_date like '#{params[:date]}%'")
-  #^^^^^^^^^^^^^  分页部分  ^^^^^^^^^^^^^^
-      m = params[:limit].to_i
-      n = params[:start].to_i
-      root = []
-      max = m + n
-      if max > size_num.length
-        max = size_num.length
-      end
-      for i in n..max - 1
-        root << size_num[i]
-      end
-      all_data = { :totalProperty => size_num.length, :check_guest_order => root }
-      render :json => all_data 
+      paging( Order.find_by_sql("select * from orders where production_date like '#{params[:date]}%'") )
     end
 
     def guest_order
-      size_num = Order.all
-      m = params[:limit].to_i
-      n = params[:start].to_i
-      root = []
-      max = m + n
-      if max > size_num.length
-        max = size_num.length
-      end
-      for i in n..max - 1
-        root << size_num[i]
-      end
-      all_data = { :totalProperty => size_num.length, :check_guest_order => root }
-      render :json => all_data 
+      paging(Order.all)
     end
 
 ##^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -15,7 +15,7 @@ Ext.onReady(function(){
         url: "/managements/get_order_progress.json",
         fields: ["shoes_id", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
         totalProperty: "totalProperty",
-        root: "progress",
+        root: "roots",
     });
     store.load({ params: { start: 0, limit: 20 } })
 
@@ -43,17 +43,14 @@ Ext.onReady(function(){
         closeAction: "hide",
         resizable: false,
         items: [progressGrid],
-        listeners: {'show':{fn:
-            function(){
-                var order = Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_id"];
-                store.proxy = new Ext.data.HttpProxy({
+        listeners: {'show':{fn: function(){
+            var order = Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_id"];
+            store.proxy = new Ext.data.HttpProxy({
                 url: "/managements/get_order_progress.json",
                 method: "post",
                 jsonData: { orderid: order},
             });
             store.load({ params: { start: 0, limit: 20 } });
-            }
-          }
-        },
+        }}}
     });
 });

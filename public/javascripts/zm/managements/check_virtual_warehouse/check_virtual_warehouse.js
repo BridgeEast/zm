@@ -32,12 +32,12 @@ var store = new Ext.data.JsonStore({
     url: "/managements/get_virtuals.json",
     fields: ['photo_one', 'photo_two', 'shoes_id', 'suitable_people', 'colors', 'size', 'types_of_shoes', 'price', 'production_date', 'necessary_num', 'finished_num', 'store_remaining'],
     totalProperty: "totalProperty",
-    root: 'virtual_warehouse',
+    root: 'roots',
 });
 store.load({ params: { start: 0, limit: 30} });
 
 var grid = new Ext.grid.GridPanel({
-    id: 'virtualWarehouseEnquiryGrid',
+    id: 'virtualgrid',
     region: 'center',
     cm: cm,
     store: store,
