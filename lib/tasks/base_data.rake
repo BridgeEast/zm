@@ -207,9 +207,9 @@ namespace :data do
      {:id => 5, :general_shoe_id => "5",:custom_num => "客户2",:server_num => "客服2",:sure_board => "2012-8-8",:done_board => "2012-8-9",:communication => "阿基是傻B",:board_kind => "确认板"},
      {:id => 6, :general_shoe_id => "6",:custom_num => "客户1",:server_num => "客服1",:sure_board => "2012-6-8",:done_board => "2012-6-13",:communication => "阿基是傻B",:board_kind => "确认板"},
      {:id => 7, :general_shoe_id => "7",:custom_num => "客户1",:server_num => "客服1",:sure_board => "2012-6-16",:done_board => "2012-6-20",:communication => "阿基是傻B",:board_kind => "确认板"},
-     {:id => 8, :general_shoe_id => "8",:custom_num => "客户2",:server_num => "客服1",:sure_board => "2012-7-2",:done_board => "2012-7-5",:communication => "阿基是傻B",:board_kind => "确认板"},
-     {:id => 9, :general_shoe_id => "9",:custom_num => "客户2",:server_num => "客服1",:sure_board => "2012-7-25",:done_board => "2012-7-29",:communication => "阿基是傻B",:board_kind => "确认板"},
-     {:id => 10, :general_shoe_id => "10",:custom_num => "客户2",:server_num => "客服2",:sure_board => "2012-8-6",:done_board => "2012-8-7",:communication => "阿基是傻B",:board_kind => "确认板"},    
+     {:id => 8, :general_shoe_id => "8",:custom_num => "客户2",:server_num => "客服1",:sure_board => "2012-7-2",:done_board => "2012-7-5",:communication => "阿基是傻B",:board_kind => "开发板"},
+     {:id => 9, :general_shoe_id => "9",:custom_num => "客户2",:server_num => "客服1",:sure_board => "2012-7-25",:done_board => "2012-7-29",:communication => "阿基是傻B",:board_kind => "开发板"},
+     {:id => 10, :general_shoe_id => "10",:custom_num => "客户2",:server_num => "客服2",:sure_board => "2012-8-6",:done_board => "2012-8-7",:communication => "阿基是傻B",:board_kind => "开发板"},    
      {:id => 11, :general_shoe_id => "11",:custom_num => "客户3",:server_num => "客服2",:sure_board => "2012-8-1",:done_board => "2012-8-2",:communication => "阿基是傻B",:board_kind => "开发板"},  
      {:id => 12, :general_shoe_id => "12",:custom_num => "客户3",:server_num => "客服2",:sure_board => "2012-8-1",:done_board => "2012-8-2",:communication => "阿基是傻B",:board_kind => "开发板"},  
    ])  

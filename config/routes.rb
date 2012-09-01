@@ -68,8 +68,8 @@ Zm::Application.routes.draw do
      #******心愿单*****
      get "wish_list"
      get "wish_list_data"
-     post"change_board_kind"
-     get"get_data"
+     post "destroy_choice"
+     post"add_to_developing_board"
      #******************
    end
  end

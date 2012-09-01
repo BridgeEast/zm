@@ -22,20 +22,14 @@ class GuestsController < ApplicationController
     def destroy_choice
       #debugger
       GeneralShoe.destroy(params[:id])
-      render :json => { }
+      render :json => {}
     end
 
     def add_to_developing_board
-
       GeneralShoe.find(params[:id]).each do |record|
-        #if(record.play_board.board_kind == "确认板")
-          #{ Ext.Msg.alert('警告' ，'123')}
-        #else
-          #{ record.play_board.board_kind = "确认板" }
-        #end
-        record.play_board.board_kind = "确认板"
+        record.play_board.update_attributes(:board_kind => "确认板")
       end
-      render :json => { }
+      render :json => {}
     end
 
   #*********************************************************************

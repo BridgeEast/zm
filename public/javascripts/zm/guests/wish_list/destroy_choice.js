@@ -1,7 +1,7 @@
 Zm.guests.destroy_choice = {
 	init: function() {
 		if (!Ext.isEmpty(Zm.guests.wish_list.choice_id)) {
-            console.log(Zm.guests.wish_list.choice_id)
+            //console.log(Zm.guests.wish_list.choice_id)
 			Ext.Ajax.request({
 				url: '/guests/destroy_choice.json',
 				method: 'post',
@@ -18,7 +18,7 @@ Zm.guests.destroy_choice = {
 				}
 			})
 		} else {
-			Ext.Msg.alert('警告', '请选择记录')
+			Ext.Msg.alert('警告','请选择记录!')
 		}
 	}
 }
