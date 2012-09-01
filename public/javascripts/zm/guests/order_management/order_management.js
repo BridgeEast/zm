@@ -7,22 +7,14 @@ Zm.guests.order_management = {
                 region: 'north',
                 title: '客户-订单管理'
             },
-            this.createOmForm(), this.createTreeOm()]
+            this.createTreeOm(), this.createOmGridOne()]
         };
     },
-    //-------------------------------------------------------------------
-    createOmForm: function() {
-        var omForm = new Ext.form.FormPanel({
-            region: 'center',
-            layout: 'form',
-            items: [this.createOmGridOne(), this.createOmGridTwo()]
-        });
-        return omForm
-    },
-    //-------------------------------------------------------------------
+    //---------------------------------------------------------------------
     createOmGridOne: function() {
+        var smOne = new Ext.grid.CheckboxSelectionModel();
         var cmOne = new Ext.grid.ColumnModel([
-        new Ext.grid.RowNumberer(), {
+        new Ext.grid.RowNumberer(), smOne, {
             header: '订单号',
             dataIndex: 'order_id'
         },
@@ -48,55 +40,52 @@ Zm.guests.order_management = {
             dataIndex: 'remark'
         },
         ]);
-        data1 = [['1','name1','descn1'],
-        	['2','name2','descn2'],
-        	['3','name3','descn3'],
-        	['4','name4','descn4'],
-        	['5','name5','descn5']];
-        var storeOne = new Ext.data.Store({
-            proxy: new Ext.data.MemoryProxy(data1),
-            reader: new Ext.data.ArrayReader({},
-            [{
-                name: 'order_id'
-            },
-            {
-                name: 'custom_contract'
-            },
-            {
-                name: 'total_price'
-            },
-            {
-                name: 'payment'
-            },
-            {
-                name: 'production_date'
-            },
-            {
-                name: 'remark'
-            }])
+        var storeOne = new Ext.data.JsonStore({ 
+            url: '/guests/get_check_orders',
+            fields: ['id', 'order_id', 'custom_contract', 'total_price', 'payment', 'production_date', 'remark'],
+            root: 'check_orders',
+            autoLoad: false
         });
-        storeOne.load();
         var omGridOne = new Ext.grid.GridPanel({
+            region: 'center',
             id: 'omGridOne',
-            height: 300,
+            height: 360,
             cm: cmOne,
+            sm: smOne,
             store: storeOne,
+            trackMouseOver : true,
             viewConfig: {
                 forceFit: true
             },
-            /* bbar: new Ext.pagingToolbar({ 
-                    pageSize: 10,
-                    store: storeOne,
-                    displayInfo: true,
-                    displayMsg: '显示第{0}条到{1}记录一共{2}条',
-                    emptyMsg: '没有记录'
-                  }) */
+            bbar: new Ext.PagingToolbar({ 
+            pageSize: 20,
+            store: storeOne,
+            displayInfo: true,
+            displayMsg: '显示第{0}条到{1}记录,一共{2}条',
+            emptyMsg: '没有记录'
+        }),
+            tbar: new Ext.Toolbar( 
+            ['-',{ 
+                     text: '删除所选'
+                   },'-',
+                   { 
+                     text: '发送订单'
+                   },'-'])
         });
 
         var contextmenu = new Ext.menu.Menu({
             items: [{
                 id: 'checkAndUpdateShoes',
                 text: '查看与修改样品',
+            },
+            { 
+                text: '查看码号与数量'
+            },
+            { 
+                text: '打开客户合同'
+            },
+            { 
+                text: '下载客户合同'
             }]
         });
 
@@ -107,10 +96,12 @@ Zm.guests.order_management = {
         });
         return omGridOne
     },
-    //------------------------------------------------------------------
+
+    //---------------------------------------------------------------------
     createOmGridTwo: function() {
+        var smTwo = new Ext.grid.CheckboxSelectionModel();
         var cmTwo = new Ext.grid.ColumnModel([
-        new Ext.grid.RowNumberer(), {
+        new Ext.grid.RowNumberer(), smTwo, {
             header: '订单号',
             dataIndex: 'order_id'
         },
@@ -184,17 +175,44 @@ Zm.guests.order_management = {
         });
         storeTwo.load();
         var omGridTwo = new Ext.grid.GridPanel({
+            region: 'center',
             id: 'omGridTwo',
             height: 300,
             cm: cmTwo,
+            sm: smTwo,
             store: storeTwo,
             viewConfig: {
                 forceFit: true
             }
         });
+         var contextmenu = new Ext.menu.Menu({
+            items: [{
+                text: '查看样品',
+            },
+            { 
+                text: '查看订单进度'
+            },
+            { 
+                text: '打开提单'
+            },
+            { 
+                text: '下载提单'
+            },           
+            { 
+               text: '打开客户合同'
+            },
+            { 
+               text: '下载客户合同'           }]
+        });
+
+        omGridTwo.on("rowcontextmenu", function(grid, rowIndex, e) {
+            e.preventDefault();
+            grid.getSelectionModel().selectRow(rowIndex);
+            contextmenu.showAt(e.getXY())
+        });
         return omGridTwo
     },
-    //-----------------------------------------------------------------
+    //---------------------------------------------------------------------
     createTreeOm: function() {
         var treeOm = new Ext.tree.TreePanel({
             autoScroll: true,
@@ -254,7 +272,7 @@ Zm.guests.order_management = {
                 if (parseInt(month) < 10) month = '0' + month;
                 date = year + '-' + month;
             }
-            else if (node.parentNode.text == '全部鞋') {
+            else if (node.parentNode.text == '全部订单') {
                 data = node.text;
             }
             else {
@@ -262,6 +280,16 @@ Zm.guests.order_management = {
                 month = null;
                 type = null;
             }
+
+          /*  store.proxy = new Ext.data.HttpProxy({ 
+                url: '/guests/get_orders_data.json',
+                method: 'post',
+                jsonData: { 
+                  selectDate: date,
+                  selectType: type
+                }
+            }),
+             store.load() */
         })
         return treeOm
     }

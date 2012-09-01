@@ -68,7 +68,6 @@ class DataBasesController < ApplicationController
   end  
 
   def create_shoes_and_details_of_shoes
-    @records = params[:record] 
     GeneralShoe.create!(params[:record])
     render :json => {}
   end

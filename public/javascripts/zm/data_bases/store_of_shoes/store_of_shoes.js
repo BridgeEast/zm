@@ -10,8 +10,9 @@ Zm.dataBases.storeOfShoes = {
 //**********************************************************************************************
     createStoreOfShoes: function() {
         //------------------------------用于显示鞋库的gridpanel
+        var shoesSm = new Ext.grid.CheckboxSelectionModel();
         var shoesCm = new Ext.grid.ColumnModel([
-        new Ext.grid.RowNumberer(), {
+        new Ext.grid.RowNumberer(), shoesSm, {
             header: '样品图1',
             dataIndex: 'photo_one',
             renderer: title_img
@@ -62,6 +63,7 @@ Zm.dataBases.storeOfShoes = {
             title: '鞋库',
             region: 'center',
             cm: shoesCm,
+            sm: shoesSm,
             store: shoesStore,
             viewConfig: {
                 forceFit: true
@@ -152,7 +154,7 @@ Zm.dataBases.storeOfShoes = {
                     url: '/data_bases/get_material.json',
                     method: 'get',
                     root: 'material',
-                    fields: ['id', 'material']
+                    fields: ['id', 'material'],
                 }),
                 triggerAction: 'all',
                 displayField: 'material',
@@ -233,7 +235,6 @@ Zm.dataBases.storeOfShoes = {
                 },
                 root: 'dos',
             })
-            inpcstore.load();
         } else {
             var inpcstore = new Ext.data.Store({
                 proxy: new Ext.data.MemoryProxy(inpcdata),
@@ -265,32 +266,6 @@ Zm.dataBases.storeOfShoes = {
             },
             store: inpcstore,
             cm: cm,
-            renderer: function(combo, gridId) {
-                var gridId = 'grid';
-                var getValue = function(value) {
-                    var idx = combo.store.find(combo.valueField, value);
-                    var rec = combo.store.getAt(idx);
-                    if (rec) {
-                        return rec.get(combo.displayField);
-                    }
-                    return value;
-                }
-                return function(value) {
-                    if (combo.store.getCount() == 0 && gridId) {
-                        combo.store.on('load', function() {
-                            var grid = Ext.getCmp(gridId);
-                            if (grid) {
-                                grid.getView().refresh();
-                            }
-                        },
-                        {
-                            single: true
-                        });
-                        return value;
-                    }
-                    return getValue(value);
-                };
-            },
             enableColumnMove: false,
             tbar: new Ext.Toolbar(['-', {
                 text: '添加一行',
@@ -606,7 +581,6 @@ Zm.dataBases.storeOfShoes = {
         Ext.getCmp('addTypesOfShoes').setValue(data["types_of_shoes"]);
         Ext.getCmp('addPrice').setValue(data["price"]);
         Ext.getCmp('addRemark').setValue(data["remark"]);
-
     }
 }
 /*renderer: function(combo, gridId) {
