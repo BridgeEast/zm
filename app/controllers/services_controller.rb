@@ -39,6 +39,7 @@ class ServicesController < ApplicationController
   end
   #------------------------------ 修改数据在general_shoes and details_of_shoes
   def updata_in_generalanddetail
+    GeneralShoe.find(params[:record][:id]).details_of_shoes.delete_all
      GeneralShoe.find(params[:record][:id]).update_attributes(params[:record])
     render :json => {}
   end
@@ -48,6 +49,15 @@ class ServicesController < ApplicationController
       respond_to do|format|
         format.json{ render :json => { :dos => details_shoes } }
       end
+  end
+  #--------------------------- change the sure_board and done_board
+  def updata_in_play_board
+    @tem=PlayBoard.find(params[:record][:general_shoe_id])
+    @tem.update_attributes(:sure_board => params[:record][:sure_board])
+    @tem.update_attributes(:done_board => params[:record][:done_board])
+    render :json => {}
+69
+
   end
 
 

@@ -140,6 +140,7 @@ Zm::Application.routes.draw do
      post "create_in_generalanddetail"
      post "updata_in_generalanddetail"
      get "get_details_of_shoes_all_id"
+     post "updata_in_play_board"
      
 >>>>>>> refresh
    end
