@@ -56,11 +56,7 @@ Zm::Application.routes.draw do
    end
  end
 
-<<<<<<< HEAD
-=======
 
-
->>>>>>> 更新代码
  resources :guests do
    collection do
 
@@ -68,17 +64,16 @@ Zm::Application.routes.draw do
      get"get_general_shoes"
      get"load_tree"
      get"get_scanning_detail"
-     get"change_board_kind"
+
+     #******心愿单*****
      get "wish_list"
      get "wish_list_data"
      post"change_board_kind"
      get"get_data"
+     #******************
    end
  end
-<<<<<<< HEAD
-=======
 
->>>>>>> 更新代码
 
  resources :managements do
    collection do
