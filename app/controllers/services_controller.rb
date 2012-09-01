@@ -66,14 +66,6 @@ class ServicesController < ApplicationController
 
 
 
-
-
-
-
-
-
-
-
   def scanningGuestWishList
   end
 

@@ -100,7 +100,11 @@ Zm.services.excelProcessingAndPlayBoard = {
 					var photo_two = Ext.getCmp('epapbGrid').getSelectionModel().getSelected().data.photo_two;
 					// Ext.Msg.alert("xxx",shoes_id);
 					//this.cwlWindow( this.checkDetailsForm(), this.checkDetailsGrid() ).show();
+<<<<<<< HEAD
 					Zm.services.checkDetail.createCheckDetails(shoes_id, photo_one, photo_two).show(); //invoke the function of looking details
+=======
+					Zm.services.checkDetail.createCheckDetails(shoes_id, photo_one, photo_two).show();
+>>>>>>> refresh
 					//var store = Ext.getCmp('detailGrid').store;
 					//store.setBaseParam('id', shoes_id );
 					//store.reload();
@@ -109,15 +113,30 @@ Zm.services.excelProcessingAndPlayBoard = {
 			{
 				text: '修改',
 				handler: function() {
+<<<<<<< HEAD
 					this.updateShoes();
 
+=======
+					//this.updateShoes("修改");
+					this.updateShoes();
+>>>>>>> refresh
 				}
 			},
 			{
 				text: '与客户交谈',
 				handler: function() {
+<<<<<<< HEAD
 					Zm.services.communicateWithGuest.createCommunicateWithGuest().show(); //invoke the im
 				}
+=======
+					Zm.services.communicateWithGuest.createCommunicateWithGuest().show();
+				}
+			},
+			{
+				text: '修改确定打板时间',
+				handler: function() {}
+
+>>>>>>> refresh
 			},
 			{
 				text: '修改打板的时间',
@@ -158,6 +177,8 @@ Zm.services.excelProcessingAndPlayBoard = {
 	},
 	//++++++++++++++++++++++++++++++++addOrModifyshoes:function+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	addOrModifyshoes: function(type, shoes_id) {
+	//++++++++++++++++++++++++++++++++addOrModifyshoes:function+++++++++++++++++++++++++++++++
+	addOrModifyshoes: function(type,shoes_id) {
 		var AOMSFormStore = new Ext.data.SimpleStore({
 			fields: ['value', 'text'],
 			data: [['value1', '高跟鞋'], ['value2', '平底鞋'], ['value3', '靴子']]
@@ -233,6 +254,44 @@ Zm.services.excelProcessingAndPlayBoard = {
 		//----------AOMSGrid------------------------
 		//----------the combo in the editorGrid
 		var addGridEditorRegion = new Ext.grid.GridEditor(
+		//----------AOMSGrid-----
+	
+
+		
+    if(type=="添加鞋"){ 
+      var AOMSData = [{ region:'1',material:'3',color:'4',procession:'5' }];
+	  	var AOMSStore = new Ext.data.Store({
+			proxy: new Ext.data.MemoryProxy(AOMSData),
+			reader: new Ext.data.ArrayReader({},
+			[{
+				name: 'region'
+			},
+			{
+				name: 'material'
+			},
+			{
+				name: 'color'
+			},
+			{
+				name: 'procession'
+			}])
+		});
+		AOMSStore.load();
+    
+    }else
+      {
+        var AOMSStore = new Ext.data.JsonStore({
+				url: '/services/get_details_of_shoes_all_id.json',
+				fields: ['color', 'material', 'procession', 'region', 'remark'],
+				baseParams: {	id: 'null'	},
+				root: 'dos',
+			});
+      //console.log("xx",shoes_id);
+      AOMSStore.setBaseParam('id', shoes_id);
+			AOMSStore.load();      
+      }
+
+      	var addGridEditorRegion = new Ext.grid.GridEditor(
 		new Ext.form.ComboBox({
 			id: 'addGridEditorRegion',
 			store: new Ext.data.JsonStore({
@@ -286,6 +345,9 @@ Zm.services.excelProcessingAndPlayBoard = {
 			editable: false
 		}));
 
+    
+
+
 		var addGridEditorProcession = new Ext.grid.GridEditor(
 		new Ext.form.ComboBox({
 			id: 'addGridEditorProcession',
@@ -303,8 +365,15 @@ Zm.services.excelProcessingAndPlayBoard = {
 			valueField: 'id',
 			editable: false
 		}));
+    var value;
+    function addGridEditorColoraji(value) {
+        console.log("xx",value);
+				var combo = Ext.getCmp("addGridEditorColor");
+				record = combo.findRecord(combo.valueField, value);
+				return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+			}
 
-		var AOMSCm = new Ext.grid.ColumnModel([
+    var AOMSCm = new Ext.grid.ColumnModel([
 		new Ext.grid.RowNumberer(), {
 			header: '部位',
 			dataIndex: 'region',
@@ -336,6 +405,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 				record = combo.findRecord(combo.valueField, value);
 				return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 			}
+			renderer: addGridEditorColoraji(value),
 		},
 		{
 			header: '加工方法',
@@ -343,10 +413,11 @@ Zm.services.excelProcessingAndPlayBoard = {
 			editor: addGridEditorProcession,
 			renderer: function(value) {
 				console.log("xxxxxx", value)
+        console.log("xxxxxx",value)
 				var combo = Ext.getCmp("addGridEditorProcession");
-				record = combo.findRecord(combo.valueField, value);
-				return record ? record.get(combo.displayField) : combo.valueNotFoundText;
-			}
+			record = combo.findRecord(combo.valueField, value);
+			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+	}
 
 		},
 		// 在下面的stroe里得到的数据，可以不按顺序就能读到这里来
@@ -402,6 +473,10 @@ Zm.services.excelProcessingAndPlayBoard = {
   
 		AOMSStore.load();
     */
+    
+    
+		
+
 		var AOMSRecord = Ext.data.Record.create([{
 			name: 'region'
 		},
@@ -427,6 +502,8 @@ Zm.services.excelProcessingAndPlayBoard = {
 				AOMSGrid.stopEditing();
 				AOMSStore.insert(0, p); //insert data above the head of store
 				AOMSGrid.startEditing(0, 0); //start at x=0,y=0
+				AOMSStore.insert(0, p);
+				AOMSGrid.startEditing(0, 0);
 			}
 		},
 		'-', {
@@ -438,6 +515,10 @@ Zm.services.excelProcessingAndPlayBoard = {
 						var cell = sm.getSelectedCell(); //get the selected model's all cells
 						var record = AOMSStore.getAt(cell[0]); //judge which row be selected,
 						AOMSStore.remove(record); // remove it
+						var sm = AOMSGrid.getSelectionModel();
+						var cell = sm.getSelectedCell();
+						var record = AOMSStore.getAt(cell[0]);
+						AOMSStore.remove(record);
 					}
 				});
 			}
@@ -458,6 +539,8 @@ Zm.services.excelProcessingAndPlayBoard = {
 			},
 			autoShow: true,
 			//activeItem:
+      autoShow: true,
+      //activeItem:
 		});
 
 		var AOMSPhoto = new Ext.Panel({
@@ -501,6 +584,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 				scope: this,
 				handler: function() {
 
+					
 				}
 			},
 			{
@@ -520,6 +604,9 @@ Zm.services.excelProcessingAndPlayBoard = {
 			var shoes_id = data.id;
 			this.addOrModifyshoes("修改", shoes_id).show();
 
+      var shoes_id = data.id;
+			this.addOrModifyshoes("修改",shoes_id).show();
+			
 			Ext.getCmp('shoes_id').setValue(data["shoes_id"]);
 			Ext.getCmp('types_of_shoes').setValue(data["types_of_shoes"]);
 			Ext.getCmp('suitable_people').setValue(data["suitable_people"]);
@@ -528,6 +615,8 @@ Zm.services.excelProcessingAndPlayBoard = {
 			Ext.getCmp('remark').setValue(data["remark"]);
 
 			/*	var tempgrid = new Ext.grid.EditorGridPanel({
+			
+		/*	var tempgrid = new Ext.grid.EditorGridPanel({
 				id: 'tempgird',
 				store: detailStore,
 				viewConfig: {
@@ -541,6 +630,13 @@ Zm.services.excelProcessingAndPlayBoard = {
 			//console.log("dataDos", detailStore.getCount());
 			//var dataDos = detailStore.data;
 			//	Ext.getCmp("AOMSGrid").getStore().loadData(dataDos);
+      //console.log("id",shoes_id);
+		//	detailStore.setBaseParam('id', shoes_id);
+			//detailStore.load();
+      //console.log("dataDos", detailStore.getCount());
+			//var dataDos = detailStore.data;
+		//	Ext.getCmp("AOMSGrid").getStore().loadData(dataDos);
+
 		};
 	},
 
@@ -549,6 +645,9 @@ Zm.services.excelProcessingAndPlayBoard = {
 	//   var data = Ext.getCmp('colorGrid').getSelectionModel().getSelected().data
 	//  }
 	//++++++++++++++++++++++++++++++++++++++++++++checkForShoes+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	//  }
+	//+++++++++++++++++++++++++++++++checkForShoes+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	createDetailShoes: function() {
 		var store = Ext.getCmp('AOMSGrid').getStore();
 		//var count=store.getCount();
@@ -763,6 +862,9 @@ Zm.services.excelProcessingAndPlayBoard = {
   },
 	//+++++++++++++++++++++++++++++++send_to_wish_list++++++++++++++++++++++++++++++++++++++++++
 	//+++++++++++++++++++++++++++++++++++EpapbTree++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	//+++++++++++++++++++++++++++++++send_to_wish_list++++++++++++++++++++++++++++++++++++++++++
+	//++++++++++++++++++++++++++++++++++check_details++++++++++++++++++++++++++++++++++++++++++++
+	//+++++++++++++++++++++++++++++++++++EpapbTree+++++++++++++++++++++++++++++++++++++++++++++++
 	createEpapbTree: function() {
 
 		var EpapbTree = new Ext.tree.TreePanel({
