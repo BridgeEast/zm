@@ -10,21 +10,14 @@ class ManagementsController < ApplicationController
     
     def get_data
       choices = []
-
       choices = GeneralShoe.where("types_of_shoes like ? and production_date like ? ","%#{params[:selectType]}%" , "%#{params[:selectDate]}%").order("production_date DESC")
-      
-
-        render :json => { :check_store_of_shoes => choices} 
+      render :json => { :check_store_of_shoes => choices} 
     end
     
 
     def get_details
-       if params[:id] != "null"
-         details = GeneralShoe.get_shoes_details( params[:id] )
-         render :json => { :shoes => details }
-       else 
-         render :json => {}
-       end
+      details = GeneralShoe.get_shoes_details( params[:id] )
+      render :json => { :shoes => details }
     end
 
   #*********************************************************************************************************

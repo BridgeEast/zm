@@ -5,10 +5,9 @@ class GuestsController < ApplicationController
 
     def wish_list
     end
+
     def order_management
     end
-
-   
 
     def wish_list_data
       wish_list = GeneralShoe.get_cwl_record( params[:id] )
@@ -22,7 +21,7 @@ class GuestsController < ApplicationController
 
     def destroy_choice
       #debugger
-      GeneralShoe.delete(params[:id])
+      GeneralShoe.destroy(params[:id])
       render :json => { }
     end
 
