@@ -7,7 +7,7 @@ Zm.dataBases.storeOfShoes = {
         };
     },
 
-//**********************************************************************************************
+    //**********************************************************************************************
     createStoreOfShoes: function() {
         //------------------------------用于显示鞋库的gridpanel
         var shoesSm = new Ext.grid.CheckboxSelectionModel();
@@ -120,7 +120,7 @@ Zm.dataBases.storeOfShoes = {
         });
     },
 
-//**********************************************************************************************
+    //**********************************************************************************************
     //----------------------------------- 添加新样品
     addShoes: function(type) {
         var cm = new Ext.grid.ColumnModel([{
@@ -142,7 +142,7 @@ Zm.dataBases.storeOfShoes = {
             renderer: function(value) {
                 var combo = Ext.getCmp("addRegion");
                 record = combo.findRecord(combo.valueField, value);
-                return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+                return record ? record.get(combo.displayField) : value;
             }
         },
         {
@@ -155,16 +155,18 @@ Zm.dataBases.storeOfShoes = {
                     method: 'get',
                     root: 'material',
                     fields: ['id', 'material'],
+                    autoLoad: true
                 }),
                 triggerAction: 'all',
                 displayField: 'material',
                 valueField: 'id',
+                mode: 'local',
                 editable: false
             })),
             renderer: function(value) {
                 var combo = Ext.getCmp("addMaterial");
                 record = combo.findRecord(combo.valueField, value);
-                return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+                return record ? record.get(combo.displayField) : value;
             }
         },
         {
@@ -176,7 +178,7 @@ Zm.dataBases.storeOfShoes = {
                     url: '/data_bases/get_color.json',
                     method: 'get',
                     root: 'color',
-                    fields: ['id', 'color']
+                    fields: ['id', 'color'],
                 }),
                 triggerAction: 'all',
                 displayField: 'color',
@@ -186,7 +188,7 @@ Zm.dataBases.storeOfShoes = {
             renderer: function(value) {
                 var combo = Ext.getCmp("addColors");
                 record = combo.findRecord(combo.valueField, value);
-                return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+                return record ? record.get(combo.displayField) : value;
             }
         },
         {
@@ -208,7 +210,7 @@ Zm.dataBases.storeOfShoes = {
             renderer: function(value) {
                 var combo = Ext.getCmp("addProcession");
                 record = combo.findRecord(combo.valueField, value);
-                return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+                return record ? record.get(combo.displayField) : value;
             }
         }]);
 
@@ -404,12 +406,11 @@ Zm.dataBases.storeOfShoes = {
         });
 
         //----------------------------- 窗体上的按钮
-        var btnPhoto = new Ext.form.TextField({ 
+        var btnPhoto = new Ext.form.TextField({
             text: '上传图片',
             scope: this,
             inputType: 'file',
-            handler: function(){ 
-            }
+            handler: function() {}
 
         });
         var btnSubmit = new Ext.Button({
@@ -438,7 +439,7 @@ Zm.dataBases.storeOfShoes = {
             width: 600,
             resizable: true,
             items: [sampleForm, grid, samplePhoto],
-            buttons: [btnPhoto,btnSubmit, btnReset]
+            buttons: [btnPhoto, btnSubmit, btnReset]
         });
         return new Ext.Window({
             id: 'addWindow',
@@ -448,7 +449,7 @@ Zm.dataBases.storeOfShoes = {
             items: [form]
         });
     },
-//***************************************************************************************************************
+    //***************************************************************************************************************
     createData: function() {
         var items = [];
         var store = Ext.getCmp('grid').getStore();
@@ -463,7 +464,7 @@ Zm.dataBases.storeOfShoes = {
         }
         return items
     },
-//******************************************************************************************************************
+    //******************************************************************************************************************
     checkForShoes: function(type) {
         var _this = this
         var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
@@ -476,14 +477,14 @@ Zm.dataBases.storeOfShoes = {
         var productionDate = date2str(new Date());
         var win
         var record = {
-            shoes_id                    : shoesId,
-            suitable_people             : suitablePeople,
-            colors                      : color,
-            types_of_shoes              : typesOfShoes,
-            price                       : price,
-            remark                      : remark,
-            production_date             : productionDate,
-            details_of_shoes_attributes : _this.createData()
+            shoes_id: shoesId,
+            suitable_people: suitablePeople,
+            colors: color,
+            types_of_shoes: typesOfShoes,
+            price: price,
+            remark: remark,
+            production_date: productionDate,
+            details_of_shoes_attributes: _this.createData()
         };
         function date2str(d) {
             var ret = d.getFullYear() + "-"
@@ -494,15 +495,15 @@ Zm.dataBases.storeOfShoes = {
         if (shoesId) {
             if (type == "修改") {
                 var record = {
-                    id                           : selection.getSelected().id,
-                    shoes_id                     : shoesId,
-                    suitable_people              : suitablePeople,
-                    colors                       : color,
-                    types_of_shoes               : typesOfShoes,
-                    price                        : price,
-                    remark                       : remark,
-                    production_date              : productionDate,
-                    details_of_shoes_attributes  : _this.createData()
+                    id: selection.getSelected().id,
+                    shoes_id: shoesId,
+                    suitable_people: suitablePeople,
+                    colors: color,
+                    types_of_shoes: typesOfShoes,
+                    price: price,
+                    remark: remark,
+                    production_date: productionDate,
+                    details_of_shoes_attributes: _this.createData()
                 };
                 Ext.Ajax.request({
                     url: '/data_bases/update_shoes_and_details_of_shoes.json',
@@ -544,7 +545,7 @@ Zm.dataBases.storeOfShoes = {
             Ext.Msg.alert('警告', '样品号不能为空!');
         }
     },
-//***************************************************************************************
+    //***************************************************************************************
     //-------------------------删除所选
     deleteShoes: function() {
         var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
@@ -569,7 +570,7 @@ Zm.dataBases.storeOfShoes = {
         }
 
     },
-//***************************************************************************************************
+    //***************************************************************************************************
     //-------------------------------------- 修改
     updateShoes: function() {
         var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
@@ -583,31 +584,3 @@ Zm.dataBases.storeOfShoes = {
         Ext.getCmp('addRemark').setValue(data["remark"]);
     }
 }
-/*renderer: function(combo, gridId) {
-    var getValue = function(value) {
-        var idx = combo.store.find(combo.valueField, value);
-        var rec = combo.store.getAt(idx);
-        if (rec) {
-            return rec.get(combo.displayField);
-        }
-        return value;
-    }
-
-    return function(value) {
-        if (combo.store.getCount() == 0 && gridId) {
-            combo.store.on('load', function() {
-                var grid = Ext.getCmp(gridId);
-                if (grid) {
-                    grid.getView().refresh();
-                }
-            },
-            {
-                single: true
-            });
-            return value;
-        }
-
-        return getValue(value);
-    };
-};*/
-
