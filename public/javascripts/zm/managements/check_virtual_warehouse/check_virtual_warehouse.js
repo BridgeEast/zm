@@ -32,12 +32,12 @@ var store = new Ext.data.JsonStore({
     url: "/managements/get_virtuals.json",
     fields: ['photo_one', 'photo_two', 'shoes_id', 'suitable_people', 'colors', 'size', 'types_of_shoes', 'price', 'production_date', 'necessary_num', 'finished_num', 'store_remaining'],
     totalProperty: "totalProperty",
-    root: 'virtual_warehouse',
+    root: 'roots',
 });
 store.load({ params: { start: 0, limit: 30} });
 
 var grid = new Ext.grid.GridPanel({
-    id: 'virtualWarehouseEnquiryGrid',
+    id: 'virtualgrid',
     region: 'center',
     cm: cm,
     store: store,
@@ -77,12 +77,7 @@ store.load();
 
 var virtualwarehouseenquiry2contextmenu = new Ext.menu.Menu({
     id: 'theContextMenu',
-    items: [{
-        text: '查看详情',
-        handler: function() {
-            detailsWindow.show();
-        }
-    }]
+    items: [{ text: '查看详情', handler: function(){ } }]
 });
 
 grid.on("rowcontextmenu", function(grid, rowIndex, e) {
@@ -93,17 +88,19 @@ grid.on("rowcontextmenu", function(grid, rowIndex, e) {
 
 var treeStore = new Ext.data.JsonStore({
     url: '/managements/get_tree_node.json',
-    fields: ['id', 'production_date'],
+    fields: ['id', 'factory_order_id', 'production_date'],
     root: 'tree_node',
     autoLoad: true
 });
 
-var jing_year_nodes = []; //全局变量数组，暂时没有好的方法，先用着 
 var root = new Ext.tree.AsyncTreeNode({
     id: "cvwRoot",
     text: "全部合同",
+    expandable: true,   //节点的“+”或“-”一直显示
     children: []
 });
+
+var jing_year_nodes = [];
 
 var cvw_tree = new Ext.tree.TreePanel({
     root: root
@@ -119,7 +116,7 @@ cvw_tree.on("expandnode", function(node) { //树的展开时执行的事件
         record[m] = treeStore.getAt(m);
     }
     if (node.id == "cvwRoot") {
-        for (i = 2010; i < myDate.getFullYear() + 1; i++) {
+        for (i = myDate.getFullYear(); i >= 2010 ; i--) {
             jing_year_nodes[i] = new Ext.tree.TreeNode({
                 text: i,
                 id: "node" + i
@@ -127,7 +124,7 @@ cvw_tree.on("expandnode", function(node) { //树的展开时执行的事件
             root.appendChild(jing_year_nodes[i]);
 
             if (i == myDate.getFullYear()) {
-                for (j = 1; j < myDate.getMonth() + 2; j++) {
+                for (j = myDate.getMonth() + 1; j >= 1 ; j--) {
                     if (j > 9) {
                         month_nodes[j] = new Ext.tree.TreeNode({
                             text: j + "月",
@@ -139,7 +136,7 @@ cvw_tree.on("expandnode", function(node) { //树的展开时执行的事件
                             var month_data = i + "-" + j;
                             if (record[k].get('production_date').substring(0, 7) == month_data) {
                                 contract_nodes[k] = new Ext.tree.TreeNode({
-                                    text: record[k].get('id'),
+                                    text: record[k].get('factory_order_id'),
                                     id: "node" + i + j + record[k].get('id')
                                 });
                                 month_nodes[j].appendChild(contract_nodes[k]);
@@ -158,7 +155,7 @@ cvw_tree.on("expandnode", function(node) { //树的展开时执行的事件
                             var month_data = i + "-0" + j;
                             if (record[k].get('production_date').substring(0, 7) == month_data) { //按月份进行分类
                                 contract_nodes[k] = new Ext.tree.TreeNode({
-                                    text: record[k].get('id'),
+                                    text: record[k].get('factory_order_id'),
                                     id: "node" + i + "0" + j + record[k].get('id')
                                 });
                                 month_nodes[j].appendChild(contract_nodes[k]);
@@ -167,7 +164,7 @@ cvw_tree.on("expandnode", function(node) { //树的展开时执行的事件
                     }
                 }
             } else {
-                for (j = 1; j < 13; j++) {
+                for (j = 12; j > 0; j--) {
                     if (j > 9) {
                         month_nodes[j] = new Ext.tree.TreeNode({
                             text: j + "月",
@@ -179,7 +176,7 @@ cvw_tree.on("expandnode", function(node) { //树的展开时执行的事件
                             var month_data = i + "-" + j;
                             if (record[k].get('production_date').substring(0, 7) == month_data) {
                                 contract_nodes[k] = new Ext.tree.TreeNode({
-                                    text: record[k].get('id'),
+                                    text: record[k].get('factory_order_id'),
                                     id: "node" + i + j + record[k].get('id')
                                 });
                                 month_nodes[j].appendChild(contract_nodes[k]);
@@ -198,7 +195,7 @@ cvw_tree.on("expandnode", function(node) { //树的展开时执行的事件
                             var month_data = i + "-0" + j;
                             if (record[k].get('production_date').substring(0, 7) == month_data) { //按月份进行分类
                                 contract_nodes[k] = new Ext.tree.TreeNode({
-                                    text: record[k].get('id'),
+                                    text: record[k].get('factory_order_id'),
                                     id: "node" + i + "0" + j + record[k].get('id')
                                 });
                                 month_nodes[j].appendChild(contract_nodes[k]);
@@ -208,7 +205,6 @@ cvw_tree.on("expandnode", function(node) { //树的展开时执行的事件
                 }
             }
         }
-        jing_node3.remove();
     }
 });
 
@@ -218,11 +214,6 @@ cvw_tree.on("collapsenode", function(node) { //树的闭合事件
         for (i = 2010; i <= myDate.getFullYear(); i++) {
             jing_year_nodes[i].remove()
         };
-        jing_node3 = new Ext.tree.TreeNode({
-            text: "2010",
-            id: "linshi"
-        });
-        root.appendChild(jing_node3);
     }
     store.removeAll();
 });

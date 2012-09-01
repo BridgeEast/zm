@@ -6,6 +6,14 @@ class DetailsOfShoe < ActiveRecord::Base
 
   belongs_to :general_shoe
 
- 
+  def self.find_details_num( shoes )
+    shoes.collect! do |shoe|
+      { 
+        :region => shoe.region.region,
+        :material => shoe.material.material,
+        :color => shoe.color.color,
+        :procession => shoe.procession.procession
+      }
+    end
   end
-
+end

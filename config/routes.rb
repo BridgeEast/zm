@@ -56,28 +56,38 @@ Zm::Application.routes.draw do
    end
  end
 
+ resources :guests do
+   collection do
+
+     get"scanning_store_of_shoes"
+     get"get_general_shoes"
+     get"load_tree"
+     get"get_scanning_detail"
+     get"change_board_kind"
+     get "wish_list"
+     get "wish_list_data"
+     post"change_board_kind"
+     get"get_data"
+   end
+ end
 
  resources :managements do
    collection do
-####### 好，这部分是我的路由,不要改我的 ###########
+
+   ## guest & virtual
      get "check_guest_order"
+     get "guest_order"
+     get "get_guest_details"
      get "get_virtuals"
-     post "get_mouth_sheet"
      get "get_virtual_daily_dispatch"
      get "get_virtual_mouth_sheet"
      get "get_virtual_mouth_dispatch"
-     get "get_virtual_daily_num_size"
      get "get_virtual_daily_sheet"
-     post "get_order_progress"
-     get "get_daily_sheet"
+     get "get_order_progress"
      get "get_guest_order"
      get "check_virtual_warehouse"
      get "get_tree_node"
-     get "get_check_guest_order"
-     get "get_check_virtual_warehouse"
-     get "get_check_virtual_warehouse_node"
-     get "get_detail"
-####### 好，这部分是我的路由 ######################
+   ################
 
      get "check_store_of_shoes"
      get "get_data"
@@ -108,17 +118,17 @@ Zm::Application.routes.draw do
      get"get_general_shoes"
      get"load_tree"
      get"get_scanning_detail"
+     #*********心愿单****************
      get"change_board_kind"
-
-     #**************心愿单***********
      get "wish_list"
      get "wish_list_data"
      post "destroy_choice"
      post "add_to_developing_board"
      #*******************************
+
    end
  end
-
+#----------------------------------------aji
  resources :services do
    collection do
      get "excelProcessingAndPlayBoard"
@@ -126,7 +136,17 @@ Zm::Application.routes.draw do
      get "scanningGuestWishLists"
      post "delete_shoes_and_detail_of_shoes"
      get "get_details_of_shoes"
-     
+     get "guest_order_management"
+     get "get_orders"
+     get "get_order_data"
+     get "get_order_shoes_detail"
+     post "create_in_generalanddetail"
+     post "updata_in_generalanddetail"
+     get "get_details_of_shoes_all_id"
+     post "updata_in_play_board"
+     post "create_in_generalanddetail"
+     post "updata_in_generalanddetail"
+     get "get_details_of_shoes_all_id"
    end
  end
 

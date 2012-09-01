@@ -1,4 +1,5 @@
- Zm.guests.scanning_store_of_shoes={
+
+Zm.guests.scanning_store_of_shoes={
   init:function(){ 
      this.select_id;
     Zm.pages.ViewPort={ 
@@ -13,12 +14,11 @@
   },
 
    scanningsamplesGrid:function(){ 
-    var scanningsamplesm = new Ext.grid.CheckboxSelectionModel();
       var cm1=new Ext.grid.ColumnModel([
           new Ext.grid.RowNumberer(),
        
-         	{header:'鞋图1',dataIndex:'photo_one'},
-         	{header:'鞋图2',dataIndex:'photo_two'},
+         	{header:'鞋图1',dataIndex:'photo_one',renderer: title_img},
+         	{header:'鞋图2',dataIndex:'photo_two',renderer: title_img},
            { header:'鞋号',dataIndex:'shoes_id'},
            { header:'鞋型',dataIndex:'types_of_shoes'},
            { header:'适用人群',dataIndex:'suitable_people'},
@@ -48,7 +48,7 @@
        });
 
        	var contextmenu = new Ext.menu.Menu({
-			     items: [{
+          items: [{
 				   id: 'selectDetails',
 				   text: '查看详情',
            scope:this,
@@ -56,7 +56,7 @@
 					 this.select_id = Ext.getCmp('scanningGrid').getSelectionModel().getSelected().data["id"];
                    Zm.guests.check_detail.init().show();
 				}
-			}]
+			},{ text:'与客户交谈' }]
 		});
          
          scanningGrid.on("rowcontextmenu",function(grid,rowIndex,e){ 
@@ -81,11 +81,9 @@
    },
 
    adddevelopment:function(){ 
-           var record={ 
-             id:Ext.getCmp('scanningGrid').getSelectionModel().getSelected().data["id"],
-           };
+           var id=Ext.getCmp('scanningGrid').getSelectionModel().getSelected().data["shoes_id"];
             Ext.Ajax.request({ 
-              JsonData:{ record: record },
+              jsonData:{ choses_id: id },
                  url:'/guests/change_board_kind.json',
                  mehtod:'post',
                  //jsonData:{ record:record },
@@ -100,48 +98,60 @@
            },
 
    tree:function(){ 
-     var loader=new Ext.tree.TreeLoader({
-       dataUrl:'/guests/load_tree.json'
-     });
-
-       var root = new Ext.tree.AsyncTreeNode({
+       var tree = new Ext.tree.TreePanel({ 
+         width:140,
+         region:'west',
+         root:orderroot,
+       //  root: new Ext.tree.TreeNode({ text:'sss' }),
+         autoScroll:true,
+       });
+    
+        var orderroot = new Ext.tree.TreeNode({
          text:'全部鞋',
          id:'0',
-         draggable:false,
-       //  iconCls:"nodeicon",
          });
-     
-     var scanningtree= new Ext.tree.TreePanel({ 
-       // el:"tree1",
-        split:true,
-        width:140,
-        region:'west',
-        loader:loader,
-        root:root,
-        rootVisible:true , 
-        autoScroll:true,    
-        enableDD:false, 
-        containerScroll: true 
-     });
 
-     scanningtree.on('click',function(node){ 
-       if(node.leaf){
-      var year=node.parentNode.parentNode.text;
-      var months=node.parentNode.text.split("");
-      var month=months[0]
-       	store.proxy = new Ext.data.HttpProxy({
-        url:'/guests/get_data.json',
-       method:'post',
-       jsonData:{ 
-        selectYear:year,
-        selectMonth:month,
-        selectType:node.text
-       }
-      }),
-       store.load()
-   }
- })
-    
- return scanningtree
-     }
+       var time = new Date();
+       var nowyear = time.getFullYear();
+       var nowmonth = time.getMonth();
+       for(var i=nowyear; i > nowyear-3; i--){ 
+         var year = new Ext.tree.TreeNode({ text: i });
+         orderroot.appendChild(year);
+         if(i==nowyear)
+          { var a = nowmonth +1 }
+         else
+          { a = 12 }
+         for(var b=a; b > 0; b--){  
+         var month = new Ext.tree.AsyncTreeNode({ 
+           text: b +'月',
+           id:i +'_' +b,
+           children:[
+         { text:"高跟鞋",leaf:true},
+         { text:"平底鞋",leaf:true },
+         { text:"靴子",leaf:true }
+         ]
+         });
+         year.appendChild(month);
+         }
+        };
+         tree.setRootNode(orderroot);
+         tree.on('click',function(node){ 
+           if(node.leaf){ 
+           var years = node.parentNode.parentNode.text.toString();
+           var months =node.parentNode.id.split("_")[1];
+           var types= node.text;
+             store.proxy = new Ext.data.HttpProxy({ 
+               url:'/guests/get_data.json',
+               method:'post',
+               jsonData:{ 
+                selectYear:years,
+                selectMonth:months,
+                selectType:types,
+               }
+             }),
+             store.reload()
+               }
+             })
+         return tree 
+    }
 };

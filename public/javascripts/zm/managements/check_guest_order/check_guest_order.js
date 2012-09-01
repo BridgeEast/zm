@@ -27,11 +27,10 @@ Zm.managements.check_guest_order= {
         ]);
 
         var store = new Ext.data.JsonStore({ 
-            url: '/managements/get_guest_order.json',
+            url: '/managements/guest_order.json',
             fields: ['order_id','custom_num', 'custom_contrast','quality','total_price','shipment','payment','lading_bill','production_date','remark'],
             totalProperty: "totalProperty",
-            root: 'check_guest_order',
-            autoLoad: true
+            root: 'roots',
         });
         store.load({ params: { start: 0, limit: 30 } });
 
@@ -81,6 +80,7 @@ Zm.managements.check_guest_order= {
         var root=new Ext.tree.AsyncTreeNode({   
             id: 'cgo_root',
             text: '全部订单',
+            expandable: true,
             children: []
         });  
               
@@ -92,11 +92,11 @@ Zm.managements.check_guest_order= {
         		var myDate = new Date();
         		var month_nodes = [];
         				if(node.id == "cgo_root"){
-           			    for(i = 2010; i < myDate.getFullYear()+1; i++ ){
+           			    for(i = myDate.getFullYear(); i > 2009; i--){
            		          chen_year_nodes[i] = new Ext.tree.TreeNode({ text: i, id: "nodes" + i });
            	     	  		root.appendChild(chen_year_nodes[i]);
                         if(i == myDate.getFullYear()){
-                            for(j = 1; j < myDate.getMonth() + 2; j++){
+                            for(j = myDate.getMonth() + 1; j > 0; j--){
                                 if(j > 9){
                                     month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "nodes" + i + j });
                                     chen_year_nodes[i].appendChild(month_nodes[j]);
@@ -106,7 +106,7 @@ Zm.managements.check_guest_order= {
                                 }
                             }
                         }else{
-           			            for(j = 1; j < 13; j++){
+           			            for(j = 12; j >= 1; j--){
                                 if(j > 9){
            		 		        		      month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "nodes" + i + j });
            		 		                  chen_year_nodes[i].appendChild(month_nodes[j]);
@@ -118,15 +118,12 @@ Zm.managements.check_guest_order= {
                         }
         			      }
                 }
-             chen_node3.remove();
          });
 
          cgo_tree.on("collapsenode", function(node){  
              if(node.id=="cgo_root"){
                  var myDate = new Date();
                  for(i = 2010; i <= myDate.getFullYear(); i++){ chen_year_nodes[i].remove() };
-                 chen_node3 = new Ext.tree.TreeNode({text: "2010", id: "Linshi2010"});
-                 root.appendChild(chen_node3);
              }
                  store.removeAll();
          });

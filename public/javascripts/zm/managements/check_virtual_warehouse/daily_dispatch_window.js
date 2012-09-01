@@ -15,7 +15,7 @@ Ext.onReady(function(){
         url: "/managements/get_data.json",
         fields: ["shoes_id", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
         totalProperty: "totalProperty",
-        root: "daily_dispatch"
+        root: "roots"
     });
     store.load({ params: { start: 0, limit: 2 } });
 
@@ -79,7 +79,7 @@ Ext.onReady(function(){
                 store.reload();
             }
         },{
-            text: "关闭", handler: function(){ dailySheetWindow.hide(); }
+            text: "重置", handler: function(){ dailySheetWindow.hide(); }
         }]
     });
 });

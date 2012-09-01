@@ -243,5 +243,20 @@ end
   end
 
 
+  #-------------------aji   查看详情但返回一串id－－－－－－－－－－－－－
+  def self.get_details_ids_json(the_shoe_id)
+     shoes = self.where( :id => the_shoe_id ).first #取出id为the_shoe_id的鞋的对象
+    shoes.details_of_shoes.collect! do |record|
+      #对同一只多个详情进行筛选组成json
+      { 
+        :region => record.region_id,
+        :material => record.material_id,
+        :color => record.color_id,
+        :procession => record.procession_id,
+        :remark => record.region.remark,
+      }
+    end
+
+  end
 
 end
