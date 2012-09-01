@@ -13,13 +13,32 @@ class GuestsController < ApplicationController
       if wish_list == [] then
         data = ""
       else
-        data = GeneralShoe.wish_list_data( wish_list )
-        
+        data = GeneralShoe.wish_list_data(wish_list)
       end
        render :json => { :wish_list_data => data }
     end
 
+    def destroy_choice
+      #debugger
+      GeneralShoe.delete(params[:id])
+      render :json => { }
+    end
 
+    def add_to_developing_board
+
+      GeneralShoe.find(params[:id]).each do |record|
+        #if(record.play_board.board_kind == "确认板")
+          #{ Ext.Msg.alert('警告' ，'123')}
+        #else
+          #{ record.play_board.board_kind = "确认板" }
+        #end
+        record.play_board.board_kind = "确认板"
+      end
+      render :json => { }
+    end
+
+    
+#find(wish_list).order("production_date  DESC").
   #*********************************************************************
 
   

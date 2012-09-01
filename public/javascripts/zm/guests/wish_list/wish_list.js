@@ -1,6 +1,7 @@
 Zm.guests.wish_list = {
 	init: function() {
-        this.select_id;
+        this.choice_id = [];
+        this.select_id ;
         this.photo_one;
         this.photo_two;
 		Zm.pages.ViewPort = {
@@ -77,13 +78,15 @@ Zm.guests.wish_list = {
 		var store = new Ext.data.JsonStore({
 			url: '/guests/wish_list_data.json',
 			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'sure_board', 'done_board', 'production_date', 'communication' ,'remark'],
+            //fields: 'id photo_one'.split(" ") 
 			root: 'wish_list_data',
-			baseParams: { id: 'null' }
+			baseParams: { id: 'null' } //初始化
 		});
 
+          
 		var tbar = new Ext.Toolbar({
 			defaults: {
-				scope: this
+				scope: this //作用域是这个方法的对象，也就是wish_list
 			},
 			items: [{
 				text: '发送Excel添加到开发板',
@@ -93,7 +96,7 @@ Zm.guests.wish_list = {
 			},
 			'-', {
 				text: '添加到确认板',
-				handler: function() {}
+				handler: function() {Zm.guests.add_to_developing_board.init()}
 			},
 			'-', {
 				text: '添加到预购单',
@@ -101,7 +104,12 @@ Zm.guests.wish_list = {
 			},
 			'-', {
 				text: '删除所选',
-				handler: function() {}
+				handler: function() { 
+                    var selectedData = Ext.getCmp("wlGrid").getSelectionModel().getSelections(); 
+                    Ext.each(selectedData,function(data){ 
+                        this.choice_id.push(data.id)
+                    },this);
+                    Zm.guests.destroy_choice.init() }
 			},
 			'-', {
 				text: '添加到订单',
@@ -117,8 +125,9 @@ Zm.guests.wish_list = {
 			viewConfig: {
 				forceFit: true
 			},
-			tbar: tbar
+			tbar: tbar,
 		});
+
 
 		var contextmenu = new Ext.menu.Menu({
 			items: [{
@@ -149,7 +158,6 @@ Zm.guests.wish_list = {
 	},
 
 	create_wl_tree: function() {
-
 		var wlTree = new Ext.tree.TreePanel({
 			autoScroll: true,
 			region: 'west',
@@ -203,7 +211,6 @@ Zm.guests.wish_list = {
           store.reload();
 		})
 		return wlTree
-
 	}
 
 }

@@ -1,5 +1,6 @@
 Zm.managements.win = {
 	init: function() {
+        this.id = Zm.managements.check_store_of_shoes.select_id || "null"
 		var form = new Ext.form.FormPanel({
 			region: 'north',
 			layout: 'fit',
@@ -44,7 +45,7 @@ Zm.managements.win = {
 			fields: ['region', 'material', 'color', 'procession'],
 			method: 'post',
 			baseParams: {
-				id: Zm.managements.check_store_of_shoes.select_id
+				id:this.id 
 			},
            /* totalProperty: 'totalProperty' ,*/
 			root: 'shoes',

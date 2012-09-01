@@ -39,12 +39,12 @@ Zm.guests.win = {
 			dataIndex: 'procession'
 		}]);
 
-		var store = new Ext.data.JsonStore({
+		 store = new Ext.data.JsonStore({
 			url: '/managements/get_details.json',
 			fields: ['region', 'material', 'color', 'procession'],
 			method: 'post',
 			baseParams: {
-				id: Zm.guests.wish_list.select_id
+              id: 'null'
 			},
            /* totalProperty: 'totalProperty' ,*/
 			root: 'shoes',
@@ -69,6 +69,9 @@ Zm.guests.win = {
 				emptyMsg: "没有记录"
 			})
 		});
+
+        store.setBaseParam("id", Zm.guests.wish_list.select_id);
+        store.reload();
 
 		check_detail = new Ext.Window({
 			layout: 'border',

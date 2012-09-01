@@ -19,10 +19,12 @@ class ManagementsController < ApplicationController
     end
     
     def get_details
-
-       details = GeneralShoe.get_shoes_details( params[:id] )
-       render :json => { :shoes => details }
-
+       if params[:id] != "null"
+         details = GeneralShoe.get_shoes_details( params[:id] )
+         render :json => { :shoes => details }
+       else 
+         render :json => {}
+       end
     end
 
 #.limit(params[:limit].to_i).offset(params[:start].to_i)

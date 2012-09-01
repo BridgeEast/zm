@@ -11,7 +11,7 @@ class GeneralShoe < ActiveRecord::Base
   belongs_to :factory_order
 
    def self.get_shoes_details( id ) 
-    shoes = self.where( :id => id ).first   #where返回1个数组
+    shoes = self.where(:id => id).first   #where返回1个数组
     shoes.details_of_shoes.collect! do |item|
      { 
         :region => item.region.region,
@@ -22,7 +22,7 @@ class GeneralShoe < ActiveRecord::Base
     end
   end
 
-   def self.wish_list_data( cwl )
+   def self.wish_list_data(cwl)
     cwl.collect! do|item|
       { 
          :id => item.id,
@@ -45,7 +45,7 @@ class GeneralShoe < ActiveRecord::Base
   ########### 获取心愿单所需记录 ##########
   def self.get_cwl_record( param_node )
     rec = Array.new
-    self.all.each do |record|
+    self.order("production_date DESC").each do |record|
       date = record.production_date
       cwl_date = date.to_s.split("-") 
       # 建立"XXXX-X-开发板"格式的id来与param进行比较
