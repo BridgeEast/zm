@@ -59,6 +59,31 @@ class ServicesController < ApplicationController
 69
 
   end
+  #-------------------------- get the EpapbTree's treenode json
+  def get_tree_node
+    treenodes=[]
+    yearnode=[]
+    monthnode=[]
+    excelnode=[]
+    i=0
+    #get all of table
+    
+    ExcelReceive.all.each do |tem|
+      count=0
+     # for year in yearnode
+       # if tem.receiving_date.year != year
+          yearnode << { :text => tem.receiving_date.year, :leaf=>true}
+      #  end
+     # end
+
+     
+    end
+
+
+    render :json=>yearnode
+
+
+  end
 
 
 

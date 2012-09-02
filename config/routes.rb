@@ -132,22 +132,26 @@ Zm::Application.routes.draw do
 
    end
  end
-#----------------------------------------aji
+#----------------------------------------aji/jb
  resources :services do
    collection do
+     #-----------------------------------aji
      get "excelProcessingAndPlayBoard"
      get "get_excel_shoes"
-     get "scanningGuestWishLists"
      post "delete_shoes_and_detail_of_shoes"
      get "get_details_of_shoes"
-     get "guest_order_management"
-     get "get_orders"
-     get "get_order_data"
-     get "get_order_shoes_detail"
      post "create_in_generalanddetail"
      post "updata_in_generalanddetail"
      get "get_details_of_shoes_all_id"
      post "updata_in_play_board"
+     get "get_tree_node"
+     get "scanningGuestWishLists"
+
+     #--------------------------------------jb
+     get "guest_order_management"
+     get "get_orders"
+     get "get_order_data"
+     get "get_order_shoes_detail"
      post "create_in_generalanddetail"
      post "updata_in_generalanddetail"
      get "get_details_of_shoes_all_id"
