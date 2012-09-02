@@ -121,37 +121,15 @@ Zm.guests.add_to_order = {
 			}))
 		}]);
 
-		var make_order_form_data = [['MH-30', '100', '42', '200', '100'], ['B-24', '100', '39', '100', '50'], ['F-42', '100', '38', '500', '480'], ['16MM宽', '100', '42', '520', '480'], ['7MM', '100', '41', '120', '120'], ['43/1*3', '100', '40', '250', '250']];
-
-		var make_order_form_store = new Ext.data.Store({
-			proxy: new Ext.data.MemoryProxy(make_order_form_data),
-			reader: new Ext.data.ArrayReader({},
-			[{
-				name: 'sample_form_id'
-			},
-			{
-				name: 'thirty_eight'
-			},
-			{
-				name: 'thrity_nine'
-			},
-			{
-				name: 'forty'
-			},
-			{
-				name: 'forty_one'
-			},
-			{
-				name: 'forty_two'
-			},
-			{
-				name: 'forty_three'
-			},
-			{
-				name: 'forty_four'
-			}])
+		var make_order_form_store = new Ext.data.JsonStore({
+          url: '/guests/add_to_order.json',
+            fields: ['sample_form_id'],
+            method: 'post',
+            baseParams: { 
+            },
+            root: '',
+            autoLoad: true
 		});
-		make_order_form_store.load();
 
 		var make_order_form_grid = new Ext.grid.EditorGridPanel({
 			height: 253,

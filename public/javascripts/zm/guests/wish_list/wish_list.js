@@ -97,10 +97,11 @@ Zm.guests.wish_list = {
 			'-', {
 				text: '添加到确认板',
 				handler: function() {
-					var change_board_kind = Ext.getCmp("wlGrid").getSelectionModel().getSelections();
 					if (Ext.getCmp('wlTree').getSelectionModel().getSelectedNode().id.split("-")[2] == "确认板") {
-						Ext.Msg.alert("警告" , "这些已经是确认板啦！")
+						Ext.Msg.alert("警告", "这些已经是确认板啦！")
 					} else {
+						this.change_id = [];
+						var change_board_kind = Ext.getCmp("wlGrid").getSelectionModel().getSelections();
 						for (var records = 0, len = change_board_kind.length; records < len; records++) {
 							wlGrid.store.remove(change_board_kind[records]);
 						}
@@ -108,7 +109,7 @@ Zm.guests.wish_list = {
 							this.change_id.push(data.id)
 						},
 						this);
-						Zm.guests.add_to_developing_board.init()
+						Zm.guests.add_to_determined_board.init()
 					}
 				}
 			},

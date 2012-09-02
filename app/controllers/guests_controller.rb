@@ -6,9 +6,6 @@ class GuestsController < ApplicationController
     def wish_list
     end
 
-    def order_management
-    end
-
     def wish_list_data
       wish_list = GeneralShoe.get_cwl_record( params[:id] )
       if wish_list == [] then
@@ -25,17 +22,25 @@ class GuestsController < ApplicationController
       render :json => {}
     end
 
-    def add_to_developing_board
+    def add_to_determined_board
       GeneralShoe.find(params[:id]).each do |record|
         record.play_board.update_attributes(:board_kind => "确认板")
       end
       render :json => {}
     end
 
+    def add_to_order
+
+    end
+    
   #*********************************************************************
 
 
   ################################浏览鞋库##############################   
+
+  def order_management
+  end
+
   def scanning_store_of_shoes
   end
 
