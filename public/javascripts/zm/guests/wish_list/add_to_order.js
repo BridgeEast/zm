@@ -1,6 +1,25 @@
 Zm.guests.add_to_order = {
-	init: function() {
-		var make_order_form = new Ext.form.FormPanel({
+	init: function(config) {
+		return new Ext.Window({
+			layout: 'border',
+			closeAction: 'hide',
+			height: 450,
+			width: 600,
+			constrainHeader: true,
+			resizable: true,
+			items: [this.make_order_form(), this.make_order_grid(config)],
+			buttons: [{
+				text: '确定'
+			},
+			{
+				text: '重置'
+			}]
+		})
+	},
+
+	make_order_form: function() {
+		return new Ext.form.FormPanel({
+			id: 'makeOrderForm',
 			title: '订单制作',
 			region: 'north',
 			buttonAlign: 'center',
@@ -55,18 +74,16 @@ Zm.guests.add_to_order = {
 				}]
 			}]
 		});
+	},
 
-		var make_order_form_cm = new Ext.grid.ColumnModel([{
+	make_order_grid: function(config) {
+		var cm = new Ext.grid.ColumnModel([{
 			header: '样品号',
-			dataIndex: 'sample_form_id',
-			editor: new Ext.grid.GridEditor(
-			new Ext.form.TextField({
-				allowBlank: false
-			}))
+			dataIndex: 'sample_id'
 		},
 		{
 			header: '38',
-			dataIndex: 'thirty_eight',
+			dataIndex: '38_size',
 			editor: new Ext.grid.GridEditor(
 			new Ext.form.TextField({
 				allowBlank: false
@@ -74,7 +91,7 @@ Zm.guests.add_to_order = {
 		},
 		{
 			header: '39',
-			dataIndex: 'thirty_nine',
+			dataIndex: '39_size',
 			editor: new Ext.grid.GridEditor(
 			new Ext.form.TextField({
 				allowBlank: false
@@ -82,7 +99,7 @@ Zm.guests.add_to_order = {
 		},
 		{
 			header: '40',
-			dataIndex: 'forty',
+			dataIndex: '40_size',
 			editor: new Ext.grid.GridEditor(
 			new Ext.form.TextField({
 				allowBlank: false
@@ -90,7 +107,7 @@ Zm.guests.add_to_order = {
 		},
 		{
 			header: '41',
-			dataIndex: 'forty_one',
+			dataIndex: '41_size',
 			editor: new Ext.grid.GridEditor(
 			new Ext.form.TextField({
 				allowBlank: false
@@ -98,7 +115,7 @@ Zm.guests.add_to_order = {
 		},
 		{
 			header: '42',
-			dataIndex: 'forty_two',
+			dataIndex: '42_size',
 			editor: new Ext.grid.GridEditor(
 			new Ext.form.TextField({
 				allowBlank: false
@@ -106,7 +123,7 @@ Zm.guests.add_to_order = {
 		},
 		{
 			header: '43',
-			dataIndex: 'forty_three',
+			dataIndex: '43_size',
 			editor: new Ext.grid.GridEditor(
 			new Ext.form.TextField({
 				allowBlank: false
@@ -114,58 +131,39 @@ Zm.guests.add_to_order = {
 		},
 		{
 			header: '44',
-			dataIndex: 'forty_four',
+			dataIndex: '44_size',
 			editor: new Ext.grid.GridEditor(
 			new Ext.form.TextField({
 				allowBlank: false
 			}))
 		}]);
-
-		var make_order_form_store = new Ext.data.JsonStore({
-          url: '/guests/add_to_order.json',
-            fields: ['sample_form_id'],
-            method: 'post',
-            baseParams: { 
-            },
-            root: '',
-            autoLoad: true
+		//console.log(ss = config);
+		var store = new Ext.data.Store({
+			proxy: new Ext.data.MemoryProxy(config.data),
+			reader: new Ext.data.ArrayReader({},
+			[{
+				name: 'sample_id'
+			}])
 		});
+		store.load();
 
-		var make_order_form_grid = new Ext.grid.EditorGridPanel({
+		return new Ext.grid.EditorGridPanel({
+			id: 'makeOrderGrid',
 			height: 253,
 			region: 'center',
 			viewConfig: {
 				forceFit: true
 			},
-			store: make_order_form_store,
-			cm: make_order_form_cm,
+			store: store,
+			cm: cm,
 			bbar: new Ext.PagingToolbar({
 				pageSize: 10,
-				store: make_order_form_store,
+				store: store,
 				displayInfo: true,
 				displayMsg: '显示第 {0} 条到 {1} 条记录，一共 {2} 条',
 				emptyMsg: "没有记录"
 			})
 		});
-
-		make_order_form_win = new Ext.Window({
-			layout: 'border',
-			closeAction: 'hide',
-			height: 450,
-			width: 600,
-			constrainHeader: true,
-			resizable: true,
-			items: [make_order_form, make_order_form_grid],
-			buttons: [{
-				text: '确定'
-			},
-			{
-				text: '重置'
-			}]
-		});
-
-		return make_order_form_win
-
 	}
 }
 
