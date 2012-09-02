@@ -1,7 +1,5 @@
 Zm.guests.wish_list = {
 	init: function() {
-		this.change_id = [];
-		this.choice_id = [];
 		this.select_id;
 		this.photo_one;
 		this.photo_two;
@@ -85,9 +83,6 @@ Zm.guests.wish_list = {
 		});
 
 		var tbar = new Ext.Toolbar({
-			defaults: {
-				scope: this //作用域是调用这个方法的对象，也就是wish_list
-			},
 			items: [{
 				text: '发送Excel添加到开发板',
 				handler: function() {
@@ -97,20 +92,7 @@ Zm.guests.wish_list = {
 			'-', {
 				text: '添加到确认板',
 				handler: function() {
-					if (Ext.getCmp('wlTree').getSelectionModel().getSelectedNode().id.split("-")[2] == "确认板") {
-						Ext.Msg.alert("警告", "这些已经是确认板啦！")
-					} else {
-						this.change_id = [];
-						var change_board_kind = Ext.getCmp("wlGrid").getSelectionModel().getSelections();
-						for (var records = 0, len = change_board_kind.length; records < len; records++) {
-							wlGrid.store.remove(change_board_kind[records]);
-						}
-						Ext.each(change_board_kind, function(data) {
-							this.change_id.push(data.id)
-						},
-						this);
-						Zm.guests.add_to_determined_board.init()
-					}
+					Zm.guests.judge_add_to_determined_board.init()
 				}
 			},
 			'-', {
@@ -122,18 +104,13 @@ Zm.guests.wish_list = {
 			'-', {
 				text: '删除所选',
 				handler: function() {
-					var selectedData = Ext.getCmp("wlGrid").getSelectionModel().getSelections();
-					Ext.each(selectedData, function(data) {
-						this.choice_id.push(data.id)
-					},
-					this);
-					Zm.guests.destroy_choice.init()
+					Zm.guests.judge_destroy_choice.init()
 				}
 			},
 			'-', {
 				text: '添加到订单',
 				handler: function() {
-					Zm.guests.add_to_order.init().show()
+					Zm.guests.judge_add_to_order.init()
 				}
 			}]
 		});

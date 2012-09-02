@@ -201,11 +201,11 @@ namespace :data do
    PlayBoard.delete_all
    PlayBoard.create([
      {:id => 1, :general_shoe_id => "1",:custom_num => "客户1",:server_num => "客服1",:sure_board => "2012-6-8",:done_board => "2012-6-13",:communication => "阿基是傻B",:board_kind => "确认板"},
-     {:id => 2, :general_shoe_id => "2",:custom_num => "客户1",:server_num => "客服1",:sure_board => "2012-6-16",:done_board => "2012-6-20",:communication => "阿基是傻B",:board_kind => "确认板"},
+     {:id => 2, :general_shoe_id => "2",:custom_num => "客户1",:server_num => "客服1",:sure_board => "2012-6-16",:done_board => "2012-6-20",:communication => "阿基是傻B",:board_kind => "开发板"},
      {:id => 3, :general_shoe_id => "3",:custom_num => "客户2",:server_num => "客服1",:sure_board => "2012-7-2",:done_board => "2012-7-5",:communication => "阿基是傻B",:board_kind => "确认板"},
      {:id => 4, :general_shoe_id => "4",:custom_num => "客户2",:server_num => "客服1",:sure_board => "2012-7-25",:done_board => "2012-7-29",:communication => "阿基是傻B",:board_kind => "开发板"},
      {:id => 5, :general_shoe_id => "5",:custom_num => "客户2",:server_num => "客服2",:sure_board => "2012-8-8",:done_board => "2012-8-9",:communication => "阿基是傻B",:board_kind => "确认板"},
-     {:id => 6, :general_shoe_id => "6",:custom_num => "客户1",:server_num => "客服1",:sure_board => "2012-6-8",:done_board => "2012-6-13",:communication => "阿基是傻B",:board_kind => "确认板"},
+     {:id => 6, :general_shoe_id => "6",:custom_num => "客户1",:server_num => "客服1",:sure_board => "2012-6-8",:done_board => "2012-6-13",:communication => "阿基是傻B",:board_kind => "开发板"},
      {:id => 7, :general_shoe_id => "7",:custom_num => "客户1",:server_num => "客服1",:sure_board => "2012-6-16",:done_board => "2012-6-20",:communication => "阿基是傻B",:board_kind => "开发板"},
      {:id => 8, :general_shoe_id => "8",:custom_num => "客户2",:server_num => "客服1",:sure_board => "2012-7-2",:done_board => "2012-7-5",:communication => "阿基是傻B",:board_kind => "开发板"},
      {:id => 9, :general_shoe_id => "9",:custom_num => "客户2",:server_num => "客服1",:sure_board => "2012-7-25",:done_board => "2012-7-29",:communication => "阿基是傻B",:board_kind => "开发板"},
