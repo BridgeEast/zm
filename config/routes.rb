@@ -66,18 +66,17 @@ Zm::Application.routes.draw do
    collection do
 
    ## guest & virtual
+     get "csos_paging"
      get "check_guest_order"
-     get "guest_order"
-     get "get_guest_details"
+     get "get_check_guest_order"
+     get "get_selected_data"
      get "get_virtuals"
      get "get_virtual_daily_dispatch"
      get "get_virtual_mouth_sheet"
      get "get_virtual_mouth_dispatch"
      get "get_virtual_daily_sheet"
      get "get_order_progress"
-     get "get_guest_order"
      get "check_virtual_warehouse"
-     get "get_tree_node"
    ################
 
    #**********查看鞋库************
@@ -85,6 +84,7 @@ Zm::Application.routes.draw do
      get "get_data"
      get "get_check_store_of_shoes"
      get "get_details"
+     get "csos_paging"
    #*******************************
 
      get "get_check_shoes"
