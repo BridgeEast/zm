@@ -20,10 +20,12 @@ Zm::Application.routes.draw do
      get "get_tree_node"
    ################
 
+   #**********查看鞋库************
      get "check_store_of_shoes"
      get "get_data"
      get "get_check_store_of_shoes"
      get "get_details"
+   #*******************************
 
      get "get_check_shoes"
      get "get_details_of_shoes"
@@ -55,6 +57,7 @@ Zm::Application.routes.draw do
      get "wish_list_data"
      post "destroy_choice"
      post "add_to_determined_board"
+     post "add_to_order"
      #*******************************
 
    end
