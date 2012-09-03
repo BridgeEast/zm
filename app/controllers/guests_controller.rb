@@ -32,7 +32,8 @@ class GuestsController < ApplicationController
   end
 
     def add_to_order
-
+      Order.create!(params[:record])
+      render :json => {}
     end
     
   #*********************************************************************

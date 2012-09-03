@@ -1,6 +1,7 @@
 Zm.guests.add_to_order = {
 	init: function(config) {
 		return new Ext.Window({
+			id: 'win',
 			layout: 'border',
 			closeAction: 'hide',
 			height: 450,
@@ -9,10 +10,69 @@ Zm.guests.add_to_order = {
 			resizable: true,
 			items: [this.make_order_form(), this.make_order_grid(config)],
 			buttons: [{
-				text: '确定'
+				text: '确定',
+				handler: function() {
+					var year = new Date().getFullYear();
+					var mon = new Date().getMonth() + 1;
+					if (mon < 10) {
+						var month = '0' + mon
+					}
+					else {
+						month = mon
+					}
+					var date = new Date().getDate();
+					if (date < 10) {
+						var day = '0' + date
+					}
+					else {
+						day = date
+					}
+					var record = {
+						order_id: '11',
+						payment: Ext.getCmp('makeOrderForm').getForm().findField('type').getGroupValue(),
+						production_date: year + '-' + month + '-' + day,
+						shipment: false,
+						lading_bill: false,
+						state: '待定订单'
+					};
+					Ext.Ajax.request({
+						url: '/guests/add_to_order.json',
+						method: 'post',
+						jsonData: {
+							record: record
+						},
+						success: function() {
+							Ext.getCmp('win').close();
+							Ext.Msg.alert('添加', '添加成功！')
+						},
+						failure: function() {
+							Ext.Msg.alert('添加', '添加失败！')
+						}
+					})
+				}
 			},
 			{
 				text: '重置'
+			},
+			{
+				text: '取消',
+				handler: function() {
+					Ext.getCmp('win').close();
+					//取消复选框的勾
+					Ext.grid.GridPanel.prototype.unSelectAll = function() {
+						var view = this.getView();
+						var sm = this.getSelectionModel();
+						if (sm) {
+							sm.clearSelections();
+							var hd = Ext.fly(view.innerHd);
+							var c = hd.query('.x-grid3-hd-checker-on');
+							if (c && c.length > 0) {
+								Ext.fly(c[0]).removeClass('x-grid3-hd-checker-on')
+							}
+						}
+					};
+					Ext.getCmp('wlGrid').unSelectAll()
+				}
 			}]
 		})
 	},
@@ -32,19 +92,19 @@ Zm.guests.add_to_order = {
 					items: [{
 						columnWidth: .2,
 						xtype: 'fieldset',
+						title: '付款方式',
 						defaultType: 'radio',
 						hideLabels: true,
-						layout: 'form',
 						items: [{
 							boxLabel: '付全款',
-							name: 'rad',
-							value: '1',
+							name: 'type',
+							inputValue: '付全款',
 							checked: true,
 						},
 						{
 							boxLabel: '先付30%',
-							name: 'rad',
-							value: '2',
+							name: 'type',
+							inputValue: '先付30%',
 						}]
 					},
 					{
