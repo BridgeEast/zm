@@ -28,13 +28,12 @@ Zm.managements.check_guest_order= {
         ]);
 
         store = new Ext.data.JsonStore({ 
-            url: '/managements/guest_order.json',
+            url: '/managements/get_check_guest_order.json',
             fields: ['order_id','custom_num', 'custom_contrast','quality','total_price','shipment','payment','lading_bill','production_date','remark'],
             totalProperty: "totalProperty",
             root: 'check_guest_order',
             autoLoad: false
         });
-        store.load({ params: { start: 0, limit: 1 } });
 
         var cgoGrid = new Ext.grid.GridPanel({ 
             id: 'cgoGrid',
@@ -43,7 +42,7 @@ Zm.managements.check_guest_order= {
             store: store,
             viewConfig: { forceFit: true },
             bbar: new Ext.PagingToolbar({
-                pageSize: 1,
+                pageSize: 30,
                 store: store,
                 displayInfo: true,
                 displayMsg: "显示第{0}条到{1}条记录，一共{2}条",
@@ -133,7 +132,7 @@ Zm.managements.check_guest_order= {
             }
             else { 
                 year = null;
-                month = null
+                month = nullguest_order
             };
 
             store.proxy = new Ext.data.HttpProxy({
@@ -141,7 +140,7 @@ Zm.managements.check_guest_order= {
                 method: 'post',
                 jsonData: { selectDate: date }      
             }),
-            store.load({ params: { start: 0, limit: 1 } });
+            store.load({ params: { start: 0, limit: 30 } });
          })
 
          return treeCgo
