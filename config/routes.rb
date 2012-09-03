@@ -45,7 +45,7 @@ Zm::Application.routes.draw do
      post "create_procession"
      post "delete_procession"
      post "update_procession"
-      get "store_of_shoes"
+     get "store_of_shoes"
      get "get_general_shoes"
      post "update_shoes"
      post "delete_shoes"

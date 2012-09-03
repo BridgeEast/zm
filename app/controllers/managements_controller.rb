@@ -60,7 +60,7 @@ class ManagementsController < ApplicationController
       for i in n..max - 1
         root << array[i]
       end
-      all_data = { :totalProperty => array.length, :roots => root }
+      all_data = { :totalProperty => array.length, :check_guest_order => root }
       render :json => all_data
     end
 

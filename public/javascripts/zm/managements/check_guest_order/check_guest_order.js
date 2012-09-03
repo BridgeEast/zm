@@ -34,7 +34,7 @@ Zm.managements.check_guest_order= {
             root: 'check_guest_order',
             autoLoad: false
         });
-        store.load({ params: { start: 0, limit: 30 } });
+        store.load({ params: { start: 0, limit: 1 } });
 
         var cgoGrid = new Ext.grid.GridPanel({ 
             id: 'cgoGrid',
@@ -43,7 +43,7 @@ Zm.managements.check_guest_order= {
             store: store,
             viewConfig: { forceFit: true },
             bbar: new Ext.PagingToolbar({
-                pageSize: 30,
+                pageSize: 1,
                 store: store,
                 displayInfo: true,
                 displayMsg: "显示第{0}条到{1}条记录，一共{2}条",
@@ -141,7 +141,7 @@ Zm.managements.check_guest_order= {
                 method: 'post',
                 jsonData: { selectDate: date }      
             }),
-            store.load({ params: { start: 0, limit: 30 } });
+            store.load({ params: { start: 0, limit: 1 } });
          })
 
          return treeCgo
