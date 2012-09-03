@@ -56,7 +56,7 @@ class ServicesController < ApplicationController
     @tem.update_attributes(:sure_board => params[:record][:sure_board])
     @tem.update_attributes(:done_board => params[:record][:done_board])
     render :json => {}
-69
+ 
 
   end
   #-------------------------- get the EpapbTree's treenode json-- 请不要改我的，因为我都已经看不懂我的代码了。。
@@ -127,9 +127,70 @@ class ServicesController < ApplicationController
     end
   
 
+
+    render :json=>yearnode
+end
+ def factory_order
+    end
+
+    def get_factory_order
+      #respond_to do |format|
+      #format.json{ render :json => { :factory_order => FactoryOrder.all } }
+     # end
+      factory_orders = FactoryOrder.get_cfo_record( params[:id] )
+      if factory_orders == [] then
+        # 如果没有找到对应的记录
+        cfo_grid = ""
+      else
+        cfo_grid = FactoryOrder.create_cfo_json( factory_orders )
+      end
+      #回应请求
+      respond_to do |format|
+        format.json{ render :json => { :factory_order => cfo_grid } }
+      end
+    end
+
+    #def get_check_shoes
+  
+     # respond_to do |format|
+    #format.json{ render :json => { :check_shoes => GeneralShoe.all  } }
+     # end
+      #end
+ def get_check_shoes
+      index = params[:start]
+      pageSize = params[:limit]
+      i = index.to_i
+      check_shoes = Array.new
+      count = pageSize.to_i + index.to_i
+      # 按照第几页显示10条数据
+      for i in index.to_i...count
+        tmp = FactoryOrder.find( params[:id] ).general_shoes[ i ]
+        if tmp != nil then
+          check_shoes << tmp
+          i += 1
+        else
+          break
+        end
+      end
+      general_shoes = GeneralShoe.get_shoes_json( check_shoes ) 
+      general_shoes = { :totalProperty => 100, :cs => general_shoes }
+      respond_to do|format|
+        format.json{ render :json => general_shoes }
+      end
+      end
+
+ def mps
+    FactoryOrder.find(params[:record][:id]).update_attributes(:payment => params[:record][:payment])
+    render :json => {  }
+    end
+
+ #-----------------------------右键查看详情----------------
+  def get_details_of_shoes
+    details_shoes = GeneralShoe.get_details_json( params[:id] )
+    respond_to do|format|
+      format.json{ render :json => { :dos => details_shoes } }
+    end
   end
-
-
 
 
 

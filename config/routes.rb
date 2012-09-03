@@ -123,6 +123,8 @@ Zm::Application.routes.draw do
      get"get_data"
      #********订单管理***************
      get"order_management"
+
+     get "order_management"
    end
  end
 #----------------------------------------aji/jb
@@ -152,6 +154,10 @@ Zm::Application.routes.draw do
      post "create_in_generalanddetail"
      post "updata_in_generalanddetail"
      get "get_details_of_shoes_all_id"
+     get "factory_order"
+     get "get_factory_order"
+     get "get_check_shoes"
+     post "mps"
    end
  end
 
