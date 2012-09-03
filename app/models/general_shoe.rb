@@ -14,6 +14,10 @@ class GeneralShoe < ActiveRecord::Base
     shoes = self.where(:id => id).first   #where返回1个数组
     shoes.details_of_shoes.collect! do |item|
      { 
+        :region_id => item.region.id,
+        :material_id => item.material.id,
+        :color_id => item.color.id,
+        :procecession_id => item.procession.id,
         :region => item.region.region,
         :material => item.material.material,
         :color => item.color.color,

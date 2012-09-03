@@ -28,6 +28,8 @@ class GuestsController < ApplicationController
       end
       render :json => {}
     end
+    render :json => { }
+  end
 
     def add_to_order
 
@@ -144,9 +146,49 @@ class GuestsController < ApplicationController
   ########################################################################
   #####################订单管理###########################################
 
+  def order_management
+  end
   def get_check_orders
     render :json => { :check_orders => Order.all }
   end
-  def get_orders_data
+  def get_undetermined_orders_data
+    results = []
+    results = Order.where("production_date like ? and state like ? ", "%#{params[:selectDate]}%", "%#{'待定订单'}%")
+    render :json => { :check_orders => results }
   end
+  def get_proceeding_orders_data
+    results = []
+    results = Order.where("production_date like ? and state like ? ", "%#{params[:selectDate]}%", "%#{'进行中订单'}%")
+    render :json => { :check_orders => results }
+  end
+  def get_check_shoes
+    Order.find(params[:id]).first.general_shoe
+  end
+  def paging(array)
+    m = params[:limit].to_i
+    n = params[:start].to_i
+    root = []
+    max = m + n
+    if max > array.length
+      max = array.length
+    end
+    for i in n..max - 1
+      root << array[i]
+    end
+    all_data = { :totalProperty => array.length, :roots => root }
+    render :json => all_data
+  end
+  def guest_order
+    render :json => {}
+  end
+  def get_guest_details
+    a = Order.where( :order_id => params[:idd] ).first.id
+    paging(GeneralShoe.find(:all, :conditions => "order_id = '#{a}'"))
+  end
+  def get_order_progress
+    shoes = Order.where( :order_id => params[:orderid] ).first.general_shoes
+    paging(GeneralShoe.get_progress_num_and_size( shoes ))
+  end    
+
+
 end

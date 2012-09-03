@@ -1,5 +1,65 @@
 Zm::Application.routes.draw do
 
+  
+ resources :acts_as_menus do
+   collection do
+     get "home_menu"
+     get "f_menu_win" 
+     get "s_menu_win" 
+     get "t_menu_win" 
+     get "c_menu_win" 
+     post "f_menu_create"
+     post "s_menu_create"
+     post "t_menu_create"
+     post "c_menu_update"
+     post "update_f_menu"
+     post "update_s_menu"
+     post "update_t_menu"
+   end
+   member do
+     get "update_f_menu_win"
+     get "update_s_menu_win"
+     get "update_t_menu_win"
+   end
+ end
+
+ resources :data_bases do
+   collection do
+     get "region"
+     get "get_region"
+     post "create_region"
+     post "delete_region"
+     post "update_region"
+     get "material"
+     get "get_material"
+     post "create_material"
+     post "delete_material"
+     post "update_material"
+     get "color"
+     get "get_color"
+     post "create_color"
+     post "delete_color"
+     post "update_color"
+     get "procession"
+     get "get_procession"
+     post "create_procession"
+     post "delete_procession"
+     post "update_procession"
+      get "store_of_shoes"
+     get "get_general_shoes"
+     post "update_shoes"
+     post "delete_shoes"
+     post "create_shoes"
+     get "get_details_of_shoes"
+     post "create_details_of_shoes"
+     post "create_shoes_and_details_of_shoes"
+
+   end
+ end
+
+
+
+
 
 
  resources :managements do
@@ -56,10 +116,17 @@ Zm::Application.routes.draw do
      post "destroy_choice"
      post "add_to_determined_board"
      #*******************************
-
+     post"change_board_kind"
+     get"get_data"
+     #********订单管理***************
+     get"order_management"
    end
  end
 #----------------------------------------aji/jb
+
+
+  
+#----------------------------------------aji
  resources :services do
    collection do
      #-----------------------------------aji
