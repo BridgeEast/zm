@@ -137,7 +137,7 @@ Zm.services.factoryOrder ={
       },{ 
         text: '修改付款方式',
         handler: function(){ 
-                 this.checkWindow( this.modifyPayment() ).show();
+                 this.checkWindow2( this.modifyPayment() ).show();
                 //var obj = Ext.getCmp('createPanel1').getSelectModel().getSelected().data;
                 
                 }
@@ -162,14 +162,14 @@ Zm.services.factoryOrder ={
           { header: '鞋号', dataIndex: 'shoes_id' },
           { header: '鞋型', dataIndex: 'types_of_shoes' },
           { header: '适合人群', dataIndex: 'suitable_people' },
-          { header: '颜色', dataIndex: 'color' },
+          { header: '颜色', dataIndex: 'colors' },
           { header: '价格', dataIndex: 'price' },
           { header: '备注', dataIndex: 'remark' }
           ]);
 
       var store = new Ext.data.JsonStore({ 
            url: '/services/get_check_shoes.json',
-           fields: ['id','shoes_id','types_of_shoes','suitable_people','color','price','remark','photo_one','photo_two'],
+           fields: ['id','shoes_id','types_of_shoes','suitable_people','colors','price','remark','photo_one','photo_two'],
            totalProperty: 'totalProperty',
            baseParams: { id: 'null' },
            root: 'cs'
@@ -183,7 +183,7 @@ Zm.services.factoryOrder ={
           title: '查看鞋',
           cm: cm,
           store: store,
-          ViewConfig: { forceFit: true },
+          viewConfig: { forceFit: true },
           bbar: new Ext.PagingToolbar({ 
                pageSize: 10,
                store: store,
@@ -389,7 +389,17 @@ Zm.services.factoryOrder ={
                });
     },
   
-
-  //checkShoesNumber: function(){ Ext.Msg.alert('hello','helloword');}
+  checkWindow2: function(cs2){  
+              return new Ext.Window({ 
+                  id: 'checkWindow2',
+                  layout: 'fit',
+                  closeAction: 'close',
+                  constrain: true,
+                  constrainHeader: true,
+                  width: 259,
+                  height: 160,
+                  items: [cs2]
+              });
+  }
  
 }
