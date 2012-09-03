@@ -168,7 +168,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			labelAlign: 'right',
 			labelWidth: 60,
 			bodyStyle: 'padding: 10px 0 0 0',
-			width: 600,
+			//width: 600,
 			height: 80,
 			frame: true,
 
@@ -232,7 +232,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 		});
 		//----------AOMSGrid------------------------
 		//----------the combo in the editorGrid
-		var addGridEditorRegion = new Ext.grid.GridEditor(
+	var addGridEditorRegion = new Ext.grid.GridEditor(
 		new Ext.form.ComboBox({
 			id: 'addGridEditorRegion',
 			store: new Ext.data.JsonStore({
@@ -304,7 +304,16 @@ Zm.services.excelProcessingAndPlayBoard = {
 			editable: false
 		}));
     //------------------------------------------------------
+    // //-----------------------------load the combo-store- 加括号的强制执行，你妹的
+  void function(){ 
     
+		    Ext.getCmp('addGridEditorRegion').store.load();
+		Ext.getCmp('addGridEditorMaterial').store.load(); // combo的store要先加载，详情的store加载后才能显示数据，这里可以放在这里，但是放的位置一定要小心s
+		Ext.getCmp('addGridEditorColor').store.load();
+	//	Ext.getCmp('addGridEditorProcession').store.load();
+	
+
+   }()
   
    
 		var AOMSCm = new Ext.grid.ColumnModel([
@@ -313,10 +322,10 @@ Zm.services.excelProcessingAndPlayBoard = {
 			dataIndex: 'region',
 			editor: addGridEditorRegion,
 			renderer: function(value) {
-		    Ext.getCmp('addGridEditorRegion').store.load();
+		   // Ext.getCmp('addGridEditorRegion').store.load();
 				var combo = Ext.getCmp("addGridEditorRegion");
 				record = combo.findRecord(combo.valueField, value);
-        //var display=Ext.getCmp("addGridEditorRegion").getStore().getAt(value).data.region;
+        var display=Ext.getCmp("addGridEditorRegion").getStore();
 
         
         return record ? record.get(combo.displayField) : value ;
@@ -327,7 +336,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			dataIndex: 'material',
 			editor: addGridEditorMaterial,
 			renderer: function(value) {
-		Ext.getCmp('addGridEditorMaterial').store.load(); // combo的store要先加载，详情的store加载后才能显示数据，这里可以放在这里，但是放的位置一定要小心s
+	//	Ext.getCmp('addGridEditorMaterial').store.load(); // combo的store要先加载，详情的store加载后才能显示数据，这里可以放在这里，但是放的位置一定要小心s
 				var combo = Ext.getCmp("addGridEditorMaterial");
 				record = combo.findRecord(combo.valueField, value);
         //var display=Ext.getCmp("addGridEditorMaterial").getStore().getAt(value).data.material;
@@ -340,7 +349,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			dataIndex: 'color',
 			editor: addGridEditorColor,
 			renderer: function(value) {
-		Ext.getCmp('addGridEditorColor').store.load();
+	//	Ext.getCmp('addGridEditorColor').store.load();
 				var combo = Ext.getCmp("addGridEditorColor");
 				record = combo.findRecord(combo.valueField, value);
         //var display=Ext.getCmp("addGridEditorColor").getStore().getAt(value).data.color;
@@ -352,7 +361,8 @@ Zm.services.excelProcessingAndPlayBoard = {
 			dataIndex: 'procession',
 			editor: addGridEditorProcession,
 			renderer: function(value) {
-		Ext.getCmp('addGridEditorProcession').store.load();
+       // Ext.getCmp('AOMSGrid').getStore().reload();
+	//	Ext.getCmp('addGridEditorProcession').store.load();
 				var combo = Ext.getCmp("addGridEditorProcession");
 				record = combo.findRecord(combo.valueField, value);
        // var display=Ext.getCmp("addGridEditorProcession").getStore().getAt(value).data.procession;
@@ -382,7 +392,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 					name: 'procession'
 				}])
 			});
-			AOMSStore.load();
+			//AOMSStore.load();
 
 		} else {
 			var AOMSStore = new Ext.data.JsonStore({
@@ -397,23 +407,21 @@ Zm.services.excelProcessingAndPlayBoard = {
 			AOMSStore.setBaseParam('id', shoes_id);
 		}
    // //-----------------------------load the combo-store- 加括号的强制执行，你妹的
-  (function(){ 
+   	//AOMSStore.load();
+     
+   
     
-		    Ext.getCmp('addGridEditorRegion').store.load();
-		Ext.getCmp('addGridEditorMaterial').store.load(); // combo的store要先加载，详情的store加载后才能显示数据，这里可以放在这里，但是放的位置一定要小心s
-		Ext.getCmp('addGridEditorColor').store.load();
-		Ext.getCmp('addGridEditorProcession').store.load();
-			AOMSStore.load();
    
 
-   }())
-		/*
+  
+		
      Ext.getCmp('addGridEditorProcession').store.load({
-     callback : function(){//comboStore加载完毕之后回调时,才加载gridStore, 这只是一个scombo的store加载，不触发任何的函数，所以一定要用callback！
+     callback : function(){//comboStore加载完毕之后回调时,才加载gridStore, 这只是一个scombo的store加载，不触发任何的函数，所以一定要用callback！ 虽然我们在上面和下面都有说直接去getCmp("xxxx").store.load();, 然后再直接AOMSStore.load(), 但这样会出错，有了callback后就没有出错了，但是还是要加载其它三个列的combo的store，我操！fuck！，这里一定要callback！！i fuck！
       AOMSStore.load()
      }
     });
 
+    /*
     Ext.getCmp('addGridEditorRegion').store.load();// 也可以这样写，先加载一个combo的store，再把AOMSStore加载进来，这个AOMSStore里的数据就能得到正确的显示，而上面的combo.store.load({  }) 是写在load里面的一个回调函数，非常重要，！
     AOMSStore.load();
   
@@ -489,10 +497,12 @@ Zm.services.excelProcessingAndPlayBoard = {
 			},
 			{
 				title: 'photo2',
-				columnWidth: .5
-			}]
+				columnWidth: .5,
+       
+			},
+      ]
 		});
-
+    		
 		return new Ext.Window({
 			id: 'AOMSWindow',
 			title: type,
@@ -503,9 +513,16 @@ Zm.services.excelProcessingAndPlayBoard = {
 			//protect the frame out of the page 
 			items: [AOMSForm, AOMSGrid, AOMSPhoto],
 			buttons: [{
-				text: '上传图片',
 				scope: this,
-        inputType: 'file'
+
+        id: 'photo_upload',
+          //labelAlign: 'right',
+         xtype: 'textfield',
+         fieldLabel: 'xxx',
+         name: 'file',
+         inputType:'file',
+         
+      
 			},
 			{
 				text: '确定',
@@ -598,6 +615,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 		var price = Ext.getCmp('price').getValue();
 		var remark = Ext.getCmp('remark').getValue();
 		var productionDate = date2str(new Date());
+    var photo_one = Ext.getCmp('photo_upload').getValue();
 		var win
 		var record = {
 			shoes_id: shoesId,
@@ -607,7 +625,9 @@ Zm.services.excelProcessingAndPlayBoard = {
 			price: price,
 			remark: remark,
 			production_date: productionDate,
+      photo_one: photo_one,
 			details_of_shoes_attributes: this.createDetailShoes(),
+      
 			// 返回的是一个数组，数组包含几条记录如：｛key:value,key:value....｝等。
 		};
 		function date2str(d) {
@@ -792,6 +812,7 @@ Zm.services.excelProcessingAndPlayBoard = {
          id:'0',
          draggable:false,
          }); 
+     //    root.expand();
 
 		var EpapbTree = new Ext.tree.TreePanel({
 			//renderTo:'tree1',//这也一另一种渲染手法，你也可以在下面body里找到div

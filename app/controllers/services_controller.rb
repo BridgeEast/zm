@@ -59,29 +59,73 @@ class ServicesController < ApplicationController
 69
 
   end
-  #-------------------------- get the EpapbTree's treenode json
+  #-------------------------- get the EpapbTree's treenode json-- 请不要改我的，因为我都已经看不懂我的代码了。。
   def get_tree_node
-    treenodes=[]
+      treenodes=[]
     yearnode=[]
-    monthnode=[]
-    excelnode=[]
-    i=0
+    #excelnode=[]
+    yearnode.push('2011')
+    aji=false
     #get all of table
-    
     ExcelReceive.all.each do |tem|
-      count=0
-     # for year in yearnode
-       # if tem.receiving_date.year != year
-          yearnode << { :text => tem.receiving_date.year, :leaf=>true}
-      #  end
-     # end
-
-     
+      yearnode << tem.receiving_date.year
+      yearnode=yearnode.uniq
+      
+     #for month in monthnode
+      #  if tem.receiving_date.month != month then  
+       #   yearnode << { :text => tem.receiving_date., :leaf=>true}
+        #end
+     end
+    for year in yearnode do
+      monthnode=Array.new(13){ Array.new()} # 真正的标准的二维定义！！
+      ExcelReceive.all.each do |tem|
+        if tem.receiving_date.year == year then
+          aji = true
+          monthnode[tem.receiving_date.month] << { :text => tem.excel_receive_id, :leaf => true }
+        end
+      end
+      excelnode=[]
+      monTime=12
+        #----------
+      if year==Time.new.year then monTime=Time.new.month end
+          
+        for i in 1..monTime do
+          if (monthnode[i].empty?) then
+             excelnode << { :text => i.to_s+'mon', :leaf => true  }
+          else
+             excelnode << { :text => i.to_s+'mon', :children => monthnode[i] }
+          end
+        end
+        #----------
+        if aji then
+          treenodes << { :text => year, :children => excelnode }
+        else
+          treenodes << { :text => year, :leaf => true }
+        end
     end
+      #if monthnode.include?(tem.receiving_date.month) then
+       # { :text => tem.receiving_date.month, :children => [] }
+      #else
+      #tem.excel_receive_id
+    render :json=> treenodes
+  end
+  #----------------------------load the picture ----
+  def upload_photo
+    @photo = GeneralShoe.new( params[:dd])
+    origin_path = params[:dd][:photo_one]
+    photo_one = upload_pic( origin_path, )
+    @photo.set_photo_url(photo_one)   #go controller,write the set_photo_url,
 
-
-    render :json=>yearnode
-
+    @photo.save #save it in db
+  end
+  
+  def upload_pic(origin_path,target_dir)
+    photo_name = origin_path.original_filename
+    File.open(File.join( target_dir, photo_name),'wb') do |f|
+      f.write( file.read)
+      return photo_name
+    end
+  
 
   end
 

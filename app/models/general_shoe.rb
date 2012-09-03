@@ -258,5 +258,14 @@ end
     end
 
   end
+  File_target = "public/images/shoes"   #the url where we put the picture in
+  def set_photo_url(photo_one)
+    self.photo_one  = photo_one
+  end
+
+
+
+
+  #-------------------------------------aji-------------------------------------
 
 end
