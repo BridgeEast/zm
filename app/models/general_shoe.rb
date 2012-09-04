@@ -1,9 +1,11 @@
 #encoding: utf-8
 class GeneralShoe < ActiveRecord::Base
   has_many :size_of_shoes, :dependent => :destroy
+
   has_many :details_of_shoes,:dependent => :destroy
   accepts_nested_attributes_for :details_of_shoes
   has_one :play_board,:dependent => :destroy
+  accepts_nested_attributes_for :play_board #1:1,so must keep odd num
 
   belongs_to :advanced_order
   belongs_to :order

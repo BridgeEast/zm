@@ -57,7 +57,7 @@ Zm.services.checkDetail = {
 			id: 'detailPhoto',
 			// title: "xx",
 			 height: 300,
-       //frame: true,
+       frame: true,
        resizable: true,
 			// width: 100,
 			layout: 'column',

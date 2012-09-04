@@ -5,6 +5,35 @@ class ServicesController < ApplicationController
   #---------------------------------- 得到数据－－－－－－－－
   def get_excel_shoes
     @tem1=[]
+   
+    case params[:nodekind]
+    when 'y'
+      @temexl = ExcelReceive.where("receiving_date like ?","#{params[:nodename]}%")
+      #@temexl = ExcelReceive.find_by_sql("select * from excel_receives where year(receiving_date) = #{params[:nodename]}")# sucess
+      @temexl.each do |temexl|
+        @temaji = GeneralShoe.find_all_by_excel_receive_id(temexl.id)
+        @tem1.concat(@temaji)
+      end
+
+    when 'm'
+      puts "--------month-------------",params[:nodename]
+      @temexl = ExcelReceive.where("receiving_date like ?","#{params[:nodename]}%")
+      #@temexl = ExcelReceive.find_by_sql("select * from excel_receives where receiving_date like #{params[:nodename]}")# sucess
+      @temexl.each do |temexl|
+        @temaji = GeneralShoe.find_all_by_excel_receive_id(temexl.id)
+        @tem1.concat(@temaji)
+      end
+
+    when 'excelid'
+      puts "--------excelid-------------",params[:nodename]
+       @tem1 = GeneralShoe.find_all_by_excel_receive_id(params[:nodename])
+    end
+    puts @tem1.size.to_s
+
+
+
+=begin
+    @tem1=[]
     if params[:yeardate].empty? == false 
       puts "xxxxxxxxxxxxxxxxxx",params[:yeardate].empty?
 
@@ -19,7 +48,7 @@ class ServicesController < ApplicationController
       @tem1 = GeneralShoe.find_all_by_excel_receive_id(params[:excel_receive_id])
 
     end
-
+=end
     @tem2 = PlayBoard.all
     tem3=[]
     @tem1.each do |tem1|
@@ -67,7 +96,7 @@ class ServicesController < ApplicationController
   end
   #--------------------------- change the sure_board and done_board
   def updata_in_play_board
-    @tem=PlayBoard.find(params[:record][:general_shoe_id])
+    @tem=PlayBoard.find_by_general_shoe_id(params[:record][:general_shoe_id])
     @tem.update_attributes(:sure_board => params[:record][:sure_board])
     @tem.update_attributes(:done_board => params[:record][:done_board])
     render :json => {}

@@ -1,6 +1,7 @@
 Zm.services.excelProcessingAndPlayBoard = {
 	//+++++++++++++++++++++++++++++++++ initialize++++++++++++++++++++++++++++++++++++++
 	init: function() {
+    treenode=null;
 		//Ext.Msg.alert('hello','world');
 		Zm.pages.ViewPort = { //i don't know what it readly it,shit,Zm.pages.ViewPort......
 			layout: 'border',
@@ -60,11 +61,13 @@ Zm.services.excelProcessingAndPlayBoard = {
 			url: '/services/get_excel_shoes.json',
 			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'sure_board', 'done_board', 'remark'],
 			root: 'excel_shoes',
-      baseParams: {
-          yeardate: 'null',
-				  excel_receive_id: 'null',
-          monthdate: 'null',
-				},
+			baseParams: {
+				//yeardate: 'null',
+				//monthdate: 'null',
+				//excel_receive_id: 'null',
+				nodekind: 'null',
+				nodename: 'null',
+			},
 			//autoLoad: true
 		});
 		//store.load;
@@ -163,6 +166,10 @@ Zm.services.excelProcessingAndPlayBoard = {
 	},
 	//++++++++++++++++++++++++++++++++addOrModifyshoes:function+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	addOrModifyshoes: function(type, shoes_id) {
+    if(treenode==null){ //if the custom hasn't click a excel node,than the treenode is null,and cannot create a new one!
+      Ext.Msg.alert('Tip!','请选择一个excel节点！');
+      return treenode;
+    }
 		var AOMSFormStore = new Ext.data.SimpleStore({
 			fields: ['value', 'text'],
 			data: [['value1', '高跟鞋'], ['value2', '平底鞋'], ['value3', '靴子']]
@@ -237,7 +244,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 		});
 		//----------AOMSGrid------------------------
 		//----------the combo in the editorGrid
-	var addGridEditorRegion = new Ext.grid.GridEditor(
+		var addGridEditorRegion = new Ext.grid.GridEditor(
 		new Ext.form.ComboBox({
 			id: 'addGridEditorRegion',
 			store: new Ext.data.JsonStore({
@@ -308,32 +315,28 @@ Zm.services.excelProcessingAndPlayBoard = {
 			valueField: 'id',
 			editable: false
 		}));
-    //------------------------------------------------------
-    // //-----------------------------load the combo-store- 加括号的强制执行，你妹的
-  void function(){ 
-    
-		    Ext.getCmp('addGridEditorRegion').store.load();
-		Ext.getCmp('addGridEditorMaterial').store.load(); // combo的store要先加载，详情的store加载后才能显示数据，这里可以放在这里，但是放的位置一定要小心s
-		Ext.getCmp('addGridEditorColor').store.load();
-	//	Ext.getCmp('addGridEditorProcession').store.load();
-	
+		//------------------------------------------------------
+		// //-----------------------------load the combo-store- 加括号的强制执行，你妹的
+		void function() {
 
-   }()
-  
-   
+			Ext.getCmp('addGridEditorRegion').store.load();
+			Ext.getCmp('addGridEditorMaterial').store.load(); // combo的store要先加载，详情的store加载后才能显示数据，这里可以放在这里，但是放的位置一定要小心s
+			Ext.getCmp('addGridEditorColor').store.load();
+			//	Ext.getCmp('addGridEditorProcession').store.load();
+		} ()
+
 		var AOMSCm = new Ext.grid.ColumnModel([
 		new Ext.grid.RowNumberer(), {
 			header: '部位',
 			dataIndex: 'region',
 			editor: addGridEditorRegion,
 			renderer: function(value) {
-		   // Ext.getCmp('addGridEditorRegion').store.load();
+				// Ext.getCmp('addGridEditorRegion').store.load();
 				var combo = Ext.getCmp("addGridEditorRegion");
 				record = combo.findRecord(combo.valueField, value);
-        var display=Ext.getCmp("addGridEditorRegion").getStore();
+				var display = Ext.getCmp("addGridEditorRegion").getStore();
 
-        
-        return record ? record.get(combo.displayField) : value ;
+				return record ? record.get(combo.displayField) : value;
 			}
 		},
 		{
@@ -341,10 +344,10 @@ Zm.services.excelProcessingAndPlayBoard = {
 			dataIndex: 'material',
 			editor: addGridEditorMaterial,
 			renderer: function(value) {
-	//	Ext.getCmp('addGridEditorMaterial').store.load(); // combo的store要先加载，详情的store加载后才能显示数据，这里可以放在这里，但是放的位置一定要小心s
+				//	Ext.getCmp('addGridEditorMaterial').store.load(); // combo的store要先加载，详情的store加载后才能显示数据，这里可以放在这里，但是放的位置一定要小心s
 				var combo = Ext.getCmp("addGridEditorMaterial");
 				record = combo.findRecord(combo.valueField, value);
-        //var display=Ext.getCmp("addGridEditorMaterial").getStore().getAt(value).data.material;
+				//var display=Ext.getCmp("addGridEditorMaterial").getStore().getAt(value).data.material;
 				return record ? record.get(combo.displayField) : value;
 			}
 		},
@@ -354,10 +357,10 @@ Zm.services.excelProcessingAndPlayBoard = {
 			dataIndex: 'color',
 			editor: addGridEditorColor,
 			renderer: function(value) {
-	//	Ext.getCmp('addGridEditorColor').store.load();
+				//	Ext.getCmp('addGridEditorColor').store.load();
 				var combo = Ext.getCmp("addGridEditorColor");
 				record = combo.findRecord(combo.valueField, value);
-        //var display=Ext.getCmp("addGridEditorColor").getStore().getAt(value).data.color;
+				//var display=Ext.getCmp("addGridEditorColor").getStore().getAt(value).data.color;
 				return record ? record.get(combo.displayField) : value;
 			}
 		},
@@ -366,19 +369,18 @@ Zm.services.excelProcessingAndPlayBoard = {
 			dataIndex: 'procession',
 			editor: addGridEditorProcession,
 			renderer: function(value) {
-       // Ext.getCmp('AOMSGrid').getStore().reload();
-	//	Ext.getCmp('addGridEditorProcession').store.load();
+				// Ext.getCmp('AOMSGrid').getStore().reload();
+				//	Ext.getCmp('addGridEditorProcession').store.load();
 				var combo = Ext.getCmp("addGridEditorProcession");
 				record = combo.findRecord(combo.valueField, value);
-       // var display=Ext.getCmp("addGridEditorProcession").getStore().getAt(value).data.procession;
+				// var display=Ext.getCmp("addGridEditorProcession").getStore().getAt(value).data.procession;
 				return record ? record.get(combo.displayField) : value;
 			}
 
 		},
 		// 在下面的stroe里得到的数据，可以不按顺序就能读到这里来
 		]);
-		
-  
+
 		if (type == "添加鞋") {
 			var AOMSData = [];
 			var AOMSStore = new Ext.data.Store({
@@ -398,7 +400,6 @@ Zm.services.excelProcessingAndPlayBoard = {
 				}])
 			});
 			//AOMSStore.load();
-
 		} else {
 			var AOMSStore = new Ext.data.JsonStore({
 				url: '/services/get_details_of_shoes_all_id.json',
@@ -411,22 +412,15 @@ Zm.services.excelProcessingAndPlayBoard = {
 			//console.log("x",shoes_id);
 			AOMSStore.setBaseParam('id', shoes_id);
 		}
-   // //-----------------------------load the combo-store- 加括号的强制执行，你妹的
-   	//AOMSStore.load();
-     
-   
-    
-   
+		// //-----------------------------load the combo-store- 加括号的强制执行，你妹的
+		//AOMSStore.load();
+		Ext.getCmp('addGridEditorProcession').store.load({
+			callback: function() { //comboStore加载完毕之后回调时,才加载gridStore, 这只是一个scombo的store加载，不触发任何的函数，所以一定要用callback！ 虽然我们在上面和下面都有说直接去getCmp("xxxx").store.load();, 然后再直接AOMSStore.load(), 但这样会出错，有了callback后就没有出错了，但是还是要加载其它三个列的combo的store，我操！fuck！，这里一定要callback！！i fuck！
+				AOMSStore.load()
+			}
+		});
 
-  
-		
-     Ext.getCmp('addGridEditorProcession').store.load({
-     callback : function(){//comboStore加载完毕之后回调时,才加载gridStore, 这只是一个scombo的store加载，不触发任何的函数，所以一定要用callback！ 虽然我们在上面和下面都有说直接去getCmp("xxxx").store.load();, 然后再直接AOMSStore.load(), 但这样会出错，有了callback后就没有出错了，但是还是要加载其它三个列的combo的store，我操！fuck！，这里一定要callback！！i fuck！
-      AOMSStore.load()
-     }
-    });
-
-    /*
+		/*
     Ext.getCmp('addGridEditorRegion').store.load();// 也可以这样写，先加载一个combo的store，再把AOMSStore加载进来，这个AOMSStore里的数据就能得到正确的显示，而上面的combo.store.load({  }) 是写在load里面的一个回调函数，非常重要，！
     AOMSStore.load();
   
@@ -457,6 +451,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 				AOMSGrid.stopEditing();
 				AOMSStore.insert(0, p); //insert data above the head of store
 				AOMSGrid.startEditing(0, 0); //start at x=0,y=0
+        AOMSGrid.view.refresh();
 			}
 		},
 		'-', {
@@ -503,11 +498,11 @@ Zm.services.excelProcessingAndPlayBoard = {
 			{
 				title: 'photo2',
 				columnWidth: .5,
-       
+
 			},
-      ]
+			]
 		});
-    		
+
 		return new Ext.Window({
 			id: 'AOMSWindow',
 			title: type,
@@ -520,14 +515,13 @@ Zm.services.excelProcessingAndPlayBoard = {
 			buttons: [{
 				scope: this,
 
-        id: 'photo_upload',
-          //labelAlign: 'right',
-         xtype: 'textfield',
-         fieldLabel: 'xxx',
-         name: 'file',
-         inputType:'file',
-         
-      
+				id: 'photo_upload',
+				//labelAlign: 'right',
+				xtype: 'textfield',
+				fieldLabel: 'xxx',
+				name: 'file',
+				inputType: 'file',
+
 			},
 			{
 				text: '确定',
@@ -610,6 +604,22 @@ Zm.services.excelProcessingAndPlayBoard = {
 		return detailrecord;
 
 	},
+  createPlayBoards: function() {
+    
+
+		var playboard=[];
+    
+    var record={
+      custom_num: 'aji',
+      server_num: 'fuckfan',
+      communication: 'fuckfan is sb',
+      board_kind: '开发板'
+    };
+    playboard.push(record);
+		return record;
+	},
+
+
 	checkForShoes: function(type) {
 
 		var selection = Ext.getCmp('EpapbGrid').getSelectionModel();
@@ -620,7 +630,8 @@ Zm.services.excelProcessingAndPlayBoard = {
 		var price = Ext.getCmp('price').getValue();
 		var remark = Ext.getCmp('remark').getValue();
 		var productionDate = date2str(new Date());
-    var photo_one = Ext.getCmp('photo_upload').getValue();
+		var photo_one = Ext.getCmp('photo_upload').getValue();
+		var excel_receive_id = treenode;
 		var win
 		var record = {
 			shoes_id: shoesId,
@@ -630,9 +641,11 @@ Zm.services.excelProcessingAndPlayBoard = {
 			price: price,
 			remark: remark,
 			production_date: productionDate,
-      photo_one: photo_one,
+			photo_one: photo_one,
+			excel_receive_id: 1,
 			details_of_shoes_attributes: this.createDetailShoes(),
-      
+      play_board_attributes: this.createPlayBoards(),// 这里的表名要写单
+
 			// 返回的是一个数组，数组包含几条记录如：｛key:value,key:value....｝等。
 		};
 		function date2str(d) {
@@ -724,7 +737,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 	},
 	//++++++++++++++++++++++++++++++++++++++++++++updatePlayBoard++++++++++++++++++++++++++++++++++++++++++++
 	updatePlayBoardWin: function() {
-    var data = Ext.getCmp('EpapbGrid').getSelectionModel().getSelected().data;
+		var data = Ext.getCmp('EpapbGrid').getSelectionModel().getSelected().data;
 
 		var updatePlayBoardForm = new Ext.form.FormPanel({
 			id: 'updatePlayBoardForm',
@@ -733,7 +746,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			bodyStyle: 'padding: 10px 10px 30px 30px',
 			frame: true,
 			defaultType: 'datefield',
-      deafaults: {
+			deafaults: {
 				scope: this
 			},
 			items: [{
@@ -750,20 +763,23 @@ Zm.services.excelProcessingAndPlayBoard = {
 			}],
 			buttons: [{
 				text: '确定',
-        scope: this,//when you invoke some function,and show the 'uncaught typeError',you can add the scope:this,   
-				handler:function(){this.updatePlayBoard(data.id)}
+				scope: this,
+				//when you invoke some function,and show the 'uncaught typeError',you can add the scope:this,   
+				handler: function() {
+					this.updatePlayBoard(data.id);
+          console.log("xxx",data.id);
+				}
 			},
 			{
 				text: '取消',
-				handler: function(){ 
-          Ext.getCmp('updatePlayBoardWin').close();
-        }
+				handler: function() {
+					Ext.getCmp('updatePlayBoardWin').close();
+				}
 			}]
 		});
-		
+
 		Ext.getCmp('sure_board').setValue(data["sure_board"]);
 		Ext.getCmp('done_board').setValue(data["done_board"]);
-    
 
 		return new Ext.Window({
 			id: 'updatePlayBoardWin',
@@ -777,48 +793,47 @@ Zm.services.excelProcessingAndPlayBoard = {
 
 	},
 
-  updatePlayBoard: function(shoes_id){ 
-    var sure=Ext.getCmp('sure_board').getValue();
-    var done=Ext.getCmp('done_board').getValue();
-    console.log('xxx',sure);
-    var record={ 
-            sure_board: sure,
-            done_board: done,
-            general_shoe_id:shoes_id,
+	updatePlayBoard: function(shoes_id) {
+		var sure = Ext.getCmp('sure_board').getValue();
+		var done = Ext.getCmp('done_board').getValue();
+		console.log('xxx', sure);
+		var record = {
+			sure_board: sure,
+			done_board: done,
+			general_shoe_id: shoes_id,
 
-    };
+		};
 
-    Ext.Ajax.request({
-					url: '/services/updata_in_play_board.json',
-					method: 'post',
-					jsonData: {
-						record: record
-					},
-					success: function() {
-						Ext.getCmp('EpapbGrid').store.load();
-						Ext.getCmp('updatePlayBoardWin').close();
-						Ext.Msg.alert('修改', '修改成功');
-						// Ext.Msg.alert('',this.createData.region_id)
-					},
-					failure: function() {
-						Ext.Msg.alert('修改', '修改失败!');
-					},
-				});
-  },
+		Ext.Ajax.request({
+			url: '/services/updata_in_play_board.json',
+			method: 'post',
+			jsonData: {
+				record: record
+			},
+			success: function() {
+				Ext.getCmp('EpapbGrid').store.load();
+				Ext.getCmp('updatePlayBoardWin').close();
+				Ext.Msg.alert('修改', '修改成功');
+				// Ext.Msg.alert('',this.createData.region_id)
+			},
+			failure: function() {
+				Ext.Msg.alert('修改', '修改失败!');
+			},
+		});
+	},
 	//+++++++++++++++++++++++++++++++send_to_wish_list++++++++++++++++++++++++++++++++++++++++++
 	//+++++++++++++++++++++++++++++++++++EpapbTree++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	createEpapbTree: function() {
-    var loader=new Ext.tree.TreeLoader({
-       dataUrl:'/services/get_tree_node.json'
-     });
+		var loader = new Ext.tree.TreeLoader({
+			dataUrl: '/services/get_tree_node.json'
+		});
 
-     var root = new Ext.tree.AsyncTreeNode({
-         text:'客户Excel接收',
-         id:'0',
-         draggable:false,
-         }); 
-     //    root.expand();
-
+		var root = new Ext.tree.AsyncTreeNode({
+			text: '客户Excel接收',
+			id: '0',
+			draggable: false,
+		});
+		//    root.expand();
 		var EpapbTree = new Ext.tree.TreePanel({
 			//renderTo:'tree1',//这也一另一种渲染手法，你也可以在下面body里找到div
 			//autoHeight:true,// 如果是这种渲染手法，就要为它加上这个属性，不然就要在div里设定div的高度
@@ -827,31 +842,55 @@ Zm.services.excelProcessingAndPlayBoard = {
 			maxSize: 150,
 			minSize: 80,
 			collapsible: true,
-      loader: loader,
+      autoScroll: true,
+			loader: loader,
 			region: 'west',
 			root: root,
 		});
 
-    EpapbTree.on('click', function(node) {
+		EpapbTree.on('click', function(node) {
       
-      var store=Ext.getCmp('EpapbGrid').store;
-      var nodekind=node.id.toString().slice(-1);
-      var nodename=node.id.toString().substring(0,node.id.toString().length-1);
-      //console.log('xx',nodekind);
-      //console.log('x',nodename);
- 
-    
+
+			var store = Ext.getCmp('EpapbGrid').store;
+			var nodekind = node.id.toString().slice( - 1);
+			var nodename = node.id.toString().substring(0, node.id.toString().length - 1);
+			console.log('nodekind', nodekind);
+			console.log('nodename', nodename);
+
+			if (nodekind == 'y') {
+				store.setBaseParam('nodekind', nodekind); //must devide into 2 steps
+				store.setBaseParam('nodename', nodename);
+				store.reload();
+			}
+			else if (nodekind == 'm') {
+				if (nodename < 10) nodename = '0' + nodename // 格式化一下日期
+				var year = node.parentNode.id.toString().substring(0, node.parentNode.id.toString().length - 1); //得到父节点的什么年份
+				nodename = year + '_' + nodename;
+				console.log('nodename' + nodename);
+				store.setBaseParam('nodekind', nodekind);
+				store.setBaseParam('nodename', nodename);
+				store.reload();
+			}
+
+			else {
+        treenode=node.id;// 保存用到的全局变量
+				nodekind = 'excelid';
+				store.setBaseParam('nodekind', nodekind);
+				store.setBaseParam('nodename', node.id);
+				store.reload();
+			}
+
+			/*
       if(nodekind == 'y'){ 
         //var yeardate=.substring(0,4);
        // console.log('year',yeardate);
         console.log('nodename',nodename);
-        store.setBaseParam('yeardate',nodename);
+        store.setBaseParam('yeardate',nodename,'excel_receive_id',kong);
         store.reload();
       }
       else if(nodekind == 'm'){ 
         var yeardate=node.parentNode.id.toString().substring(0,node.parentNode.id.toString().length-1);
         store.setBaseParam( 'yeardate',yeardate, 'monthdate',nodename );
-
       
       }else
         {
@@ -864,7 +903,30 @@ Zm.services.excelProcessingAndPlayBoard = {
 			//var store = Ext.getCmp('wlGrid').store;
 			//store.setBaseParam("id", node.id);
 			//store.reload();
+    //*/
 		});
+
+		var contextmenu = new Ext.menu.Menu({
+			id: 'treecontextmenu',
+			items: [{
+				text: 'open',
+				handler: function() {
+					alert('xxx');
+				}
+			},{
+				text: 'download',
+				handler: function() {
+					alert('xxx');
+				}
+			}]
+
+		});
+
+    EpapbTree.on("contextmenu",function(node,e){ 
+      e.preventDefault();
+      node.select();
+      contextmenu.showAt(e.getXY());
+    });
 
 		return EpapbTree;
 
