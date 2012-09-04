@@ -2,18 +2,14 @@
 class GuestsController < ApplicationController
 
   #*******************************心愿单********************************
-
-    def wish_list
-    end
+   # url的解析，controller + action ,这里可以删，但route.rb哪里不能删 
+   # def wish_list
+   # end
 
     def wish_list_data
       wish_list = GeneralShoe.get_cwl_record( params[:id] )
-      if wish_list == [] then
-        data = ""
-      else
-        data = GeneralShoe.wish_list_data( wish_list )
-      end
-      render :json => { :wish_list_data => data }
+      data = wish_list.blank? ? "" : GeneralShoe.wish_list_data( wish_list )
+      render :json => { :wish_list_data => data }  #可以把render封装起来
     end
 
     def destroy_choice

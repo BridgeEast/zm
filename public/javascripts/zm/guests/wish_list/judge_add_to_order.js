@@ -9,9 +9,13 @@ Zm.guests.judge_add_to_order = {
 				data.push([record.data.shoes_id]);
 			});
 			if (!Ext.isEmpty(data)) {
-				Zm.guests.add_to_order.init({
-					data: data
-				}).show()
+				var addToOrder = Zm.guests.add_to_order;
+				if (!addToOrder.isInit) { //if (isInit == false)
+					addToOrder.init({
+						data: data
+					})
+				}
+				addToOrder.win.show();
 			}
 			else {
 				Ext.Msg.alert('警告', '请选择记录！')

@@ -1,8 +1,5 @@
 Zm.guests.wish_list = {
 	init: function() {
-		this.select_id;
-		this.photo_one;
-		this.photo_two;
 		Zm.pages.ViewPort = {
 			layout: 'border',
 			region: 'center',
@@ -132,10 +129,8 @@ Zm.guests.wish_list = {
 				text: '查看详情',
 				scope: this,
 				handler: function() {
-					this.select_id = Ext.getCmp('wlGrid').getSelectionModel().getSelected().data["id"];
-					this.photo_one = Ext.getCmp('wlGrid').getSelectionModel().getSelected().data["photo_one"];
-					this.photo_two = Ext.getCmp('wlGrid').getSelectionModel().getSelected().data["photo_two"];
-					Zm.guests.win.init().show();
+                    var selectionData = Ext.getCmp('wlGrid').getSelectionModel().getSelected();
+					Zm.guests.win.init(selectionData).show();  //把selectionData传过去
 				}
 			},
 			{

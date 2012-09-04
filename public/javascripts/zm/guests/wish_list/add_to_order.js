@@ -1,5 +1,12 @@
 Zm.guests.add_to_order = {
+	isInit: false,
 	init: function(config) {
+		this.unSelectAll();
+		this.win = this.createWin(config);
+		this.isInit = true;
+	},
+
+	createWin: function(config) {
 		return new Ext.Window({
 			id: 'win',
 			layout: 'border',
@@ -12,69 +19,37 @@ Zm.guests.add_to_order = {
 			buttons: [{
 				text: '确定',
 				handler: function() {
-					var year = new Date().getFullYear();
-					var mon = new Date().getMonth() + 1;
-					if (mon < 10) {
-						var month = '0' + mon
-					}
-					else {
-						month = mon
-					}
-					var date = new Date().getDate();
-					if (date < 10) {
-						var day = '0' + date
-					}
-					else {
-						day = date
-					}
-					var record = {
-						order_id: '11',
-						payment: Ext.getCmp('makeOrderForm').getForm().findField('type').getGroupValue(),
-						production_date: year + '-' + month + '-' + day,
-						shipment: false,
-						lading_bill: false,
-						state: '待定订单'
-					};
-					Ext.Ajax.request({
-						url: '/guests/add_to_order.json',
-						method: 'post',
-						jsonData: {
-							record: record
-						},
-						success: function() {
-							Ext.getCmp('win').close();
-							Ext.Msg.alert('添加', '添加成功！')
-						},
-						failure: function() {
-							Ext.Msg.alert('添加', '添加失败！')
-						}
-					})
+					Zm.guests.determine.add()
 				}
 			},
 			{
-				text: '重置'
+				text: '重置',
+				handler: function() {}
 			},
 			{
 				text: '取消',
+				scope: this,
 				handler: function() {
-					Ext.getCmp('win').close();
-					//取消复选框的勾
-					Ext.grid.GridPanel.prototype.unSelectAll = function() {
-						var view = this.getView();
-						var sm = this.getSelectionModel();
-						if (sm) {
-							sm.clearSelections();
-							var hd = Ext.fly(view.innerHd);
-							var c = hd.query('.x-grid3-hd-checker-on');
-							if (c && c.length > 0) {
-								Ext.fly(c[0]).removeClass('x-grid3-hd-checker-on')
-							}
-						}
-					};
+					this.win.hide(); //close会把win关掉，下次show时又要重新建win，很浪费资源
 					Ext.getCmp('wlGrid').unSelectAll()
 				}
 			}]
-		})
+		});
+	},
+
+	unSelectAll: function() { //每次点总选框再取消，用clearSelections()只能去掉每条记录前面的勾,总选框的勾去不掉，这是Ext的问题。
+		Ext.grid.GridPanel.prototype.unSelectAll = function() { //prototype是原型的意思，
+			var view = this.getView();
+			var sm = this.getSelectionModel();
+			if (sm) {
+				sm.clearSelections(); //去掉每条记录前面的勾
+				var hd = Ext.fly(view.innerHd); //下面是改那个总选框的样式，去掉它的勾，
+				var c = hd.query('.x-grid3-hd-checker-on');
+				if (c && c.length > 0) {
+					Ext.fly(c[0]).removeClass('x-grid3-hd-checker-on')
+				}
+			}
+		};
 	},
 
 	make_order_form: function() {
@@ -82,44 +57,61 @@ Zm.guests.add_to_order = {
 			id: 'makeOrderForm',
 			title: '订单制作',
 			region: 'north',
+			//bodyStyle:……  //设置边距
 			buttonAlign: 'center',
 			labelAlign: 'right',
+			labelWidth: 60,
 			height: 150,
+			defaults: { //下面有多少层items就有多少层defaults
+				defaults: {
+					defaults: {
+						anchor: "90%"
+					}
+				}
+			},
 			frame: true,
 			items: [{
+				layout: 'column',
 				items: [{
-					layout: 'column',
+					columnWidth: .33,
+					layout: 'form',
 					items: [{
-						columnWidth: .2,
-						xtype: 'fieldset',
-						title: '付款方式',
-						defaultType: 'radio',
-						hideLabels: true,
-						items: [{
-							boxLabel: '付全款',
-							name: 'type',
-							inputValue: '付全款',
-							checked: true,
-						},
-						{
-							boxLabel: '先付30%',
-							name: 'type',
-							inputValue: '先付30%',
-						}]
+						xtype: 'textfield',
+						fieldLabel: '订单名',
+						id: 'order_id',
+						allowBlank: false,
+						name: 'textfield',
+					}]
+				},
+				{
+					columnWidth: .2,
+					layout: 'form',
+					xtype: 'fieldset',
+					title: '付款方式',
+					defaultType: 'radio',
+					hideLabels: true,
+					items: [{
+						boxLabel: '付全款',
+						name: 'type',
+						inputValue: '付全款',
+						checked: true,
 					},
 					{
-						columnWidth: .8,
-						layout: 'form',
-						labelAlign: 'left',
-						items: [{
-							width: 170,
-							xtype: 'textarea',
-							fieldLabel: '备注',
-							name: 'textarea',
-
-						}]
+						boxLabel: '先付30%',
+						name: 'type',
+						inputValue: '先付30%',
 					}]
-				}]
+				},
+				{
+					columnWidth: .33,
+					layout: 'form',
+					items: [{
+						xtype: 'textarea',
+						fieldLabel: '备注',
+						name: 'textarea',
+					}]
+				},
+				]
 			},
 			{
 				labelAlign: 'right',
@@ -144,60 +136,38 @@ Zm.guests.add_to_order = {
 		{
 			header: '38',
 			dataIndex: '38_size',
-			editor: new Ext.grid.GridEditor(
-			new Ext.form.TextField({
-				allowBlank: false
-			}))
+			editor: new Ext.form.TextField({})
 		},
 		{
 			header: '39',
 			dataIndex: '39_size',
-			editor: new Ext.grid.GridEditor(
-			new Ext.form.TextField({
-				allowBlank: false
-			}))
+			editor: new Ext.form.TextField({})
 		},
 		{
 			header: '40',
 			dataIndex: '40_size',
-			editor: new Ext.grid.GridEditor(
-			new Ext.form.TextField({
-				allowBlank: false
-			}))
+			editor: new Ext.form.TextField({})
 		},
 		{
 			header: '41',
 			dataIndex: '41_size',
-			editor: new Ext.grid.GridEditor(
-			new Ext.form.TextField({
-				allowBlank: false
-			}))
+			editor: new Ext.form.TextField({})
 		},
 		{
 			header: '42',
 			dataIndex: '42_size',
-			editor: new Ext.grid.GridEditor(
-			new Ext.form.TextField({
-				allowBlank: false
-			}))
+			editor: new Ext.form.TextField({})
 		},
 		{
 			header: '43',
 			dataIndex: '43_size',
-			editor: new Ext.grid.GridEditor(
-			new Ext.form.TextField({
-				allowBlank: false
-			}))
+			editor: new Ext.form.TextField({})
 		},
 		{
 			header: '44',
 			dataIndex: '44_size',
-			editor: new Ext.grid.GridEditor(
-			new Ext.form.TextField({
-				allowBlank: false
-			}))
+			editor: new Ext.form.TextField({})
 		}]);
-		//console.log(ss = config);
 		var store = new Ext.data.Store({
 			proxy: new Ext.data.MemoryProxy(config.data),
 			reader: new Ext.data.ArrayReader({},

@@ -9,7 +9,6 @@ Zm.guests.destroy_choice = {
 			success: function() {
 				Ext.getCmp('wlGrid').store.load();
 				Ext.Msg.alert('删除', '删除成功！');
-
 			},
 			failure: function() {
 				Ext.Msg.alert('删除', '删除失败！')
