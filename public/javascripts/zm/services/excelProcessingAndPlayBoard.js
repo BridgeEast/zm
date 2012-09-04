@@ -60,7 +60,12 @@ Zm.services.excelProcessingAndPlayBoard = {
 			url: '/services/get_excel_shoes.json',
 			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'sure_board', 'done_board', 'remark'],
 			root: 'excel_shoes',
-			autoLoad: true
+      baseParams: {
+          yeardate: 'null',
+				  excel_receive_id: 'null',
+          monthdate: 'null',
+				},
+			//autoLoad: true
 		});
 		//store.load;
 		var gridTbar = new Ext.Toolbar({
@@ -95,9 +100,9 @@ Zm.services.excelProcessingAndPlayBoard = {
 			items: [{ //菜单主要有什么内容，实现什么功能
 				text: '查看详情',
 				handler: function() {
-					var shoes_id = Ext.getCmp('epapbGrid').getSelectionModel().getSelected().data.id;
-					var photo_one = Ext.getCmp('epapbGrid').getSelectionModel().getSelected().data.photo_one;
-					var photo_two = Ext.getCmp('epapbGrid').getSelectionModel().getSelected().data.photo_two;
+					var shoes_id = Ext.getCmp('EpapbGrid').getSelectionModel().getSelected().data.id;
+					var photo_one = Ext.getCmp('EpapbGrid').getSelectionModel().getSelected().data.photo_one;
+					var photo_two = Ext.getCmp('EpapbGrid').getSelectionModel().getSelected().data.photo_two;
 					// Ext.Msg.alert("xxx",shoes_id);
 					//this.cwlWindow( this.checkDetailsForm(), this.checkDetailsGrid() ).show();
 					Zm.services.checkDetail.createCheckDetails(shoes_id, photo_one, photo_two).show(); //invoke the function of looking details
@@ -134,7 +139,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 		});
 
 		var EpapbGrid = new Ext.grid.GridPanel({
-			id: 'epapbGrid',
+			id: 'EpapbGrid',
 			title: '客服-Excel文件处理及打板',
 			region: 'center',
 			border: true,
@@ -548,7 +553,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 
 	//+++++++++++++++++++++++++++++++updata_shoes++++++++++++++++++++++++++++++++++++++++++++++++
 	updateShoes: function() {
-		var selection = Ext.getCmp('epapbGrid').getSelectionModel();
+		var selection = Ext.getCmp('EpapbGrid').getSelectionModel();
 		if (!selection.getSelected()) {
 			Ext.Msg.alert('警告', '请选择一条记录');
 		} else {
@@ -607,7 +612,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 	},
 	checkForShoes: function(type) {
 
-		var selection = Ext.getCmp('epapbGrid').getSelectionModel();
+		var selection = Ext.getCmp('EpapbGrid').getSelectionModel();
 		var shoesId = Ext.getCmp('shoes_id').getValue();
 		var suitablePeople = Ext.getCmp('suitable_people').getValue();
 		var color = Ext.getCmp('colors').getValue();
@@ -658,7 +663,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 						record: record
 					},
 					success: function() {
-						Ext.getCmp('epapbGrid').store.load();
+						Ext.getCmp('EpapbGrid').store.load();
 						Ext.getCmp('AOMSWindow').close();
 						Ext.Msg.alert('修改', '修改成功');
 						// Ext.Msg.alert('',this.createData.region_id)
@@ -683,7 +688,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 					callback: function() {
 						Ext.getCmp('AOMSForm').form.reset();
 						Ext.getCmp('AOMSWindow').close();
-						Ext.getCmp('epapbGrid').store.load();
+						Ext.getCmp('EpapbGrid').store.load();
 					}
 				});
 			}
@@ -695,7 +700,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++deleteShoes++++++++++++++++++++++++
 	deleteShoes: function() {
-		var selection = Ext.getCmp('epapbGrid').getSelectionModel();
+		var selection = Ext.getCmp('EpapbGrid').getSelectionModel();
 		if (selection.getSelected()) {
 			Ext.Ajax.request({
 				url: '/services/delete_shoes_and_detail_of_shoes.json',
@@ -705,7 +710,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 
 				},
 				success: function() {
-					Ext.getCmp('epapbGrid').store.load();
+					Ext.getCmp('EpapbGrid').store.load();
 					Ext.Msg.alert('删除', '删除成功!');
 				},
 				failure: function() {
@@ -719,7 +724,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 	},
 	//++++++++++++++++++++++++++++++++++++++++++++updatePlayBoard++++++++++++++++++++++++++++++++++++++++++++
 	updatePlayBoardWin: function() {
-    var data = Ext.getCmp('epapbGrid').getSelectionModel().getSelected().data;
+    var data = Ext.getCmp('EpapbGrid').getSelectionModel().getSelected().data;
 
 		var updatePlayBoardForm = new Ext.form.FormPanel({
 			id: 'updatePlayBoardForm',
@@ -790,7 +795,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 						record: record
 					},
 					success: function() {
-						Ext.getCmp('epapbGrid').store.load();
+						Ext.getCmp('EpapbGrid').store.load();
 						Ext.getCmp('updatePlayBoardWin').close();
 						Ext.Msg.alert('修改', '修改成功');
 						// Ext.Msg.alert('',this.createData.region_id)
@@ -825,6 +830,40 @@ Zm.services.excelProcessingAndPlayBoard = {
       loader: loader,
 			region: 'west',
 			root: root,
+		});
+
+    EpapbTree.on('click', function(node) {
+      
+      var store=Ext.getCmp('EpapbGrid').store;
+      var nodekind=node.id.toString().slice(-1);
+      var nodename=node.id.toString().substring(0,node.id.toString().length-1);
+      //console.log('xx',nodekind);
+      //console.log('x',nodename);
+ 
+    
+      if(nodekind == 'y'){ 
+        //var yeardate=.substring(0,4);
+       // console.log('year',yeardate);
+        console.log('nodename',nodename);
+        store.setBaseParam('yeardate',nodename);
+        store.reload();
+      }
+      else if(nodekind == 'm'){ 
+        var yeardate=node.parentNode.id.toString().substring(0,node.parentNode.id.toString().length-1);
+        store.setBaseParam( 'yeardate',yeardate, 'monthdate',nodename );
+
+      
+      }else
+        {
+        console.log('nodeid',node.id)
+        store.removeAll();
+        store.setBaseParam('excel_receive_id',node.id);
+        store.reload();
+        }
+        
+			//var store = Ext.getCmp('wlGrid').store;
+			//store.setBaseParam("id", node.id);
+			//store.reload();
 		});
 
 		return EpapbTree;

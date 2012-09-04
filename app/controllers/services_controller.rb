@@ -4,7 +4,22 @@ class ServicesController < ApplicationController
   end
   #---------------------------------- 得到数据－－－－－－－－
   def get_excel_shoes
-    @tem1 = GeneralShoe.all
+    @tem1=[]
+    if params[:yeardate].empty? == false 
+      puts "xxxxxxxxxxxxxxxxxx",params[:yeardate].empty?
+
+      @temexl = ExcelReceive.find_by_sql("select * from excel_receives where year(receiving_date) = #{params[:yeardate]}")# sucess
+      @temexl.each do |temexl|
+        @tem1 << GeneralShoe.find_by_excel_receive_id(temexl.id)
+      end
+    end
+
+    if params[:excel_receive_id].empty? == false
+      puts "xxxxxxxxxxsssssssssssss",params[:excel_receive_id].empty?
+      @tem1 = GeneralShoe.find_all_by_excel_receive_id(params[:excel_receive_id])
+
+    end
+
     @tem2 = PlayBoard.all
     tem3=[]
     @tem1.each do |tem1|
@@ -61,7 +76,7 @@ class ServicesController < ApplicationController
   end
   #-------------------------- get the EpapbTree's treenode json-- 请不要改我的，因为我都已经看不懂我的代码了。。
   def get_tree_node
-      treenodes=[]
+    treenodes=[]
     yearnode=[]
     #excelnode=[]
     yearnode.push('2011')
@@ -81,7 +96,7 @@ class ServicesController < ApplicationController
       ExcelReceive.all.each do |tem|
         if tem.receiving_date.year == year then
           aji = true
-          monthnode[tem.receiving_date.month] << { :text => tem.excel_receive_id, :leaf => true }
+          monthnode[tem.receiving_date.month] << { :text => tem.excel_receive_id, :id=> tem.id, :leaf => true }
         end
       end
       excelnode=[]
@@ -91,16 +106,16 @@ class ServicesController < ApplicationController
           
         for i in 1..monTime do
           if (monthnode[i].empty?) then
-             excelnode << { :text => i.to_s+'mon', :leaf => true  }
+             excelnode << { :text => i.to_s+'mon', :id => i.to_s+'m', :leaf => true  }
           else
-             excelnode << { :text => i.to_s+'mon', :children => monthnode[i] }
+             excelnode << { :text => i.to_s+'mon', :id => i.to_s+'m', :children => monthnode[i] }
           end
         end
         #----------
         if aji then
-          treenodes << { :text => year, :children => excelnode }
+          treenodes << { :text => year.to_s+'y', :id => year.to_s+'y', :children => excelnode }
         else
-          treenodes << { :text => year, :leaf => true }
+          treenodes << { :text => year.to_s+'y', :id => year.to_s+'y', :leaf => true }
         end
     end
       #if monthnode.include?(tem.receiving_date.month) then
