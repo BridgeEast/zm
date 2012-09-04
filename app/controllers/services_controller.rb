@@ -1,5 +1,5 @@
 class ServicesController < ApplicationController
-  #---------------------------------aji
+  #---------------------------------------------aji-------------------------------------------------
   def excelProcessingAndPlayBoard
   end
   #---------------------------------- 得到数据－－－－－－－－
@@ -155,6 +155,22 @@ class ServicesController < ApplicationController
   end
   #----------------------------load the picture ----
   def upload_photo
+    img=params[:photo]
+    
+    content_size=img.size
+    puts "ssssssssssssssssssssssss",img
+    file_data=img.read
+    filetype=img.content_type
+    @filename=img.original_filename
+    File.open(RAILS_ROOT+"/public/images/"+@filname,"wb"){ |f| f.write(file_data) }
+    render :json => {  }
+  end
+
+
+
+
+
+  def upload_photoaji
     @photo = GeneralShoe.new( params[:dd])
     origin_path = params[:dd][:photo_one]
     photo_one = upload_pic( origin_path, )
@@ -169,11 +185,11 @@ class ServicesController < ApplicationController
       f.write( file.read)
       return photo_name
     end
-  
 
 
-    render :json=>yearnode
-end
+  end
+#------------------------------------------------------------------------------------------------------
+
  def factory_order
     end
 

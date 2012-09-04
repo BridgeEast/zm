@@ -129,9 +129,6 @@ Zm::Application.routes.draw do
  end
 #----------------------------------------aji/jb
 
-
-  
-#----------------------------------------aji
  resources :services do
    collection do
      #-----------------------------------aji
@@ -145,6 +142,7 @@ Zm::Application.routes.draw do
      post "updata_in_play_board"
      get "get_tree_node"
      get "scanningGuestWishLists"
+     post "upload_photo"
 
      #--------------------------------------jb
      get "guest_order_management"

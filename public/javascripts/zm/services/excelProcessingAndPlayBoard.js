@@ -166,10 +166,10 @@ Zm.services.excelProcessingAndPlayBoard = {
 	},
 	//++++++++++++++++++++++++++++++++addOrModifyshoes:function+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	addOrModifyshoes: function(type, shoes_id) {
-    if(treenode==null){ //if the custom hasn't click a excel node,than the treenode is null,and cannot create a new one!
+    /*if(treenode==null){ //if the custom hasn't click a excel node,than the treenode is null,and cannot create a new one!
       Ext.Msg.alert('Tip!','请选择一个excel节点！');
       return treenode;
-    }
+    }*/
 		var AOMSFormStore = new Ext.data.SimpleStore({
 			fields: ['value', 'text'],
 			data: [['value1', '高跟鞋'], ['value2', '平底鞋'], ['value3', '靴子']]
@@ -518,9 +518,12 @@ Zm.services.excelProcessingAndPlayBoard = {
 				id: 'photo_upload',
 				//labelAlign: 'right',
 				xtype: 'textfield',
-				fieldLabel: 'xxx',
+				fieldLabel: 'upload',
 				name: 'file',
 				inputType: 'file',
+        blankText: '请上传文件',  
+  
+        anchor: '50%'  // anchor width by percentage
 
 			},
 			{
@@ -534,6 +537,22 @@ Zm.services.excelProcessingAndPlayBoard = {
 				text: '重置',
 				scope: this,
 				handler: function() {
+         var photo = Ext.getDom('photo_upload');
+         console.log(photo);
+         Ext.Ajax.request({
+					url: '/services/upload_photo.json',
+					method: 'post',
+					jsonData: {
+						photo: photo
+					},
+					success: function() {
+            alert('sucess');
+
+					},
+					failure: function() {
+            alert('failure');
+					},
+				}); 
 
 				}
 			},
