@@ -53,6 +53,7 @@ Zm.managements.win = {
 		var checkDetailsGrid = new Ext.grid.GridPanel({
 			region: 'center',
 			height: 360,
+      loadMask: true,
 			viewConfig: {
 				forceFit: true
 			},
@@ -61,8 +62,6 @@ Zm.managements.win = {
 		});
 
 		var checkDetails = new Ext.Window({
-			layout: 'border',
-			closeAction: 'hide',
 			height: 600,
 			width: 500,
 			constrainHeader: true,

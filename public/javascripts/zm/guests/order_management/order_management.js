@@ -1,5 +1,6 @@
 Zm.guests.order_management = {
     init: function() {
+        this.select_id;
         Zm.pages.ViewPort = {
             layout: 'border',
             region: 'center',
@@ -7,8 +8,19 @@ Zm.guests.order_management = {
                 region: 'north',
                 title: '客户-订单管理'
             },
-            this.createTreeOm(), this.createOmGridOne()]
+            this.createTreeOm(), this.createOmPanel()]
         };
+    },
+    //---------------------------------------------------------------------
+    createOmPanel: function() {
+        var mainPanel = new Ext.Panel({
+            region: 'center',
+            resizeTabs: true,
+            items: [this.createOmGridOne, this.createOmGridTwo],
+            layout: "card",
+            activeItem: 0
+        });
+        return mainPanel
     },
     //---------------------------------------------------------------------
     createOmGridOne: function() {
@@ -40,51 +52,58 @@ Zm.guests.order_management = {
             dataIndex: 'remark'
         },
         ]);
-        var storeOne = new Ext.data.JsonStore({ 
+        store = new Ext.data.JsonStore({
             url: '/guests/get_check_orders',
             fields: ['id', 'order_id', 'custom_contract', 'total_price', 'payment', 'production_date', 'remark'],
             root: 'check_orders',
             autoLoad: false
         });
         var omGridOne = new Ext.grid.GridPanel({
-            region: 'center',
             id: 'omGridOne',
             height: 360,
             cm: cmOne,
             sm: smOne,
-            store: storeOne,
-            trackMouseOver : true,
+            store: store,
+            trackMouseOver: true,
             viewConfig: {
                 forceFit: true
             },
-            bbar: new Ext.PagingToolbar({ 
-            pageSize: 20,
-            store: storeOne,
-            displayInfo: true,
-            displayMsg: '显示第{0}条到{1}记录,一共{2}条',
-            emptyMsg: '没有记录'
-        }),
-            tbar: new Ext.Toolbar( 
-            ['-',{ 
-                     text: '删除所选'
-                   },'-',
-                   { 
-                     text: '发送订单'
-                   },'-'])
+            bbar: new Ext.PagingToolbar({
+                pageSize: 20,
+                store: store,
+                displayInfo: true,
+                displayMsg: '显示第{0}条到{1}记录,一共{2}条',
+                emptyMsg: '没有记录'
+            }),
+            tbar: new Ext.Toolbar(['-', {
+                text: '删除所选'
+            },
+            '-', {
+                text: '发送订单'
+            },
+            '-'])
         });
 
         var contextmenu = new Ext.menu.Menu({
             items: [{
-                id: 'checkAndUpdateShoes',
                 text: '查看与修改样品',
+                scope: this,
+                handler: function() {
+                    this.select_id = Ext.getCmp('omGridOne').getSelectionModel().getSelected().data["order_id"];
+                    Zm.guests.check_and_update_shoes.init().show();
+                }
             },
-            { 
-                text: '查看码号与数量'
+            {
+                text: '查看码号与数量',
+                scope: this,
+                handler: function() {
+                    Zm.guests.check_and_update_number.init().show();
+                }
             },
-            { 
+            {
                 text: '打开客户合同'
             },
-            { 
+            {
                 text: '下载客户合同'
             }]
         });
@@ -137,72 +156,49 @@ Zm.guests.order_management = {
             header: '备注',
             dataIndex: 'remark'
         }]);
-        data2 = [['1','name1','descn1','','','已上传'],
-        	['2','name2','descn2','','','已上传'],
-        	['3','name3','descn3','','','未上传'],
-        	['4','name4','descn4','','','未上传'],
-        	['5','name5','descn5','','','未上传']];
-        var storeTwo = new Ext.data.Store({
-            proxy: new Ext.data.MemoryProxy(data2),
-            reader: new Ext.data.ArrayReader({},
-            [{
-                name: 'order_id'
-            },
-            {
-                name: 'custom_contrast'
-            },
-            {
-                name: 'total_price'
-            },
-            {
-                name: 'quality'
-            },
-            {
-                name: 'shipment'
-            },
-            {
-                name: 'payment'
-            },
-            {
-                name: 'lading'
-            },
-            {
-                name: 'production_date'
-            },
-            {
-                name: 'remark'
-            }])
-        });
-        storeTwo.load();
+        store = new Ext.data.JsonStore({
+            url: '/guests/get_check_orders',
+            fields: ['id', 'order_id', 'custom_contract', 'total_price', 'payment', 'production_date', 'remark'],
+            root: 'check_orders',
+            autoLoad: false
+        })
         var omGridTwo = new Ext.grid.GridPanel({
-            region: 'center',
             id: 'omGridTwo',
             height: 300,
             cm: cmTwo,
             sm: smTwo,
-            store: storeTwo,
+            store: store,
             viewConfig: {
                 forceFit: true
             }
         });
-         var contextmenu = new Ext.menu.Menu({
+        var contextmenu = new Ext.menu.Menu({
             items: [{
                 text: '查看样品',
+                scope: this,
+                handler: function() {
+                    Zm.guests.check_shoes.init().show();
+                }
             },
-            { 
-                text: '查看订单进度'
+            {
+                text: '查看订单进度',
+                scope: this,
+                handler: function() {
+                    Zm.guests.check_order_schedule.init().show();
+                }
             },
-            { 
+            {
                 text: '打开提单'
             },
-            { 
+            {
                 text: '下载提单'
-            },           
-            { 
-               text: '打开客户合同'
             },
-            { 
-               text: '下载客户合同'           }]
+            {
+                text: '打开客户合同'
+            },
+            {
+                text: '下载客户合同'
+            }]
         });
 
         omGridTwo.on("rowcontextmenu", function(grid, rowIndex, e) {
@@ -258,38 +254,54 @@ Zm.guests.order_management = {
             };
         };
         treeOm.setRootNode(rootOrders);
-        treeOm.on('click', function(node) {
+        treeOm.on('click', function(node, e) {
+            if(node.text == '待定'){ 
+                defaults: { scope: this }
+                this.createOmPanel().layout.setActiveItem(0);
+            }
+            if(node.text == '进行中'){ 
+                this.createOmPanel().layout.setActiveItem(1);
+            }
             if (node.leaf) {
                 var year = node.parentNode.parentNode.text;
                 var month = node.parentNode.id.split("_")[1];
                 if (parseInt(month) < 10) month = '0' + month;
                 var date = year + '_' + month;
-                var type = node.text;
+                var type = node.text + '订单';
             }
             else if (node.text.toString().indexOf("月") != - 1) {
                 year = node.parentNode.text;
                 month = node.id.split("_")[1];
                 if (parseInt(month) < 10) month = '0' + month;
-                date = year + '-' + month;
-            }
-            else if (node.parentNode.text == '全部订单') {
-                data = node.text;
+                date = year + '_' + month;
             }
             else {
                 year = null;
                 month = null;
                 type = null;
             }
+            if (type == '待定订单') {
+                store.proxy = new Ext.data.HttpProxy({
+                    url: '/guests/get_undetermined_orders_data.json',
+                    method: 'post',
+                    jsonData: {
+                        selectDate: date,
+                        selectType: type
+                    }
+                });
+                store.load()
+            } else if (type == '进行中订单') {
+                store.proxy = new Ext.data.HttpProxy({
+                    url: '/guests/get_proceeding_orders_data.json',
+                    method: 'post',
+                    jsonData: {
+                        selectDate: date,
+                        selectType: type
+                    }
+                });
+                store.load()
+            }
 
-          /*  store.proxy = new Ext.data.HttpProxy({ 
-                url: '/guests/get_orders_data.json',
-                method: 'post',
-                jsonData: { 
-                  selectDate: date,
-                  selectType: type
-                }
-            }),
-             store.load() */
         })
         return treeOm
     }

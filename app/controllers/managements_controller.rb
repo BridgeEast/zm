@@ -1,29 +1,7 @@
 class ManagementsController < ApplicationController
   #*********************************************查看鞋库****************************************************
 
-    def check_store_of_shoes
-    end
-
-    def get_check_store_of_shoes
-      render :json => { :check_store_of_shoes => GeneralShoe.all }
-    end
-    
-    def get_data
-      choices = []
-      choices = GeneralShoe.where("types_of_shoes like ? and production_date like ? ","%#{params[:selectType]}%" , "%#{params[:selectDate]}%").order("production_date DESC")
-      render :json => { :check_store_of_shoes => choices} 
-    end
-    
-
-    def get_details
-      details = GeneralShoe.get_shoes_details( params[:id] )
-      render :json => { :shoes => details }
-    end
-
-  #*********************************************************************************************************
-
-    ##^^^^^^^^^^^^^  分页  ^^^^^^^^^^^^^^
-    def paging(array)
+    def csos_paging(array)
       m = params[:limit].to_i
       n = params[:start].to_i
       root = []
@@ -34,7 +12,55 @@ class ManagementsController < ApplicationController
       for i in n..max - 1
         root << array[i]
       end
-      all_data = { :totalProperty => array.length, :roots => root }
+      all_data = { :totalProperty => array.length, :check_store_of_shoes => root }
+      render :json => all_data
+    end
+
+
+    def check_store_of_shoes
+    end
+
+    def get_check_store_of_shoes
+      render :json => { :check_store_of_shoes => GeneralShoe.all }
+    end
+    
+    def get_data
+      csos_paging(GeneralShoe.where("types_of_shoes like ? and production_date like ? ","%#{params[:selectType]}%" , "%#{params[:selectDate]}%").order("production_date DESC"))
+    end
+    
+
+    def get_details
+      details = GeneralShoe.get_shoes_details( params[:id] )
+      rcender :json => { :shoes => details }
+    end
+
+  #*********************************************************************************************************
+
+   def check_guest_order
+   end
+
+   def get_check_guest_order
+     render :json => { :check_guest_order => Order.all}
+   end
+
+   def get_selected_data
+      cgo_paging(Order.where("production_date like ? ", "%#{params[:selectDate]}%").order("production_date DESC"))
+   end
+
+
+    ##^^^^^^^^^^^^^  分页  ^^^^^^^^^^^^^^
+    def cgo_paging(array)
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > array.length
+        max = array.length
+      end
+      for i in n..max - 1
+        root << array[i]
+      end
+      all_data = { :totalProperty => array.length, :check_guest_order => root }
       render :json => all_data
     end
 
@@ -132,21 +158,6 @@ class ManagementsController < ApplicationController
       render :json => {}
     end 
 
-
-    #guest显示主界面数据
-    def get_guest_order
-      paging( Order.find_by_sql("select * from orders where production_date like '#{params[:date]}%'") )
-    end
-
-    ##guest第一次加载数据，不显示数据
-    def guest_order
-      render :json => {}
-    end
-
-    ##从数据库读取数据生成树节点
-    def get_tree_node
-      render :json => { :tree_node => FactoryOrder.all }
-    end
 
     ##############################################################################################
     def check_factory_order

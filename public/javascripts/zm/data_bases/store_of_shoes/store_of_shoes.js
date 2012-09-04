@@ -228,33 +228,25 @@ Zm.dataBases.storeOfShoes = {
         {
             name: 'procession'
         }]);
-        if (type == '修改') {
-            var inpcstore = new Ext.data.JsonStore({
-                url: '/data_bases/get_details_of_shoes.json',
-                fields: ['region', 'material', 'color', 'procession'],
-                baseParams: {
-                    id: Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().id
-                },
-                root: 'dos',
-            })
-        } else {
-            var inpcstore = new Ext.data.Store({
-                proxy: new Ext.data.MemoryProxy(inpcdata),
-                reader: new Ext.data.ArrayReader({},
-                [{
-                    name: 'region'
-                },
-                {
-                    name: 'material'
-                },
-                {
-                    name: 'color'
-                },
-                {
-                    name: 'procession'
-                }])
-            })
+       if (type == '修改') { 
+        var inpcstore = new Ext.data.JsonStore({
+            url: '/data_bases/get_details_of_shoes.json',
+            fields: ['region', 'material', 'color', 'procession'],
+            baseParams: {
+              id: Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data['id']
+            },
+            root: 'dos',
+            autoLoad: true
+        }); 
+        } else { 
+        var inpcstore = new Ext.data.Store({ 
+            proxy: new Ext.data.MemoryProxy(inpcdata),
+            reader: new Ext.data.ArrayReader({},
+              [{ name: 'region' }, { name: 'material' }, { name: 'color' }, { name: 'procession' }]
+              )
+        })
         };
+        
         var grid = new Ext.grid.EditorGridPanel({
             id: 'grid',
             region: 'center',

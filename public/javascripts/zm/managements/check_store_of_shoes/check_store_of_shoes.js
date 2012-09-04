@@ -60,18 +60,25 @@ Zm.managements.check_store_of_shoes = {
 		store = new Ext.data.JsonStore({
 			url: '/managements/get_check_store_of_shoes.json',
 			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'production_date', 'remark'],
-			root: 'check_store_of_shoes',
+			totalProperty: "totalProperty",
+      root: 'check_store_of_shoes',
 			autoLoad: false
 		});
+    store.load({ params: { start: 0, limit: 10 } });
 
 		var csosGrid = new Ext.grid.GridPanel({
 			id: 'csosGrid',
 			region: 'center',
 			cm: cm,
 			store: store,
-			viewConfig: {
-				forceFit: true
-			}
+			viewConfig: {	forceFit: true },
+      bbar: new Ext.PagingToolbar({
+          pageSize: 10,
+          store: store,
+          displayInfo: true,
+          displayMsg: "显示第{0}条到{1}条记录，一共{2}条",
+          emptyMsg: "没有记录"
+      })      
 		});
 
 		var contextmenu = new Ext.menu.Menu({
@@ -184,7 +191,7 @@ Zm.managements.check_store_of_shoes = {
 					selectType: type
 				}
 			}),
-			store.load()
+			store.load({ params: { start: 0, limit: 10 } })
 		})
 
 		return treeCsos
