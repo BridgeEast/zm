@@ -19,12 +19,17 @@ Zm.guests.add_to_order = {
 			buttons: [{
 				text: '确定',
 				handler: function() {
-					Zm.guests.determine.add()
+                   console.log(Ext.getCmp('makeOrderGrid').getStore().getAt(0).data); 
+       console.log('init' , config.data);
+					Zm.guests.determine.add(config.data)
 				}
 			},
 			{
 				text: '重置',
-				handler: function() {}
+				handler: function() {
+					Ext.getCmp('makeOrderForm').getForm().reset();
+					Ext.getCmp('makeOrderGrid').getStore().reload();
+				}
 			},
 			{
 				text: '取消',

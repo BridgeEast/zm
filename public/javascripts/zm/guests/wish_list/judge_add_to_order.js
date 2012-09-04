@@ -16,6 +16,7 @@ Zm.guests.judge_add_to_order = {
 					})
 				}
 				addToOrder.win.show();
+                console.log('win',data)
 			}
 			else {
 				Ext.Msg.alert('警告', '请选择记录！')
