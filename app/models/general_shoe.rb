@@ -22,10 +22,6 @@ class GeneralShoe < ActiveRecord::Base
         :material_id => item.material.id,
         :color_id => item.color.id,
         :procecession_id => item.procession.id,
-        :region => item.region.region,
-        :material => item.material.material,
-        :color => item.color.color,
-        :procession => item.procession.procession,
       }
     end
   end
