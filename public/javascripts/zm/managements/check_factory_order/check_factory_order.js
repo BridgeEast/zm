@@ -111,7 +111,7 @@ Zm.managements.CheckFactoryOrder = {
                                   success: function(){ 
                                   }
                                 });
-                              this.checkWindow( this.checkOrders() ).show();
+                                  this.checkWindow( this.checkOrders() ).show();
                             }
                     }],
                   });

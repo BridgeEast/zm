@@ -44,7 +44,7 @@ Zm.managements.win = {
 			fields: ['region', 'material', 'color', 'procession'],
 			method: 'post',
 			baseParams: {
-				id: Zm.managements.check_store_of_shoes.select_id
+				id: Zm.managements.check_store_of_shoes.select_id 
 			},
            /* totalProperty: 'totalProperty' ,*/
 			root: 'shoes',

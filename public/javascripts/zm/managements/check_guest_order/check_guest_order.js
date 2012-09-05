@@ -3,16 +3,17 @@ Zm.managements.check_guest_order= {
         Zm.pages.ViewPort = {
             layout: 'border',
             region:'center',
-            items: [ 
-                     {region:'north',layout:'fit',height:'90',title:'管理层-订单管理'},
-                     {region:'west',layout:'fit', width:'180', items:[cgo_tree]},
-                     {region:'center',layout:'fit', items:[grid]}
-                   ]
+            items: [{  
+              region: 'north',
+              title: '管理层-查看订单'
+            },
+            this.createCgoGrid(), this.createCgoTree()]
         };
     },
-};
 
-        var cm = new Ext.grid.ColumnModel([ 
+
+    createCgoGrid: function() { 
+        var cm = new Ext.grid.ColumnModel([  
             new Ext.grid.RowNumberer(),
             { header: '订单号', dataIndex: 'order_id' },
             { header: '客户', dataIndex: 'custom_num' },
@@ -22,42 +23,41 @@ Zm.managements.check_guest_order= {
             { header: '是否出货', dataIndex: 'shipment' },
             { header: '付款情况', dataIndex: 'payment' },
             { header: '提单情况', dataIndex: 'lading_bill' },
-            { header: '制作日期', dataIndex: 'production_date' },
+            { header: '制作日期', dataIndex: 'production_date', renderer: Ext.util.Format.dateRenderer('Y-m-d') },
             { header: '备注', dataIndex: 'remark' },
         ]);
 
-        var store = new Ext.data.JsonStore({ 
-            url: '/managements/guest_order.json',
+        store = new Ext.data.JsonStore({ 
+            url: '/managements/get_check_guest_order.json',
             fields: ['order_id','custom_num', 'custom_contrast','quality','total_price','shipment','payment','lading_bill','production_date','remark'],
             totalProperty: "totalProperty",
             root: 'check_guest_order',
-            autoLoad: true
+            autoLoad: false
         });
-        store.load({ params: { start: 0, limit: 30 } });
 
-        var grid = new Ext.grid.GridPanel({ 
-            id: 'guestgrid',
+        var cgoGrid = new Ext.grid.GridPanel({ 
+            id: 'cgoGrid',
             region: 'center',
             cm: cm,
             store: store,
             viewConfig: { forceFit: true },
             bbar: new Ext.PagingToolbar({
                 pageSize: 30,
-                store:store,
+                store: store,
                 displayInfo: true,
-                displayMsg: "第{0}条到{1}第条，一共{2}条",
+                displayMsg: "显示第{0}条到{1}条记录，一共{2}条",
                 emptyMsg: "没有记录"
-            }),
+            })
         });                  
    
-        var guestContexMenu = new Ext.menu.Menu({
+        var cgoContexMenu = new Ext.menu.Menu({
          		id: 'theContextMenu',
           	items: [{
               	text: '查看鞋', 
-                handler: function(){ guestDetailWindow.show(); }
+                handler: function(){ checkShoesWindow.show(); }
   	    		},{
                	text: '查看订单进度',
-                handler: function(){ progressWindow.show(); }
+                handler: function(){ checkProgressWindow.show(); }
   	    		},{				
   	    		    text: '打开提单',
                 handler: function(){ }
@@ -70,75 +70,79 @@ Zm.managements.check_guest_order= {
             }]
       	});
   
-      	grid.on("rowcontextmenu", function(grid, rowIndex, e){
+      	cgoGrid.on("rowcontextmenu", function(grid, rowIndex, e){
           	e.preventDefault();
           	grid.getSelectionModel().selectRow(rowIndex);
-          	guestContexMenu.showAt(e.getXY());
+          	cgoContexMenu.showAt(e.getXY())
       	});
+
+        return cgoGrid
         
-        var chen_year_nodes = [];  //全局变量，暂时没其他办法，先用着
+    },
 
-        var root=new Ext.tree.AsyncTreeNode({   
-            id: 'cgo_root',
-            text: '全部订单',
-            expandable: true,
-            children: []
-        });  
-              
-        var cgo_tree=new Ext.tree.TreePanel({     
-            root: root
-        });    
 
-        cgo_tree.on("expandnode",function(node){      //树的展开时执行的事件
-        		var myDate = new Date();
-        		var month_nodes = [];
-        				if(node.id == "cgo_root"){
-           			    for(i = myDate.getFullYear(); i > 2009; i--){
-           		          chen_year_nodes[i] = new Ext.tree.TreeNode({ text: i, id: "nodes" + i });
-           	     	  		root.appendChild(chen_year_nodes[i]);
-                        if(i == myDate.getFullYear()){
-                            for(j = myDate.getMonth() + 1; j > 0; j--){
-                                if(j > 9){
-                                    month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "nodes" + i + j });
-                                    chen_year_nodes[i].appendChild(month_nodes[j]);
-                                }else{
-                                    month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "nodes" + i + "0" + j });
-                                    chen_year_nodes[i].appendChild(month_nodes[j]);
-                                }
-                            }
-                        }else{
-           			            for(j = 12; j >= 1; j--){
-                                if(j > 9){
-           		 		        		      month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "nodes" + i + j });
-           		 		                  chen_year_nodes[i].appendChild(month_nodes[j]);
-                                }else{
-           		 		        		      month_nodes[j] = new Ext.tree.TreeNode({ text: j + "月", id: "nodes" + i + "0" + j });
-           		 		                  chen_year_nodes[i].appendChild(month_nodes[j]);
-                                }
-        			              }
-                        }
-        			      }
-                }
-         });
+    createCgoTree: function() { 
 
-         cgo_tree.on("collapsenode", function(node){  
-             if(node.id=="cgo_root"){
-                 var myDate = new Date();
-                 for(i = 2010; i <= myDate.getFullYear(); i++){ chen_year_nodes[i].remove() };
-             }
-                 store.removeAll();
-         });
+		    var treeCgo = new Ext.tree.TreePanel({ 
+          id: 'treeCgo',
+          region: 'west',
+          width: 180,
+          autoScroll: true
+        });
 
-         cgo_tree.on("click", function(node){
-             var i = node.id.substring(5, 9);
-             var j = node.id.substring(9, 11);
-             var date = i + "-" + j;
-             if(node.id.length == 11){
-                     store.proxy = new Ext.data.HttpProxy({
-                         url: "/managements/get_guest_order.json",
-                         method: "post",
-                         jsonData: { date: date }
-                     });
-                     store.reload({ params: { start: 0, limit: 30 } });
-             }
-         });
+        var rootOrder = new Ext.tree.TreeNode({
+			      id: 'rootOrder',
+			      text: '全部订单'
+		    });
+
+		    var nowYear = new Date().getFullYear();
+		    var nowMonth = new Date().getMonth();
+
+		    for (var i = nowYear; i > nowYear - 3; i--) {
+		   	    var year = new Ext.tree.TreeNode({
+			  	     text: i,
+				       id: i
+			      });
+			     rootOrder.appendChild(year);
+			     if (i == nowYear) {
+				       var months = nowMonth + 1
+			     }
+			     else {
+				       months = 12
+			     }
+			     for (j = months; j > 0; j--) {
+				       var month = new Ext.tree.TreeNode({
+					         text: j + '月',
+					         id: i + '_' + j
+				       });
+			     year.appendChild(month);
+			     };
+		    };
+
+		    treeCgo.setRootNode(rootOrder);
+        treeCgo.on("click", function(node){
+            if (node.text.toString().indexOf("月") != -1) { 
+                var year = node.parentNode.text
+                var month = node.id.split("_")[1];
+                if (parseInt(month) < 10) month = '0' + month
+                  var date = year + '-' + month
+            }
+            else if (node.parentNode.text == '全部订单'){ 
+            
+            }
+            else { 
+                year = null;
+                month = nullguest_order
+            };
+
+            store.proxy = new Ext.data.HttpProxy({
+                url: '/managements/get_selected_data.json',
+                method: 'post',
+                jsonData: { selectDate: date }      
+            }),
+            store.load({ params: { start: 0, limit: 30 } });
+         })
+
+         return treeCgo
+    }
+};         

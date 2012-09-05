@@ -11,7 +11,7 @@ namespace :menu do
           { :name => "浏览鞋库", :url => "/guests/scanning_store_of_shoes" },
           { :name => "心愿单", :url => "/guests/wish_list" },
           { :name => "预购单管理", :url => "" },
-          { :name => "订单管理", :url => "" },
+          { :name => "订单管理", :url => "/guests/order_management" },
         ]
       },
       { :name => "客服",
@@ -22,8 +22,9 @@ namespace :menu do
           { :name => "虚拟仓库管理", :url => "" },
           { :name => "预购单管理", :url => "" },
           { :name => "订单管理", :url => "/services/guest_order_management" },
-          { :name => "合同管理", :url => "" },
-         
+          { :name => "合同管理", :url => "/services/factory_order" },
+
+     
         ]
       },
       { :name => "管理层",

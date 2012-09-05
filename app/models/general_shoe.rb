@@ -1,9 +1,13 @@
 #encoding: utf-8
 class GeneralShoe < ActiveRecord::Base
   has_many :size_of_shoes, :dependent => :destroy
+  accepts_nested_attributes_for :size_of_shoes
+
   has_many :details_of_shoes,:dependent => :destroy
   accepts_nested_attributes_for :details_of_shoes
+
   has_one :play_board,:dependent => :destroy
+  accepts_nested_attributes_for :play_board #1:1,so must keep odd num
 
   belongs_to :advanced_order
   belongs_to :order
@@ -11,9 +15,13 @@ class GeneralShoe < ActiveRecord::Base
   belongs_to :factory_order
 
    def self.get_shoes_details( id ) 
-    shoes = self.where( :id => id ).first   #where返回1个数组
+    shoes = self.where(:id => id).first   #where返回1个数组
     shoes.details_of_shoes.collect! do |item|
      { 
+        :region_id => item.region.id,
+        :material_id => item.material.id,
+        :color_id => item.color.id,
+        :procecession_id => item.procession.id,
         :region => item.region.region,
         :material => item.material.material,
         :color => item.color.color,
@@ -22,7 +30,7 @@ class GeneralShoe < ActiveRecord::Base
     end
   end
 
-   def self.wish_list_data( cwl )
+   def self.wish_list_data(cwl)
     cwl.collect! do|item|
       { 
          :id => item.id,
@@ -45,7 +53,7 @@ class GeneralShoe < ActiveRecord::Base
   ########### 获取心愿单所需记录 ##########
   def self.get_cwl_record( param_node )
     rec = Array.new
-    self.all.each do |record|
+    self.order("production_date DESC").each do |record|
       date = record.production_date
       cwl_date = date.to_s.split("-") 
       # 建立"XXXX-X-开发板"格式的id来与param进行比较
@@ -243,5 +251,29 @@ end
   end
 
 
+  #-------------------aji   查看详情但返回一串id－－－－－－－－－－－－－
+  def self.get_details_ids_json(the_shoe_id)
+     shoes = self.where( :id => the_shoe_id ).first #取出id为the_shoe_id的鞋的对象
+    shoes.details_of_shoes.collect! do |record|
+      #对同一只多个详情进行筛选组成json
+      { 
+        :region => record.region_id,
+        :material => record.material_id,
+        :color => record.color_id,
+        :procession => record.procession_id,
+        :remark => record.region.remark,
+      }
+    end
+
+  end
+  File_target = "public/images/shoes"   #the url where we put the picture in
+  def set_photo_url(photo_one)
+    self.photo_one  = photo_one
+  end
+
+
+
+
+  #-------------------------------------aji-------------------------------------
 
 end

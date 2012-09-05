@@ -1,5 +1,5 @@
 Zm.guests.win = {
-	init: function() {
+	init: function(selectionData) {
 		var form = new Ext.form.FormPanel({
 			region: 'north',
 			layout: 'fit',
@@ -11,12 +11,12 @@ Zm.guests.win = {
 				layout: 'column',
 				items: [{
 					columnWidth: .5,
-					html: '<img src=\'/images/shoes/' + Zm.guests.wish_list.photo_one + '\' width=100% height=100%>'
+					html: '<img src=\'/images/shoes/' + selectionData.get('photo_one') + '\' width=100% height=100%>'
 
 				},
 				{
 					columnWidth: .5,
-					html: '<img src=\'/images/shoes/' + Zm.guests.wish_list.photo_two + '\' width=100% height=100%>'
+					html: '<img src=\'/images/shoes/' + selectionData.get('photo_two') + '\' width=100% height=100%>'
 
 				}]
 			}]
@@ -39,20 +39,19 @@ Zm.guests.win = {
 			dataIndex: 'procession'
 		}]);
 
-		var store = new Ext.data.JsonStore({
+		store = new Ext.data.JsonStore({
 			url: '/managements/get_details.json',
 			fields: ['region', 'material', 'color', 'procession'],
 			method: 'post',
 			baseParams: {
-				id: Zm.guests.wish_list.select_id
+				id: selectionData.get('id')
 			},
-           /* totalProperty: 'totalProperty' ,*/
+			/* totalProperty: 'totalProperty' ,*/
 			root: 'shoes',
-            autoLoad: true
+			autoLoad: true
 		});
 
-        //store.load({ params: { start: 0 , limit: 2 } });
-
+		//store.load({ params: { start: 0 , limit: 2 } });
 		var grid = new Ext.grid.GridPanel({
 			region: 'center',
 			height: 360,
@@ -65,7 +64,7 @@ Zm.guests.win = {
 				pageSize: 10,
 				store: store,
 				displayInfo: true,
-				diaplayMsg: '显示第{0}条到{1}条记录，一共{2}条',
+				displayMsg: '显示第{0}条到{1}条记录，一共{2}条',
 				emptyMsg: "没有记录"
 			})
 		});
@@ -83,5 +82,4 @@ Zm.guests.win = {
 		return check_detail
 	}
 }
-
 

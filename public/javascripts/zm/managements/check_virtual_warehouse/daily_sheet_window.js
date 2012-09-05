@@ -12,10 +12,10 @@ Ext.onReady(function(){
     ]);
 
     var store = new Ext.data.JsonStore({
-        url: "/managements/get_daily_sheet.json",
+        url: "/managements/get_virtual_daily_sheet.json",
         fields: ["shoes_id", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
         totalProperty: "totalProperty",
-        root: "daily_sheet",
+        root: "roots",
     });
     store.load({ params: { start: 0, limit: 20 } });
 

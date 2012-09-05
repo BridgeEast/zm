@@ -13,7 +13,7 @@ class CreateOrders < ActiveRecord::Migration
       t.date :production_date
       t.boolean :shipment
       t.boolean :lading_bill
-      t.boolean :state
+      t.string :state
       t.text :remark
 
       t.timestamps

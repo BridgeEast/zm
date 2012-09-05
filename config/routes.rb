@@ -1,4 +1,5 @@
 Zm::Application.routes.draw do
+
   
  resources :acts_as_menus do
    collection do
@@ -44,7 +45,7 @@ Zm::Application.routes.draw do
      post "create_procession"
      post "delete_procession"
      post "update_procession"
-      get "store_of_shoes"
+     get "store_of_shoes"
      get "get_general_shoes"
      post "update_shoes"
      post "delete_shoes"
@@ -57,32 +58,34 @@ Zm::Application.routes.draw do
  end
 
 
+
+
+
+
  resources :managements do
    collection do
-####### 好，这部分是我的路由,不要改我的 ###########
+
+   ## guest & virtual
+     get "csos_paging"
      get "check_guest_order"
+     get "get_check_guest_order"
+     get "get_selected_data"
      get "get_virtuals"
-     post "get_mouth_sheet"
      get "get_virtual_daily_dispatch"
      get "get_virtual_mouth_sheet"
      get "get_virtual_mouth_dispatch"
-     get "get_virtual_daily_num_size"
      get "get_virtual_daily_sheet"
      get "get_order_progress"
-     get "get_daily_sheet"
-     get "get_guest_order"
      get "check_virtual_warehouse"
-     get "get_tree_node"
-     get "get_check_guest_order"
-     get "get_check_virtual_warehouse"
-     get "get_check_virtual_warehouse_node"
-     get "get_detail"
-####### 好，这部分是我的路由 ######################
+   ################
 
+   #**********查看鞋库************
      get "check_store_of_shoes"
      get "get_data"
      get "get_check_store_of_shoes"
      get "get_details"
+     get "csos_paging"
+   #*******************************
 
      get "get_check_shoes"
      get "get_details_of_shoes"
@@ -108,29 +111,66 @@ Zm::Application.routes.draw do
      get"get_general_shoes"
      get"load_tree"
      get"get_scanning_detail"
+     #*********心愿单****************
      get"change_board_kind"
      post"change_board_kind"
      get"get_data"
      #################################
-     get "wish_list"
+     
+    get "wish_list"
      get "wish_list_data"
+     post "destroy_choice"
+     post "add_to_determined_board"
+     post "add_to_order"
+    
+     #********订单管理***************
+     get"order_management"
+
+     
+
+    
+   
+     #################################
+    
    end
  end
+#----------------------------------------aji/jb
 
  resources :services do
    collection do
+     #-----------------------------------aji
      get "excelProcessingAndPlayBoard"
      get "get_excel_shoes"
-     get "scanningGuestWishLists"
      post "delete_shoes_and_detail_of_shoes"
      ############################我的别动############################
      get "get_details_of_shoes"
+     post "create_in_generalanddetail"
+     post "updata_in_generalanddetail"
+     get "get_details_of_shoes_all_id"
+     post "updata_in_play_board"
+     get "get_tree_node"
+     get "scanningGuestWishLists"
+     post "upload_photo"
+
+     #--------------------------------------jb
      get "guest_order_management"
      get "get_orders"
      get "get_order_data"
      get "get_order_shoes_detail"
+
+     ################################################################
+
+   post "create_in_generalanddetail"
+     post "updata_in_generalanddetail"
+     get "get_details_of_shoes_all_id"
+     get "factory_order"
+     get "get_factory_order"
+     get "get_check_shoes"
+     post "mps"
      get "get_speed_of_progress"
      ################################################################
+
+
    end
  end
 

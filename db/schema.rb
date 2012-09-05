@@ -125,7 +125,7 @@ ActiveRecord::Schema.define(:version => 20120827074417) do
     t.date     "production_date"
     t.boolean  "shipment"
     t.boolean  "lading_bill"
-    t.boolean  "state"
+    t.string   "state"
     t.text     "remark"
     t.datetime "created_at"
     t.datetime "updated_at"

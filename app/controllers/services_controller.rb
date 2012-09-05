@@ -1,10 +1,54 @@
 class ServicesController < ApplicationController
-  #---------------------------------aji
+  #---------------------------------------------aji-------------------------------------------------
   def excelProcessingAndPlayBoard
   end
   #---------------------------------- 得到数据－－－－－－－－
   def get_excel_shoes
-    @tem1 = GeneralShoe.all
+    @tem1=[]
+   
+    case params[:nodekind]
+    when 'y'
+      @temexl = ExcelReceive.where("receiving_date like ?","#{params[:nodename]}%")
+      #@temexl = ExcelReceive.find_by_sql("select * from excel_receives where year(receiving_date) = #{params[:nodename]}")# sucess
+      @temexl.each do |temexl|
+        @temaji = GeneralShoe.find_all_by_excel_receive_id(temexl.id)
+        @tem1.concat(@temaji)
+      end
+
+    when 'm'
+      puts "--------month-------------",params[:nodename]
+      @temexl = ExcelReceive.where("receiving_date like ?","#{params[:nodename]}%")
+      #@temexl = ExcelReceive.find_by_sql("select * from excel_receives where receiving_date like #{params[:nodename]}")# sucess
+      @temexl.each do |temexl|
+        @temaji = GeneralShoe.find_all_by_excel_receive_id(temexl.id)
+        @tem1.concat(@temaji)
+      end
+
+    when 'excelid'
+      puts "--------excelid-------------",params[:nodename]
+       @tem1 = GeneralShoe.find_all_by_excel_receive_id(params[:nodename])
+    end
+    puts @tem1.size.to_s
+
+
+
+=begin
+    @tem1=[]
+    if params[:yeardate].empty? == false 
+      puts "xxxxxxxxxxxxxxxxxx",params[:yeardate].empty?
+
+      @temexl = ExcelReceive.find_by_sql("select * from excel_receives where year(receiving_date) = #{params[:yeardate]}")# sucess
+      @temexl.each do |temexl|
+        @tem1 << GeneralShoe.find_by_excel_receive_id(temexl.id)
+      end
+    end
+
+    if params[:excel_receive_id].empty? == false
+      puts "xxxxxxxxxxsssssssssssss",params[:excel_receive_id].empty?
+      @tem1 = GeneralShoe.find_all_by_excel_receive_id(params[:excel_receive_id])
+
+    end
+=end
     @tem2 = PlayBoard.all
     tem3=[]
     @tem1.each do |tem1|
@@ -32,16 +76,181 @@ class ServicesController < ApplicationController
     end
   end
 
+  #------------------------------ 添加数据在general_shoes and details_of_shoes
+  def create_in_generalanddetail
+    GeneralShoe.create!(params[:record])
+    render :json =>{}
+  end
+  #------------------------------ 修改数据在general_shoes and details_of_shoes
+  def updata_in_generalanddetail
+    GeneralShoe.find(params[:record][:id]).details_of_shoes.delete_all
+     GeneralShoe.find(params[:record][:id]).update_attributes(params[:record])
+    render :json => {}
+  end
+  #--------------------------- 点修改后弹出的显示，这里返回的是一串id！妈的个b
+  def get_details_of_shoes_all_id
+    details_shoes = GeneralShoe.get_details_ids_json( params[:id] )
+      respond_to do|format|
+        format.json{ render :json => { :dos => details_shoes } }
+      end
+  end
+  #--------------------------- change the sure_board and done_board
+  def updata_in_play_board
+    @tem=PlayBoard.find_by_general_shoe_id(params[:record][:general_shoe_id])
+    @tem.update_attributes(:sure_board => params[:record][:sure_board])
+    @tem.update_attributes(:done_board => params[:record][:done_board])
+    render :json => {}
+ 
+
+  end
+  #-------------------------- get the EpapbTree's treenode json-- 请不要改我的，因为我都已经看不懂我的代码了。。
+  def get_tree_node
+    treenodes=[]
+    yearnode=[]
+    #excelnode=[]
+    yearnode.push('2011')
+    aji=false
+    #get all of table
+    ExcelReceive.all.each do |tem|
+      yearnode << tem.receiving_date.year
+      yearnode=yearnode.uniq
+      
+     #for month in monthnode
+      #  if tem.receiving_date.month != month then  
+       #   yearnode << { :text => tem.receiving_date., :leaf=>true}
+        #end
+     end
+    for year in yearnode do
+      monthnode=Array.new(13){ Array.new()} # 真正的标准的二维定义！！
+      ExcelReceive.all.each do |tem|
+        if tem.receiving_date.year == year then
+          aji = true
+          monthnode[tem.receiving_date.month] << { :text => tem.excel_receive_id, :id=> tem.id, :leaf => true }
+        end
+      end
+      excelnode=[]
+      monTime=12
+        #----------
+      if year==Time.new.year then monTime=Time.new.month end
+          
+        for i in 1..monTime do
+          if (monthnode[i].empty?) then
+             excelnode << { :text => i.to_s+'mon', :id => i.to_s+'m', :leaf => true  }
+          else
+             excelnode << { :text => i.to_s+'mon', :id => i.to_s+'m', :children => monthnode[i] }
+          end
+        end
+        #----------
+        if aji then
+          treenodes << { :text => year.to_s+'y', :id => year.to_s+'y', :children => excelnode }
+        else
+          treenodes << { :text => year.to_s+'y', :id => year.to_s+'y', :leaf => true }
+        end
+    end
+      #if monthnode.include?(tem.receiving_date.month) then
+       # { :text => tem.receiving_date.month, :children => [] }
+      #else
+      #tem.excel_receive_id
+    render :json=> treenodes
+  end
+  #----------------------------load the picture ----
+  def upload_photo
+    img=params[:photo]
+    
+    content_size=img.size
+    puts "ssssssssssssssssssssssss",img
+    file_data=img.read
+    filetype=img.content_type
+    @filename=img.original_filename
+    File.open(RAILS_ROOT+"/public/images/"+@filname,"wb"){ |f| f.write(file_data) }
+    render :json => {  }
+  end
 
 
 
 
 
+  def upload_photoaji
+    @photo = GeneralShoe.new( params[:dd])
+    origin_path = params[:dd][:photo_one]
+    photo_one = upload_pic( origin_path, )
+    @photo.set_photo_url(photo_one)   #go controller,write the set_photo_url,
+
+    @photo.save #save it in db
+  end
+  
+  def upload_pic(origin_path,target_dir)
+    photo_name = origin_path.original_filename
+    File.open(File.join( target_dir, photo_name),'wb') do |f|
+      f.write( file.read)
+      return photo_name
+    end
 
 
+  end
+#------------------------------------------------------------------------------------------------------
 
+ def factory_order
+    end
 
+    def get_factory_order
+      #respond_to do |format|
+      #format.json{ render :json => { :factory_order => FactoryOrder.all } }
+     # end
+      factory_orders = FactoryOrder.get_cfo_record( params[:id] )
+      if factory_orders == [] then
+        # 如果没有找到对应的记录
+        cfo_grid = ""
+      else
+        cfo_grid = FactoryOrder.create_cfo_json( factory_orders )
+      end
+      #回应请求
+      respond_to do |format|
+        format.json{ render :json => { :factory_order => cfo_grid } }
+      end
+    end
 
+    #def get_check_shoes
+  
+     # respond_to do |format|
+    #format.json{ render :json => { :check_shoes => GeneralShoe.all  } }
+     # end
+      #end
+ def get_check_shoes
+      index = params[:start]
+      pageSize = params[:limit]
+      i = index.to_i
+      check_shoes = Array.new
+      count = pageSize.to_i + index.to_i
+      # 按照第几页显示10条数据
+      for i in index.to_i...count
+        tmp = FactoryOrder.find( params[:id] ).general_shoes[ i ]
+        if tmp != nil then
+          check_shoes << tmp
+          i += 1
+        else
+          break
+        end
+      end
+      general_shoes = GeneralShoe.get_shoes_json( check_shoes ) 
+      general_shoes = { :totalProperty => 100, :cs => general_shoes }
+      respond_to do|format|
+        format.json{ render :json => general_shoes }
+      end
+      end
+
+ def mps
+    FactoryOrder.find(params[:record][:id]).update_attributes(:payment => params[:record][:payment])
+    render :json => {  }
+    end
+
+ #-----------------------------右键查看详情----------------
+  def get_details_of_shoes
+    details_shoes = GeneralShoe.get_details_json( params[:id] )
+    respond_to do|format|
+      format.json{ render :json => { :dos => details_shoes } }
+    end
+  end
 
 
 
@@ -139,6 +348,7 @@ class ServicesController < ApplicationController
         format.json{ render :json =>{} }
       end
     end
+
 #########################################################################################################################################################
   def upload_order
     @order = Order.new( params[:order] )

@@ -1,8 +1,5 @@
 Zm.guests.wish_list = {
 	init: function() {
-        this.select_id;
-        this.photo_one;
-        this.photo_two;
 		Zm.pages.ViewPort = {
 			layout: 'border',
 			region: 'center',
@@ -15,11 +12,9 @@ Zm.guests.wish_list = {
 	},
 
 	create_wl_grid: function() {
-        var sm = new Ext.grid.CheckboxSelectionModel();
+		var sm = new Ext.grid.CheckboxSelectionModel();
 		var cm = new Ext.grid.ColumnModel([
-		new Ext.grid.RowNumberer(),
-        sm, 
-        {
+		new Ext.grid.RowNumberer(), sm, {
 			header: '鞋图1',
 			dataIndex: 'photo_one',
 			renderer: title_img
@@ -76,15 +71,15 @@ Zm.guests.wish_list = {
 
 		var store = new Ext.data.JsonStore({
 			url: '/guests/wish_list_data.json',
-			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'sure_board', 'done_board', 'production_date', 'communication' ,'remark'],
+			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'sure_board', 'done_board', 'production_date', 'communication', 'remark'],
+			//fields: 'id photo_one'.split(" ") 
 			root: 'wish_list_data',
-			baseParams: { id: 'null' }
+			baseParams: {
+				id: 'null'
+			} //初始化
 		});
 
 		var tbar = new Ext.Toolbar({
-			defaults: {
-				scope: this
-			},
 			items: [{
 				text: '发送Excel添加到开发板',
 				handler: function() {
@@ -93,51 +88,58 @@ Zm.guests.wish_list = {
 			},
 			'-', {
 				text: '添加到确认板',
-				handler: function() {}
+				handler: function() {
+					Zm.guests.judge_add_to_determined_board.init()
+				}
 			},
 			'-', {
 				text: '添加到预购单',
-				handler: function() {Zm.guests.add_to_advanced_order.init().show()}
+				handler: function() {
+					Zm.guests.add_to_advanced_order.init().show()
+				}
 			},
 			'-', {
 				text: '删除所选',
-				handler: function() {}
+				handler: function() {
+					Zm.guests.judge_destroy_choice.init()
+				}
 			},
 			'-', {
 				text: '添加到订单',
-				handler: function() {Zm.guests.add_to_order.init().show()}
+				handler: function() {
+					Zm.guests.judge_add_to_order.init()
+				}
 			}]
 		});
 		var wlGrid = new Ext.grid.GridPanel({
 			id: 'wlGrid',
 			region: 'center',
 			cm: cm,
-            sm: sm,
+			sm: sm,
 			store: store,
 			viewConfig: {
 				forceFit: true
 			},
-			tbar: tbar
+			tbar: tbar,
 		});
 
 		var contextmenu = new Ext.menu.Menu({
 			items: [{
 				id: 'check_details',
 				text: '查看详情',
-                scope: this,
-				handler: function() {	
-                    this.select_id = Ext.getCmp('wlGrid').getSelectionModel().getSelected().data["id"];
-                    this.photo_one = Ext.getCmp('wlGrid').getSelectionModel().getSelected().data["photo_one"];
-                    this.photo_two = Ext.getCmp('wlGrid').getSelectionModel().getSelected().data["photo_two"];
-					Zm.guests.win.init().show();
+				scope: this,
+				handler: function() {
+                    var selectionData = Ext.getCmp('wlGrid').getSelectionModel().getSelected();
+					Zm.guests.win.init(selectionData).show();  //把selectionData传过去
 				}
-			},{ 
-              id:'communicate_with_service',
-            text: '与客服交谈',
-            handler: function(){ 
-              Zm.guests.communicate.init().show();
-            }
-            }]
+			},
+			{
+				id: 'communicate_with_service',
+				text: '与客服交谈',
+				handler: function() {
+					Zm.guests.communicate.init().show();
+				}
+			}]
 		});
 		wlGrid.on("rowcontextmenu", function(grid, rowIndex, e) {
 			e.preventDefault();
@@ -149,7 +151,6 @@ Zm.guests.wish_list = {
 	},
 
 	create_wl_tree: function() {
-
 		var wlTree = new Ext.tree.TreePanel({
 			autoScroll: true,
 			region: 'west',
@@ -183,12 +184,12 @@ Zm.guests.wish_list = {
 					id: i + '-' + j,
 					children: [{
 						text: '开发板',
-						id:  i + '-' + j + '-' + '开发板' ,
+						id: i + '-' + j + '-' + '开发板',
 						leaf: true
 					},
 					{
 						text: '确认板',
-						id:  i + '-' + j + '-' + '确认板', 
+						id: i + '-' + j + '-' + '确认板',
 						leaf: true
 					}]
 				});
@@ -198,12 +199,11 @@ Zm.guests.wish_list = {
 
 		wlTree.setRootNode(rootShoes);
 		wlTree.on('click', function(node) {
-          var store = Ext.getCmp('wlGrid').store;
-          store.setBaseParam("id" , node.id);
-          store.reload();
+			var store = Ext.getCmp('wlGrid').store;
+			store.setBaseParam("id", node.id);
+			store.reload();
 		})
 		return wlTree
-
 	}
 
 }
