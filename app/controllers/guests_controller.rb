@@ -2,35 +2,34 @@
 class GuestsController < ApplicationController
 
   #*******************************心愿单********************************
-   # url的解析，controller + action ,这里可以删，但route.rb哪里不能删 
-   # def wish_list
-   # end
+  # url的解析，controller + action ,这里可以删，但route.rb哪里不能删 
+  def wish_list
+  end
 
-    def wish_list_data
-      wish_list = GeneralShoe.get_cwl_record( params[:id] )
-      data = wish_list.blank? ? "" : GeneralShoe.wish_list_data( wish_list )
-      render :json => { :wish_list_data => data }  #可以把render封装起来
-    end
+  def wish_list_data
+    wish_list = GeneralShoe.get_cwl_record( params[:id] )
+    data = wish_list.blank? ? "" : GeneralShoe.wish_list_data( wish_list )
+    render :json => { :wish_list_data => data }  #可以把render封装起来
+  end
 
-    def destroy_choice
-      #debugger
-      GeneralShoe.destroy(params[:id])
-      render :json => {}
-    end
+  def destroy_choice
+    #debugger
+    GeneralShoe.destroy(params[:id])
+    render :json => {}
+  end
 
-    def add_to_determined_board
-      GeneralShoe.find(params[:id]).each do |record|
-        record.play_board.update_attributes(:board_kind => "确认板")
-      end
-      render :json => {}
+  def add_to_determined_board
+    GeneralShoe.find(params[:id]).each do |record|
+      record.play_board.update_attributes(:board_kind => "确认板")
     end
-  
+    render :json => {}
+  end
 
-    def add_to_order
-      Order.create!(params[:record])
-      render :json => {}
-    end
-    
+  def add_to_order
+    Order.create!(params[:record])
+    render :json => {}
+  end
+
   #*********************************************************************
 
 
@@ -56,17 +55,17 @@ class GuestsController < ApplicationController
 
   def change_board_kind
 
-   # PlayBoard.find(params[:choses_id]).board_kind.update_attributes("开发板")
-   # render:json =>{}
-       PlayBoard.all.each do |choses_ids|
-         get_shoes = params[:choses_id].delete("S")
-       if( choses_ids.general_shoe_id == get_shoes.to_i)
-          choses_ids.supdate_attributes(:board_kind => "开发板")
-       end
-       end
+    # PlayBoard.find(params[:choses_id]).board_kind.update_attributes("开发板")
+    # render:json =>{}
+    PlayBoard.all.each do |choses_ids|
+      get_shoes = params[:choses_id].delete("S")
+      if( choses_ids.general_shoe_id == get_shoes.to_i)
+        choses_ids.supdate_attributes(:board_kind => "开发板")
+      end
+    end
     respond_to do |format|
-       format.json{  render :json =>{}}
-     end
+      format.json{  render :json =>{}}
+    end
 
     select_id = nil
     GeneralShoe.all.each do |j|
@@ -144,21 +143,18 @@ class GuestsController < ApplicationController
 
   def order_management
   end
-  def get_check_orders
-    render :json => { :check_orders => Order.all }
-  end
   def get_undetermined_orders_data
     results = []
     results = Order.where("production_date like ? and state like ? ", "%#{params[:selectDate]}%", "%#{'待定订单'}%")
-    render :json => { :check_orders => results }
+    paging(results)
   end
   def get_proceeding_orders_data
     results = []
     results = Order.where("production_date like ? and state like ? ", "%#{params[:selectDate]}%", "%#{'进行中订单'}%")
-    render :json => { :check_orders => results }
+    paging(results)
   end
   def get_check_shoes
-    Order.find(params[:id]).first.general_shoe
+    paging(Order.find(params[:id]).first.general_shoe)
   end
   def paging(array)
     m = params[:limit].to_i
@@ -174,9 +170,6 @@ class GuestsController < ApplicationController
     all_data = { :totalProperty => array.length, :roots => root }
     render :json => all_data
   end
-  def guest_order
-    render :json => {}
-  end
   def get_guest_details
     a = Order.where( :order_id => params[:idd] ).first.id
     paging(GeneralShoe.find(:all, :conditions => "order_id = '#{a}'"))
@@ -185,6 +178,19 @@ class GuestsController < ApplicationController
     shoes = Order.where( :order_id => params[:orderid] ).first.general_shoes
     paging(GeneralShoe.get_progress_num_and_size( shoes ))
   end    
-
-
+  def get_shoes_size_num
+    shoes = Order.where( :order_id => params[:order_id] ).first.general_shoes
+    size_num = GeneralShoe.get_size_and_num_json( shoes )
+    paging(size_num)
+  end
+  def get_details_of_shoes
+    details_shoes = GeneralShoe.get_order_details_json( params[:shoes_id] )
+    respond_to do|format|
+      format.json{ render :json => { :dos => details_shoes } }
+    end
+  end
+  def send_order
+    Order.where(:order_id => params[:record][:order_id]).update_attributes(params[:record])
+    render :json => {}
+  end
 end

@@ -123,8 +123,7 @@ Zm::Application.routes.draw do
      get"get_data"
      #********订单管理***************
      get"order_management"
-
-     get "order_management"
+     get"get_details_of_shoes"
    end
  end
 #----------------------------------------aji/jb

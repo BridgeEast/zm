@@ -34,7 +34,7 @@ Zm.guests.check_order_schedule = {
         }]);
 
         var store = new Ext.data.JsonStore({
-            url: '/guests/guest_order.json',
+            url: '/guests/get_order_progress.json',
             fields: ["shoes_id", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
             totalProperty: "totalProperty",
             root: "roots",
