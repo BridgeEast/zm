@@ -54,7 +54,7 @@ Zm.managements.check_guest_order= {
          		id: 'theContextMenu',
           	items: [{
               	text: '查看鞋', 
-                handler: function(){ checkShoesWindow.show(); }
+                handler: function(){ Zm.managements.checkShoesWin.init().show(); }
   	    		},{
                	text: '查看订单进度',
                 handler: function(){ checkProgressWindow.show(); }
