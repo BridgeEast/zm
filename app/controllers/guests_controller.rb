@@ -83,20 +83,10 @@ class GuestsController < ApplicationController
     end
 
   end
-
-  def get_data
-    selects =[]
-    GeneralShoe.all.each do |item|
-
-      if(item.production_date.to_s.split("-")[1].gsub(/\b(0+)/,"")==params[:selectMonth].to_s and item.production_date.to_s.split("-")[0]==params[:selectYear] and item.types_of_shoes ==params[:selectType] and item.play_board.board_kind=="确认板")
-        selects << item
-
-  end
    
   def get_data
      selects =[]
      GeneralShoe.all.each do |item|
-       
        if(item.production_date.to_s.split("-")[1].gsub(/\b(0+)/,"")==params[:selectMonth].to_s and item.production_date.to_s.split("-")[0]==params[:selectYear] and item.types_of_shoes ==params[:selectType] )
        selects << item
        end
@@ -112,7 +102,6 @@ class GuestsController < ApplicationController
       respond_to do|format|
         format.json{ render :json => { :scanning_detail => details_shoes } }
       end
-    end
     respond_to do |format|
       format.json{  render :json =>{ :general_shoes =>selects }}
     end
@@ -125,7 +114,7 @@ class GuestsController < ApplicationController
       format.json{ render :json => { :scanning_detail => details_shoes } }
     end
   end
-
+=begin
   def load_tree
     nodes=[]
     treenodes=[]
@@ -158,6 +147,7 @@ class GuestsController < ApplicationController
     end
     render :json=>treenodes
   end
+=end
 
   ########################################################################
   #####################订单管理###########################################
@@ -180,6 +170,7 @@ class GuestsController < ApplicationController
   def get_check_shoes
     Order.find(params[:id]).first.general_shoe
   end
+
   def paging(array)
     m = params[:limit].to_i
     n = params[:start].to_i
@@ -194,13 +185,16 @@ class GuestsController < ApplicationController
     all_data = { :totalProperty => array.length, :roots => root }
     render :json => all_data
   end
+
   def guest_order
     render :json => {}
   end
+
   def get_guest_details
     a = Order.where( :order_id => params[:idd] ).first.id
     paging(GeneralShoe.find(:all, :conditions => "order_id = '#{a}'"))
   end
+
   def get_order_progress
     shoes = Order.where( :order_id => params[:orderid] ).first.general_shoes
     paging(GeneralShoe.get_progress_num_and_size( shoes ))
