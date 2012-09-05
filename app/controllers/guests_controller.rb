@@ -28,39 +28,36 @@ class GuestsController < ApplicationController
   end
 
   def get_general_shoes
-    choses =[]
-    GeneralShoe.all.each do |check|
-      if(check.play_board.board_kind =="确认板")
-        choses<<check
-      end
-    end
+  #  choses =[]
+   # GeneralShoe.all.each do |check|
+  #    if(check.play_board.board_kind =="确认板")
+   #     choses<<check
+  #    end
+  #  end
     respond_to do |format|
-      format.json{ render :json=>{ :general_shoes =>choses }}
+      format.json{ render :json=>{ :general_shoes => GeneralShoe.all }}
     end
   end
 
   def change_board_kind
-       select_id = nil
-       GeneralShoe.all.each do |j|
-         if(j.shoes_id==params[:record])
-           select_id << j
-         end
-       end
-       PlayBoard.all.each do |choses_id|
-       if( choses_id.general_shoe_id == select_id)
-          choses_id.board_kind.update_attributes("开发板")
+   # PlayBoard.find(params[:choses_id]).board_kind.update_attributes("开发板")
+   # render:json =>{}
+       PlayBoard.all.each do |choses_ids|
+         get_shoes = params[:choses_id].delete("S")
+       if( choses_ids.general_shoe_id == get_shoes.to_i)
+          choses_ids.update_attributes(:board_kind => "开发板")
        end
        end
     respond_to do |format|
        format.json{  render :json =>{}}
-  end
+     end
   end
    
   def get_data
      selects =[]
      GeneralShoe.all.each do |item|
        
-       if(item.production_date.to_s.split("-")[1].gsub(/\b(0+)/,"")==params[:selectMonth].to_s and item.production_date.to_s.split("-")[0]==params[:selectYear] and item.types_of_shoes ==params[:selectType] and item.play_board.board_kind=="确认板")
+       if(item.production_date.to_s.split("-")[1].gsub(/\b(0+)/,"")==params[:selectMonth].to_s and item.production_date.to_s.split("-")[0]==params[:selectYear] and item.types_of_shoes ==params[:selectType] )
        selects << item
        end
      end

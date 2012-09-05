@@ -12,11 +12,11 @@ Zm.guests.check_detail={
       items:[{ 
         layout:'column',
         items:[{ 
-        title:'picture1',
         columnWidth: .5,
+        html: '<img src=\'/images/shoes/' + Ext.getCmp('scanningGrid').getSelectionModel().getSelected().data.photo_one + '\' width=100% height=100%>'
         },{
-        title:'picture2',
         columnWidth: .5,
+        html: '<img src=\'/images/shoes/' + Ext.getCmp('scanningGrid').getSelectionModel().getSelected().data.photo_two + '\' width=100% height=100%>'
         }]
       }]
     });

@@ -103,17 +103,17 @@ Zm::Application.routes.draw do
 
   resources :guests do
    collection do
-
+######################我的别动######################
      get"scanning_store_of_shoes"
      get"get_general_shoes"
      get"load_tree"
      get"get_scanning_detail"
      get"change_board_kind"
-
-     #**************心愿单***********
+     post"change_board_kind"
+     get"get_data"
+     #################################
      get "wish_list"
      get "wish_list_data"
-     #*******************************
    end
  end
 
@@ -123,8 +123,14 @@ Zm::Application.routes.draw do
      get "get_excel_shoes"
      get "scanningGuestWishLists"
      post "delete_shoes_and_detail_of_shoes"
+     ############################我的别动############################
      get "get_details_of_shoes"
-     
+     get "guest_order_management"
+     get "get_orders"
+     get "get_order_data"
+     get "get_order_shoes_detail"
+     get "get_speed_of_progress"
+     ################################################################
    end
  end
 
