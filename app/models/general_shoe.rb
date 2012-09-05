@@ -22,10 +22,6 @@ class GeneralShoe < ActiveRecord::Base
         :material_id => item.material.id,
         :color_id => item.color.id,
         :procecession_id => item.procession.id,
-        :region => item.region.region,
-        :material => item.material.material,
-        :color => item.color.color,
-        :procession => item.procession.procession,
       }
     end
   end
@@ -275,5 +271,19 @@ end
 
 
   #-------------------------------------aji-------------------------------------
+  #####################order 里查看详情
+  def self.get_order_details_json( shoes_id ) 
+    shoes = self.where( :shoes_id => shoes_id ).first #取出id为the_shoe_id的鞋的对象
+    shoes.details_of_shoes.collect! do |record|
+      #对同一只多个详情进行筛选组成json
+      { 
+        :region => record.region.region,
+        :material => record.material.material,
+        :color => record.color.color,
+        :procession => record.procession.procession,
+        :remark => record.region.remark,
+      }
+    end
+  end
 
 end

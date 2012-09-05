@@ -70,7 +70,7 @@ Zm.managements.win = {
 			})
 		});
 
-		check_detail = new Ext.Window({
+		var check_detail = new Ext.Window({
 			layout: 'border',
 			closeAction: 'hide',
 			height: 600,

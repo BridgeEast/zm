@@ -1,6 +1,16 @@
 Zm.guests.check_shoes = {
     init: function() {
         var cm = new Ext.grid.ColumnModel([
+            {  
+                header: '鞋图一',
+                dataIndex: 'photo_one',
+                hidden : true
+            },
+            { 
+                header: '鞋图二',
+                dataIndex: 'photo_two',
+                hidden : true
+            },
             {
                 header: '样品号',
                 dataIndex: 'shoes_id'
@@ -23,12 +33,13 @@ Zm.guests.check_shoes = {
             }
         ]);
         var store = new Ext.data.JsonStore({
-            url: '/guests/guest_order.json',
-            fields: ['shoes_id', 'types_of_shoes', 'suitable_people', 'price', 'remark'],
+            url: '/guests/get_guest_details.json',
+            fields: ['photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'price', 'remark'],
             totalProperty: "totalProperty",
             root: "roots",
         });
         var grid = new Ext.grid.GridPanel({
+            id: 'grid',
             height: 570,
             autoScroll: true,
             loadMask: true,
@@ -46,7 +57,26 @@ Zm.guests.check_shoes = {
                 emptyMsg: '没有记录'
             })
         });
-
+        var contextmenu = new Ext.menu.Menu({ 
+            scope: this,
+            items: [{ 
+                     text: '查看详情',
+                     handler: function() { 
+                     Zm.guests.check_details_of_shoes.init().show();
+                     }
+                   },
+                   { 
+                     text: '与客服交谈',
+                     handler: function() { 
+                        Zm.guests.communicateWithServices.init().show();
+                     }
+                   }]
+        }); 
+        grid.on("rowcontextmenu", function(grid, rowIndex, e) { 
+            e.preventDefault();
+            grid.getSelectionModel().selectRow(rowIndex);
+            contextmenu.showAt(e.getXY())
+        });
         var checkShoes = new Ext.Window({
             height: 600,
             width: 500,

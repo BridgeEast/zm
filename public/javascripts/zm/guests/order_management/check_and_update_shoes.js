@@ -1,8 +1,17 @@
 Zm.guests.check_and_update_shoes = {
     init: function() {
-        var sm = new Ext.grid.CheckboxSelectionModel();
         var cm = new Ext.grid.ColumnModel([
-        new Ext.grid.RowNumberer(), sm, {
+        new Ext.grid.RowNumberer(), { 
+            header: '鞋图一',
+            dataIndex: 'photo_one',
+            hidden : true
+        },
+        { 
+            header: '鞋图二',
+            dataIndex: 'photo_two',
+            hidden : true
+        },
+        {
             header: '样品号',
             dataIndex: 'shoes_id'
         },
@@ -24,12 +33,13 @@ Zm.guests.check_and_update_shoes = {
         }]);
 
         var store = new Ext.data.JsonStore({
-          url: '/guests/guest_order.json',
-          fields: ['shoes_id', 'types_of_shoes', 'suitable_people', 'price', 'remark'],
+          url: '/guests/get_guest_details.json',
+          fields: ['photo_one', 'photo_two','shoes_id', 'types_of_shoes', 'suitable_people', 'price', 'remark'],
           totalProperty: "totalProperty",
           root: "roots",
         });
         var grid = new Ext.grid.GridPanel({
+            id: 'grid',
             height: 570,
             autoScroll: true,
             loadMask: true,
@@ -38,7 +48,6 @@ Zm.guests.check_and_update_shoes = {
                 forceFit: true
             },
             cm: cm,
-            sm: sm,
             store: store,
             bbar: new Ext.PagingToolbar({
                 pageSize: 20,
@@ -46,16 +55,27 @@ Zm.guests.check_and_update_shoes = {
                 displayInfo: true,
                 displayMsg: '显示第{0}条到{1}条记录，一共{2}条',
                 emptyMsg: '没有记录'
-            }),
-            tbar: new Ext.Toolbar(['-', {
-                text: '添加一个样品',
-            },
-            '-', {
-                text: '删除所选样品',
-            },
-            '-'])
+            })
         });
-
+        var contextmenu = new Ext.menu.Menu({ 
+            items: [{ 
+                     text: '查看详情',
+                     handler: function(){ 
+                        Zm.guests.check_details_of_shoes.init().show();
+                     }
+                   },
+                   { 
+                     text: '与客服交谈',
+                     handler: function() { 
+                     Zm.guests.communicateWithServices.init().show();
+                     }
+                   }]
+        }); 
+        grid.on("rowcontextmenu", function(grid, rowIndex, e) { 
+            e.preventDefault();
+            grid.getSelectionModel().selectRow(rowIndex);
+            contextmenu.showAt(e.getXY())
+        });
         var checkAndUpdateShoes = new Ext.Window({
             constrainHeader: true,
             height: 600,

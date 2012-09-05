@@ -11,4 +11,15 @@ class Order < ActiveRecord::Base
   def get_order_url
     return Order::File_target + "/" + self.order_url
   end
+  def get_details_of_shoes
+      details_of_shoes = GeneralShoe.where(:shoes_id => shoes_id).first
+      details_of_shoes.collect! do |item|
+        { 
+          :region => item.region.region,
+          :material => item.material.material,
+          :color => item.color.color,
+          :procession => item.procession.procession
+        }
+      end
+  end
 end
