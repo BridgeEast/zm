@@ -106,7 +106,7 @@ Zm::Application.routes.draw do
 
   resources :guests do
    collection do
-
+######################我的别动######################
      get"scanning_store_of_shoes"
      get"get_general_shoes"
      get"load_tree"
@@ -124,7 +124,14 @@ Zm::Application.routes.draw do
      #********订单管理***************
      get"order_management"
 
-     get "order_management"
+     
+
+    
+   
+     #################################
+     get "wish_list"
+     get "wish_list_data"
+
    end
  end
 #----------------------------------------aji/jb
@@ -135,6 +142,7 @@ Zm::Application.routes.draw do
      get "excelProcessingAndPlayBoard"
      get "get_excel_shoes"
      post "delete_shoes_and_detail_of_shoes"
+     ############################我的别动############################
      get "get_details_of_shoes"
      post "create_in_generalanddetail"
      post "updata_in_generalanddetail"
@@ -149,13 +157,16 @@ Zm::Application.routes.draw do
      get "get_orders"
      get "get_order_data"
      get "get_order_shoes_detail"
-     post "create_in_generalanddetail"
+   post "create_in_generalanddetail"
      post "updata_in_generalanddetail"
      get "get_details_of_shoes_all_id"
      get "factory_order"
      get "get_factory_order"
      get "get_check_shoes"
      post "mps"
+     get "get_speed_of_progress"
+     ################################################################
+
    end
  end
 

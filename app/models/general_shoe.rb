@@ -161,12 +161,12 @@ class GeneralShoe < ActiveRecord::Base
     size_shoe = shoe.size_of_shoes.where( :size => size )
     if size_shoe != []
       if size_shoe.first.necessary_num != nil 
-        nec = size_shoe.first.necessary_num.to_s
+        nec = size_shoe.first.necessary_num.to_s######要完成的数量
       else
         nec = "0"
       end
       if size_shoe.first.finished_num != nil
-        fin = size_shoe.first.finished_num.to_s
+        fin = size_shoe.first.finished_num.to_s#######已完成数量!
       else
         fin = "0"
       end

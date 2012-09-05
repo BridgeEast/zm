@@ -255,7 +255,6 @@ class ServicesController < ApplicationController
 
 
 
-
   def scanningGuestWishList
   end
 
@@ -308,6 +307,48 @@ class ServicesController < ApplicationController
         format.json{ render :json => { :order_shoes_detail_second => details_shoes } }
       end
    end
+
+   def get_speed_of_progress
+      shoes = Order.where( :id => params[:id].delete("O") ).first.general_shoes
+     size_num = GeneralShoe.get_size_and_num_json( shoes )
+      respond_to do|format|
+        format.json{ render :json => { :speed_of_progress => size_num } }
+      end
+   end
+
+    def update_pay_condition
+    Order.all.each do |selects|
+     if( selects.order_id == params[:id])
+         selects.update_attributes(:payment => params[:value])
+     end
+  end
+    respond_to do |format|
+       format.json{  render :json =>{}}
+     end
+    end
+
+    def update_quality
+      Order.all.each do |qualityselects|
+        if(qualityselects.order_id == params[:id])
+         # p paramas[:qualityvalue]
+          qualityselects.update_attributes(:quality => params[:value])
+        end
+      end
+      respond_to do |format|
+        format.json{ render :json =>{} }
+      end
+    end
+
+    def update_shipment
+      Order.all.each do |shipselects|
+        if(shipselects.order_id == params[:id])
+          shipselects.update_attributes(:shipment => params[:value])
+        end
+      end
+      respond_to do |format|
+        format.json{ render :json =>{} }
+      end
+    end
 
 #########################################################################################################################################################
   def upload_order

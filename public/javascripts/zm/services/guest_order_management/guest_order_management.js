@@ -57,7 +57,12 @@ Zm.services.guest_order_management={
                 {
                   text:'查看订单进度',
                   scope:this,
-                  handler:function(){  }
+
+                  handler:function(){
+                   this.select_id = Ext.getCmp('ordermanagementGrid').getSelectionModel().getSelected().data["order_id"];
+                   Zm.services.speed_of_progress.init().show();
+                  }
+
                 },
                 { 
                   text:'与客户交谈',
@@ -67,17 +72,32 @@ Zm.services.guest_order_management={
                 { 
                   text:'修改付款情况',
                   scope:this,
-                  handler:function(){  }
+
+                  handler:function(){
+                   this.select_id = Ext.getCmp('ordermanagementGrid').getSelectionModel().getSelected().data["order_id"];
+                   Zm.services.update_pay_condition.init().show();
+                  }
+
                 },
                { 
                   text:'修改品质',
                   scope:this,
-                  handler:function(){  }
+
+                  handler:function(){ 
+                   this.select_id = Ext.getCmp('ordermanagementGrid').getSelectionModel().getSelected().data["order_id"];
+                   Zm.services.update_quality.init().show();
+                  }
+
                 },
                 { 
                   text:'修改是否出货',
                   scope:this,
-                  handler:function(){  }
+
+                  handler:function(){ 
+                     this.select_id = Ext.getCmp('ordermanagementGrid').getSelectionModel().getSelected().data["order_id"];
+                   Zm.services.update_shipment.init().show();
+                  }
+
                 },
                 { 
                   text:'上传提单',
