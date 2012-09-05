@@ -1,4 +1,6 @@
-Ext.onReady(function(){
+Zm.managements.checkShoesWin = { 
+    init: function() { 
+
 			var cm = new Ext.grid.ColumnModel([
           new Ext.grid.RowNumberer(),      
         	{header:'鞋号',dataIndex:'shoes_id'},
@@ -10,7 +12,7 @@ Ext.onReady(function(){
     	]);
 
     	var store = new Ext.data.JsonStore({
-          url:"/managements/guest_order.json",
+          url:"/managements/check_shoes.json",
           fields: ['shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'remark'],
           totalProperty: "totalProperty",
           root: "roots",
@@ -58,7 +60,7 @@ Ext.onReady(function(){
         	guestContexMenu.showAt(e.getXY());
     	});      
 
-      guestDetailWindow = new Ext.Window({
+      var checkShoesWin = new Ext.Window({
 	    		minimizable: true,
 	    		region: 'center',
 	    		labelAlign: 'top',
@@ -79,4 +81,9 @@ Ext.onReady(function(){
               store.load({ params: { start: 0, limit: 20 } });
           }}}
     	});
-	});					 
+
+
+
+    }
+
+}
