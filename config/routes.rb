@@ -114,7 +114,6 @@ Zm::Application.routes.draw do
      get"get_scanning_detail"
 
      #*********心愿单****************
-     get "change_board_kind"
      get "get_details"
      get "wish_list"
      get "wish_list_data"
