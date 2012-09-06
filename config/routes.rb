@@ -70,6 +70,7 @@ Zm::Application.routes.draw do
      get "check_guest_order"
      get "get_check_guest_order"
      get "get_selected_data"
+     get "check_shoes"
      get "get_virtuals"
      get "get_virtual_daily_dispatch"
      get "get_virtual_mouth_sheet"

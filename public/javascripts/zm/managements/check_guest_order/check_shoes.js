@@ -15,6 +15,7 @@ Zm.managements.checkShoesWin = {
           url:"/managements/check_shoes.json",
           fields: ['shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'remark'],
           totalProperty: "totalProperty",
+          baseParams: { id: Zm.managements.check_guest_order.selected_id },
           root: "check_shoes",
           autoLoad: true
     	});

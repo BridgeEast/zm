@@ -1,5 +1,6 @@
 Zm.managements.check_guest_order= { 
     init: function() { 
+        this.selected_id;
         Zm.pages.ViewPort = {
             layout: 'border',
             region:'center',
@@ -54,7 +55,10 @@ Zm.managements.check_guest_order= {
          		id: 'theContextMenu',
           	items: [{
               	text: '查看鞋', 
-                handler: function(){ Zm.managements.checkShoesWin.init().show(); }
+                handler: function(){ 
+                   this.selected_id = Ext.getCmp('cgo$Grid').getSelectionModel().getSelected().data["id"];
+                    Zm.managements.checkShoesWin.init().show(); 
+                }
   	    		},{
                	text: '查看订单进度',
                 handler: function(){ checkProgressWindow.show(); }

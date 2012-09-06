@@ -34,7 +34,7 @@ class ManagementsController < ApplicationController
       render :json => { :shoes => details }
     end
 
-  #*********************************************************************************************************
+  #**********************************************查看订单***********************************************************
 
    def check_guest_order
    end
@@ -47,6 +47,13 @@ class ManagementsController < ApplicationController
       cgo_paging(Order.where("production_date like ? ", "%#{params[:selectDate]}%").order("production_date DESC"))
    end
 
+   #^^^^^^^^^^^^^右键查看鞋^^^^^^^^^^^^^^
+   def check_shoes
+       tmp = Order.find(params[:id]).general_shoes
+       order_shoes = GeneralShoe.get_shoes_json( tmp )
+      render :json => { :check_shoes => order_shoes }
+      
+   end
 
     ##^^^^^^^^^^^^^  分页  ^^^^^^^^^^^^^^
     def cgo_paging(array)
