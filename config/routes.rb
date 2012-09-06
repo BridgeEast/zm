@@ -112,18 +112,20 @@ Zm::Application.routes.draw do
      get"get_general_shoes"
      get"load_tree"
      get"get_scanning_detail"
+
      #*********心愿单****************
-     get"change_board_kind"
-     post"change_board_kind"
-     get"get_data"
-     #################################
-     
-    get "wish_list"
+     get "change_board_kind"
+     get "get_details"
+     get "wish_list"
      get "wish_list_data"
      post "destroy_choice"
      post "add_to_determined_board"
      post "add_to_order"
     
+     post"change_board_kind"
+     get "get_data"
+
+
      #********订单管理***************
      get"order_management"
      get"get_details_of_shoes"

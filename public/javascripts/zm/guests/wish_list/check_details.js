@@ -51,6 +51,7 @@ Zm.guests.win = {
 			autoLoad: true
 		});
 
+        console.log('data' , id)
 		//store.load({ params: { start: 0 , limit: 2 } });
 		var grid = new Ext.grid.GridPanel({
 			region: 'center',

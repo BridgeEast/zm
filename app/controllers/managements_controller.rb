@@ -30,7 +30,7 @@ class ManagementsController < ApplicationController
     
 
     def get_details
-      details = GeneralShoe.get_shoes_details( params[:id] )
+      details = GeneralShoe.get_shoes_details( '2' )
       render :json => { :shoes => details }
     end
 
