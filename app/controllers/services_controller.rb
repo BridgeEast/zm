@@ -158,8 +158,8 @@ class ServicesController < ApplicationController
     img=params[:photo]
     
     content_size=img.size
-    puts "ssssssssssssssssssssssss",img
-    file_data=img.read
+    puts "ssssssssssssssssssssssss",params[:photo]
+   # file_data=img.read
     filetype=img.content_type
     @filename=img.original_filename
     File.open(RAILS_ROOT+"/public/images/"+@filname,"wb"){ |f| f.write(file_data) }
