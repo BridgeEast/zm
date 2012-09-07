@@ -51,8 +51,7 @@ class ManagementsController < ApplicationController
    def check_shoes
        tmp = Order.find(params[:id]).general_shoes
        order_shoes = GeneralShoe.get_shoes_json( tmp )
-      render :json => { :check_shoes => order_shoes }
-      
+       render :json => { :check_shoes => order_shoes }  
    end
 
     ##^^^^^^^^^^^^^  分页  ^^^^^^^^^^^^^^

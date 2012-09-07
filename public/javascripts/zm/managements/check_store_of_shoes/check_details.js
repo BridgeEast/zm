@@ -43,12 +43,10 @@ Zm.managements.win = {
 			url: '/managements/get_details.json',
 			fields: ['region', 'material', 'color', 'procession'],
 			method: 'post',
-			baseParams: {
-				id: Zm.managements.check_store_of_shoes.select_id 
-			},
+			baseParams: {	id: Zm.managements.check_store_of_shoes.select_id },
            /* totalProperty: 'totalProperty' ,*/
 			root: 'shoes',
-            autoLoad: true
+      autoLoad: true
 		});
 
         //store.load({ params: { start: 0 , limit: 2 } });

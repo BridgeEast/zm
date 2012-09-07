@@ -1,5 +1,5 @@
 Zm.managements.checkShoesWin = { 
-    init: function() { 
+    init: function(selected_id) { 
 
 			var cm = new Ext.grid.ColumnModel([
           new Ext.grid.RowNumberer(),      
@@ -13,9 +13,9 @@ Zm.managements.checkShoesWin = {
 
     	var store = new Ext.data.JsonStore({
           url:"/managements/check_shoes.json",
-          fields: ['shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'remark'],
+          fields: ["id",'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'remark'],
           totalProperty: "totalProperty",
-          baseParams: { id: Zm.managements.check_guest_order.selected_id },
+          baseParams: { id: selected_id },
           root: "check_shoes",
           autoLoad: true
     	});

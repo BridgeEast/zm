@@ -1,6 +1,5 @@
 Zm.managements.check_guest_order= { 
     init: function() { 
-        this.selected_id;
         Zm.pages.ViewPort = {
             layout: 'border',
             region:'center',
@@ -30,7 +29,7 @@ Zm.managements.check_guest_order= {
 
         store = new Ext.data.JsonStore({ 
             url: '/managements/get_check_guest_order.json',
-            fields: ['order_id','custom_num', 'custom_contrast','quality','total_price','shipment','payment','lading_bill','production_date','remark'],
+            fields: ['id','order_id','custom_num', 'custom_contrast','quality','total_price','shipment','payment','lading_bill','production_date','remark'],
             totalProperty: "totalProperty",
             root: 'check_guest_order',
             autoLoad: false
@@ -56,8 +55,8 @@ Zm.managements.check_guest_order= {
           	items: [{
               	text: '查看鞋', 
                 handler: function(){ 
-                   this.selected_id = Ext.getCmp('cgo$Grid').getSelectionModel().getSelected().data["id"];
-                    Zm.managements.checkShoesWin.init().show(); 
+                   var selected_id = Ext.getCmp('cgoGrid').getSelectionModel().getSelected().data["id"];
+                   Zm.managements.checkShoesWin.init(selected_id).show(); 
                 }
   	    		},{
                	text: '查看订单进度',
