@@ -36,23 +36,31 @@ class ManagementsController < ApplicationController
 
   #**********************************************查看订单***********************************************************
 
-   def check_guest_order
-   end
+    def check_guest_order
+    end
 
-   def get_check_guest_order
-     render :json => { :check_guest_order => Order.all}
-   end
+    def get_check_guest_order
+      render :json => { :check_guest_order => Order.all}
+    end
 
-   def get_selected_data
+    def get_selected_data
       cgo_paging(Order.where("production_date like ? ", "%#{params[:selectDate]}%").order("production_date DESC"))
-   end
+    end
 
    #^^^^^^^^^^^^^右键查看鞋^^^^^^^^^^^^^^
-   def check_shoes
-       tmp = Order.find(params[:id]).general_shoes
-       order_shoes = GeneralShoe.get_shoes_json( tmp )
-       render :json => { :check_shoes => order_shoes }  
-   end
+    def check_shoes
+      order_shoes = GeneralShoe.get_shoes_json( Order.find(params[:id]).general_shoes )       
+      render :json => { :check_shoes => order_shoes }  
+    end
+
+   #^^^^^^^^^^^右键查看订单进度^^^^^^^^^^^^
+    def check_order_progress
+      order_shoes = Order.find( params[:id] ).general_shoes
+      size_num = GeneralShoe.get_size_and_num_json( order_shoes )
+      respond_to do|format|
+        format.json{ render :json => { :check_order_progress => size_num } }
+    end
+    end
 
     ##^^^^^^^^^^^^^  分页  ^^^^^^^^^^^^^^
     def cgo_paging(array)
@@ -143,13 +151,12 @@ class ManagementsController < ApplicationController
 
     ##订单进度
     def get_order_progress
-      shoes = Order.where( :order_id => params[:orderid] ).first.general_shoes
-      paging(GeneralShoe.get_progress_num_and_size( shoes ))
+
     end    
 
     ##guest查看详情
     def get_guest_details
-      a = Order.where( :order_id => params[:idd] ).first.id
+      a = Order.where( :order_id => params[:id] ).first.id
       paging(GeneralShoe.find(:all, :conditions => "order_id = '#{a}'"))
     end
 

@@ -50,7 +50,7 @@ Zm.managements.check_guest_order= {
             })
         });                  
    
-        var cgoContexMenu = new Ext.menu.Menu({
+        var cgoContextMenu = new Ext.menu.Menu({
          		id: 'theContextMenu',
           	items: [{
               	text: '查看鞋', 
@@ -60,7 +60,10 @@ Zm.managements.check_guest_order= {
                 }
   	    		},{
                	text: '查看订单进度',
-                handler: function(){ checkProgressWindow.show(); }
+                handler: function(){ 
+                   var selected_id = Ext.getCmp('cgoGrid').getSelectionModel().getSelected().data["id"];
+                   Zm.managements.checkOrderProgressWin.init(selected_id).show()
+                }
   	    		},{				
   	    		    text: '打开提单',
                 handler: function(){ }
@@ -76,7 +79,7 @@ Zm.managements.check_guest_order= {
       	cgoGrid.on("rowcontextmenu", function(grid, rowIndex, e){
           	e.preventDefault();
           	grid.getSelectionModel().selectRow(rowIndex);
-          	cgoContexMenu.showAt(e.getXY())
+          	cgoContextMenu.showAt(e.getXY())
       	});
 
         return cgoGrid

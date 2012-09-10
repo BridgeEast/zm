@@ -135,23 +135,6 @@ class GeneralShoe < ActiveRecord::Base
       end
   end
 
-##^^^^^^^^^^^^^^^^^^^^^^  订单进度  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  def self.get_progress_num_and_size( shoes )
-      shoes.collect! do|shoe|
-        { 
-          :shoes_id => shoe.shoes_id,
-          :size_36 => GeneralShoe.get_size_obj( shoe, 36 ),
-          :size_37 => GeneralShoe.get_size_obj( shoe, 37 ),
-          :size_38 => GeneralShoe.get_size_obj( shoe, 38 ),
-          :size_39 => GeneralShoe.get_size_obj( shoe, 39 ),
-          :size_40 => GeneralShoe.get_size_obj( shoe, 40 ),
-          :size_41 => GeneralShoe.get_size_obj( shoe, 41 ),
-          :size_42 => GeneralShoe.get_size_obj( shoe, 42 ),
-          :size_43 => GeneralShoe.get_size_obj( shoe, 43 ),
-          :size_44 => GeneralShoe.get_size_obj( shoe, 44 ),
-        }
-      end
-  end
   ###################### 获取鞋码为size的size_of_shoes的记录 ######################
   def self.get_size_obj( shoe, size )
     size_shoe = shoe.size_of_shoes.where( :size => size )

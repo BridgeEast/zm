@@ -7,7 +7,7 @@ Zm.managements.checkShoesWin = {
         	{header:'鞋型',dataIndex:'types_of_shoes'},
         	{header:'适合人群',dataIndex:'suitable_people'},
         	{header:'颜色',dataIndex:'colors'},
-        	{header:'价格',dataIndex:'price`'},
+        	{header:'价格',dataIndex:'price'},
         	{header:'备注',dataIndex:'remark'}
     	]);
 
@@ -43,22 +43,26 @@ Zm.managements.checkShoesWin = {
     	});
 
       var checkShoesContextMenu = new Ext.menu.Menu({
-       		id: 'checkShoesContextMenu',
+       		id: 'theContextMenu',
         	items: [{
             	text: '查看详情',
             	handler: function(){
+                  var selected_shoes_id = Ext.getCmp('checkShoesGrid').getSelectionModel().getSelected().data["id"];
+                  var photo_one = Ext.getCmp('checkShoesGrid').getSelectionModel().getSelected().data["photo_one"];
+                  var photo_two = Ext.getCmp('checkShoesGrid').getSelectionModel().getSelected().data["photo_two"];
+                  Zm.managements.checkDetailsWin.init(selected_shoes_id, photo_one, photo_two).show();
             	}	
-			},{
+			    },{
             	text: '查看合同',
-			},{
+			    },{
             	text: '下载合同',	
         	}]
     	});
 
-    	checkShoesContextMenu.on("rowcontextmenu", function(checkShoesGrid, rowIndex, e){
-        	e.preventDefault();
-        	checkShoesGrid.getSelectionModel().selectRow(rowIndex);
-        	checkShoesContexMenu.showAt(e.getXY());
+      	checkShoesGrid.on("rowcontextmenu", function(grid, rowIndex, e){
+          	e.preventDefault();
+          	grid.getSelectionModel().selectRow(rowIndex);
+          	checkShoesContextMenu.showAt(e.getXY())
     	});      
 
       var checkShoesWin = new Ext.Window({
@@ -73,7 +77,6 @@ Zm.managements.checkShoesWin = {
 
 
       return checkShoesWin
-
 
     }
 
