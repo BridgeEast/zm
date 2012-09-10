@@ -78,9 +78,32 @@ class ServicesController < ApplicationController
 
   #------------------------------ 添加数据在general_shoes and details_of_shoes
   def create_in_generalanddetail
-    GeneralShoe.create!(params[:record])
+    #GeneralShoe.create!(params[:record])
+    @url= "public/images"
+    @generalshoe=GeneralShoe.new( params[:record])
+    origin_path=params[:record][:photo_one]
+    shoes_path = upload_file(origin_path,@url )
+
+    @generalshoe.set_photo_url(shoes_path)
+    
+    @generalshoe.save
+
+
     render :json =>{}
   end
+  
+  def upload_file( file, target_dir )
+    if file.nil || file.original_filename.empty?
+      #return "空文件或文件名错误！"
+    else
+      filename = file.original_filename                            # 文件名
+      File.open( File.join( target_dir, filename ),'wb' ) do |f|   # 打开的文件并准备写入
+        f.write( file.read )                                       # 向文件夹中写入文件
+        return filename #返回文件名和其后缀
+      end
+    end
+  end
+
   #------------------------------ 修改数据在general_shoes and details_of_shoes
   def updata_in_generalanddetail
     GeneralShoe.find(params[:record][:id]).details_of_shoes.delete_all
@@ -155,7 +178,8 @@ class ServicesController < ApplicationController
   end
   #----------------------------load the picture ----
   def upload_photo
-    img=params[:photo]
+    @img=params[:photo]
+    puts "ddddddddddddddddddddddddddddd",@img.original_filename
     
     content_size=img.size
     puts "ssssssssssssssssssssssss",params[:photo]
