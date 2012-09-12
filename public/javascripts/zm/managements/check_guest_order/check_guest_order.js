@@ -92,7 +92,7 @@ Zm.managements.check_guest_order= {
 		    var treeCgo = new Ext.tree.TreePanel({ 
           id: 'treeCgo',
           region: 'west',
-          width: 180,
+          width: '180',
           autoScroll: true
         });
 
@@ -128,23 +128,22 @@ Zm.managements.check_guest_order= {
 		    treeCgo.setRootNode(rootOrder);
         treeCgo.on("click", function(node){
             if (node.text.toString().indexOf("月") != -1) { 
-                var year = node.parentNode.text
-                var month = node.id.split("_")[1];
-                if (parseInt(month) < 10) month = '0' + month
-                  var date = year + '-' + month
+                var year_num = node.parentNode.text
+                var month_num = node.id.split("_")[1];
+                if (parseInt(month_num) < 10) month_num = '0' + month_num
+                  var date_num = year_num + '-' + month_num
             }
             else if (node.parentNode.text == '全部订单'){ 
-            
+                date_num = node.text;
             }
             else { 
-                year = null;
-                month = nullguest_order
+                date_num = null;
             };
 
             store.proxy = new Ext.data.HttpProxy({
                 url: '/managements/get_selected_data.json',
                 method: 'post',
-                jsonData: { selectDate: date }      
+                jsonData: { selectDate: date_num }      
             }),
             store.load({ params: { start: 0, limit: 30 } });
          })

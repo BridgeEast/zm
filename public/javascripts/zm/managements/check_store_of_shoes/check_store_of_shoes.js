@@ -188,8 +188,9 @@ Zm.managements.check_store_of_shoes = {
 			else if (!isNaN(node.text)) {
 				date = node.text;
 			}
-			else {
-				year = null;
+			else if (node.text == '全部鞋'){
+				date = null;
+        year = null;
 				month = null;
 				type = null
 			}
