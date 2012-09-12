@@ -24,10 +24,10 @@ Zm.guests.determine = {
 	},
 
 	add_to_size_of_shoes: function() {
-		//var records = [];
-		var items = [];
+		var records = [];
 		var store = Ext.getCmp('makeOrderGrid').store;
 		store.data.items.forEach(function(item) {
+			var items = [];
 			for (var i = 38; i < 45; i++) {
 				if (item.data[i] != "") {
 					items.push({
@@ -36,10 +36,9 @@ Zm.guests.determine = {
 					})
 				}
 			}
-			//records.push(items)
+			records.push(items)
 		})
-		//return records
-		return items
+		return records
 	},
 
 	add_to_play_board: function() {
@@ -56,14 +55,14 @@ Zm.guests.determine = {
 	add_to_general_shoes: function(config) {
 		var items = [];
 		var records = this.add_to_play_board();
-        var a = this.add_to_size_of_shoes();
+		var sizes = this.add_to_size_of_shoes();
 		var store = Ext.getCmp('makeOrderGrid').getStore();
 		for (var i = 0; i < store.getCount(); i++) {
 			var data = store.getAt(i).data;
 			items.push({
 				shoes_id: config.data[i][0],
 				production_date: year + '-' + month + '-' + day,
-				size_of_shoes_attributes: a,
+				size_of_shoes_attributes: sizes[i],
 				play_board_attributes: records[i]
 			})
 		}
