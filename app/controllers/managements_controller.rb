@@ -28,10 +28,11 @@ class ManagementsController < ApplicationController
       csos_paging(GeneralShoe.where("types_of_shoes like ? and production_date like ? ","%#{params[:selectType]}%" , "%#{params[:selectDate]}%").order("production_date DESC"))
     end
     
-
-    def get_details
-      details = GeneralShoe.get_shoes_details( '2' )
-      render :json => { :shoes => details }
+    def get_csos_check_details
+      shoes_details = GeneralShoe.get_details_json( params[:id] )
+      respond_to do|format|
+        format.json{ render :json => { :csos_check_details => shoes_details } }
+      end
     end
 
   #**********************************************查看订单***********************************************************
@@ -46,12 +47,21 @@ class ManagementsController < ApplicationController
     def get_selected_data
       cgo_paging(Order.where("production_date like ? ", "%#{params[:selectDate]}%").order("production_date DESC"))
     end
+ 
 
    #^^^^^^^^^^^^^右键查看鞋^^^^^^^^^^^^^^
     def check_shoes
       order_shoes = GeneralShoe.get_shoes_json( Order.find(params[:id]).general_shoes )       
       render :json => { :check_shoes => order_shoes }  
     end
+
+    #^^^^^^^^右键查看详情^^^^^^^^
+    def get_cgo_check_details
+      shoes_details = GeneralShoe.get_details_json( params[:id] )
+      respond_to do|format|
+        format.json{ render :json => { :cgo_check_details => shoes_details } }
+      end
+    end 
 
    #^^^^^^^^^^^右键查看订单进度^^^^^^^^^^^^
     def check_order_progress

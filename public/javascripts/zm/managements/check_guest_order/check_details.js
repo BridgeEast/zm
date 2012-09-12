@@ -28,12 +28,12 @@ Zm.managements.checkDetailsWin = {
     ]);
 
 		var checkDetailsStore = new Ext.data.JsonStore({
-			url: '/managements/get_details.json',
+			url: '/managements/get_cgo_check_details.json',
 			fields: ['region', 'material', 'color', 'procession'],
-			method: 'post',
+			method: 'get',
 			baseParams: {	id: selected_shoes_id },
            /* totalProperty: 'totalProperty' ,*/
-			root: 'shoes',
+			root: 'cgo_check_details',
       autoLoad: true
 		});
 
@@ -49,13 +49,14 @@ Zm.managements.checkDetailsWin = {
 				pageSize: 10,
 				store: store,
 				displayInfo: true,
-				diaplayMsg: '显示第{0}条到{1}条记录，一共{2}条',
+				diaplayMsg: '显示第{0}条到{1}条记录，一共{2}条',
 				emptyMsg: "没有记录"
 			})
 		});
 
 		var checkDetailsWin = new Ext.Window({
-			layout: 'border',
+			id: 'checkDetailsWin',
+      layout: 'border',
 			closeAction: 'hide',
 			height: 600,
 			width: 500,

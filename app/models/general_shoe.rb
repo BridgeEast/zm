@@ -14,17 +14,6 @@ class GeneralShoe < ActiveRecord::Base
   belongs_to :excel_receive
   belongs_to :factory_order
 
-   def self.get_shoes_details( id ) 
-    shoes = self.where(:id => id).first   #where返回1个数组
-    shoes.details_of_shoes.collect! do |item|
-     { 
-        :region_id => item.region.id,
-        :material_id => item.material.id,
-        :color_id => item.color.id,
-        :procecession_id => item.procession.id,
-      }
-    end
-  end
 
    def self.wish_list_data(cwl)
     cwl.collect! do|item|

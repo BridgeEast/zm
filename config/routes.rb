@@ -71,12 +71,13 @@ Zm::Application.routes.draw do
      get "get_check_guest_order"
      get "get_selected_data"
      get "check_shoes"
+     get "get_cgo_check_details"
+     get "get_order_progress"
      get "get_virtuals"
      get "get_virtual_daily_dispatch"
      get "get_virtual_mouth_sheet"
      get "get_virtual_mouth_dispatch"
      get "get_virtual_daily_sheet"
-     get "get_order_progress"
      get "check_virtual_warehouse"
    ################
 
@@ -84,7 +85,7 @@ Zm::Application.routes.draw do
      get "check_store_of_shoes"
      get "get_data"
      get "get_check_store_of_shoes"
-     get "get_details"
+     get "get_csos_check_details"
      get "csos_paging"
    #*******************************
 

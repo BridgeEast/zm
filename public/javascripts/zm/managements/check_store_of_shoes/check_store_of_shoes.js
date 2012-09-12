@@ -64,7 +64,6 @@ Zm.managements.check_store_of_shoes = {
       root: 'check_store_of_shoes',
 			autoLoad: false
 		});
-    store.load({ params: { start: 0, limit: 10 } });
 
 		var csosGrid = new Ext.grid.GridPanel({
 			id: 'csosGrid',

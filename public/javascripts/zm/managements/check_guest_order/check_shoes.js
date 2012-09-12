@@ -13,7 +13,7 @@ Zm.managements.checkShoesWin = {
 
     	var store = new Ext.data.JsonStore({
           url:"/managements/check_shoes.json",
-          fields: ["id",'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'remark'],
+          fields: ["id",'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'remark', 'photo_one','photo_two'],
           totalProperty: "totalProperty",
           baseParams: { id: selected_id },
           root: "check_shoes",
@@ -22,6 +22,7 @@ Zm.managements.checkShoesWin = {
       store.load({ params: { start: 0, limit: 20 } });
   
   	  var checkShoesGrid= new Ext.grid.GridPanel({
+          id: 'checkShoesGrid',
 		    	region: 'center',
 		    	height: 491,
           width: 788,
