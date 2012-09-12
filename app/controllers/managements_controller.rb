@@ -1,6 +1,5 @@
 class ManagementsController < ApplicationController
   #*********************************************查看鞋库****************************************************
-
     def csos_paging(array)
       m = params[:limit].to_i
       n = params[:start].to_i
@@ -35,6 +34,8 @@ class ManagementsController < ApplicationController
       end
     end
 
+
+   
   #**********************************************查看订单***********************************************************
 
     def check_guest_order

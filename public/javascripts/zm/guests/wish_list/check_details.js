@@ -40,14 +40,14 @@ Zm.guests.win = {
 		}]);
 
 		store = new Ext.data.JsonStore({
-			url: '/managements/get_details.json',
+			url: '/managements/get_details_of_shoes.json',
 			fields: ['region', 'material', 'color', 'procession'],
 			method: 'post',
 			baseParams: {
 				id: selectionData.get('id')
 			},
 			/* totalProperty: 'totalProperty' ,*/
-			root: 'shoes',
+			root: 'dos',
 			autoLoad: true
 		});
 

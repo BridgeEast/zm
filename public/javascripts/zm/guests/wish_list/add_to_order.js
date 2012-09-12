@@ -1,16 +1,17 @@
 Zm.guests.add_to_order = {
-	isInit: false,
+	//isInit: false,
 	init: function(config) {
-		this.config = config
-		this.unSelectAll();
+		this.config = config;
+		this.unSelectAll = Zm.guests.checkbox.unSelectAll();  //不是this.unSelectAll
 		this.win = this.createWin();
-		this.isInit = true;
+		//this.isInit = true;
 	},
 
 	createWin: function() {
 		return new Ext.Window({
 			layout: 'border',
-			closeAction: 'hide',
+			id: 'win',
+			closeAction: 'close',
 			height: 450,
 			width: 600,
 			constrainHeader: true,
@@ -20,8 +21,8 @@ Zm.guests.add_to_order = {
 				text: '确定',
 				scope: this,
 				handler: function() {
-					console.log(Ext.getCmp('makeOrderGrid').getStore().getAt(0).data['38']);
-					Zm.guests.determine.add(this.config)
+					Zm.guests.determine.add(this.config);
+					Ext.getCmp('wlGrid').unSelectAll();
 				}
 			},
 			{
@@ -35,26 +36,11 @@ Zm.guests.add_to_order = {
 				text: '取消',
 				scope: this,
 				handler: function() {
-					this.win.close(); 
-                    Ext.getCmp('wlGrid').unSelectAll();
+					this.win.close();
+					Ext.getCmp('wlGrid').unSelectAll();
 				}
 			}]
 		});
-	},
-
-	unSelectAll: function() { //每次点总选框再取消，用clearSelections()只能去掉每条记录前面的勾,总选框的勾去不掉，这是Ext的问题。
-		Ext.grid.GridPanel.prototype.unSelectAll = function() { //prototype是原型的意思，
-			var view = this.getView();
-			var sm = this.getSelectionModel();
-			if (sm) {
-				sm.clearSelections(); //去掉每条记录前面的勾
-				var hd = Ext.fly(view.innerHd); //下面是改那个总选框的样式，去掉它的勾，
-				var c = hd.query('.x-grid3-hd-checker-on');
-				if (c && c.length > 0) {
-					Ext.fly(c[0]).removeClass('x-grid3-hd-checker-on')
-				}
-			}
-		};
 	},
 
 	make_order_form: function() {

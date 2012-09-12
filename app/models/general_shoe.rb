@@ -15,6 +15,7 @@ class GeneralShoe < ActiveRecord::Base
   belongs_to :factory_order
 
 
+
    def self.wish_list_data(cwl)
     cwl.collect! do|item|
       { 
@@ -101,7 +102,6 @@ class GeneralShoe < ActiveRecord::Base
         :material => record.material.material,
         :color => record.color.color,
         :procession => record.procession.procession,
-        :remark => record.region.remark,
       }
     end
   end

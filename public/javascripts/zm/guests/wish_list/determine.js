@@ -20,38 +20,25 @@ Zm.guests.determine = {
 				day = date
 			}
 		}
-		this.record();
-		Ext.getCmp('makeOrderForm').getForm().reset();
-		Ext.getCmp('makeOrderGrid').getStore().removeAll();
+		this.record()
 	},
 
 	add_to_size_of_shoes: function() {
+		//var records = [];
 		var items = [];
-		var store = Ext.getCmp('makeOrderGrid').store
+		var store = Ext.getCmp('makeOrderGrid').store;
 		store.data.items.forEach(function(item) {
-			if (item.data[38] != '') items.push({
-				size: 38,
-				necessary_num: 100
-			})
-			if (item.data[39] != '') items.push({
-				size: 38,
-				necessary_num: 100
-			})
+			for (var i = 38; i < 45; i++) {
+				if (item.data[i] != "") {
+					items.push({
+						size: i,
+						necessary_num: parseInt(item.data[i])
+					})
+				}
+			}
+			//records.push(items)
 		})
-		//var items = [];
-		//var store = Ext.getCmp('makeOrderGrid').getStore();
-		//for (var i = 0; i < store.getCount(); i++) {
-		//    var data = store.getAt(i).data;
-		//    for (var j = 38; j < 45; j++) {
-		//        if (data[j] != "") {
-		//            items.push({
-		//                size: 38,
-		//                necessary_num: 100
-		//            })
-		//        }
-		//    }
-		//}
-		//console.log(items)
+		//return records
 		return items
 	},
 
@@ -59,7 +46,6 @@ Zm.guests.determine = {
 		var items = [];
 		var store = Ext.getCmp('makeOrderGrid').getStore();
 		for (var i = 0; i < store.getCount(); i++) {
-			var data = store.getAt(i).data;
 			items.push({
 				board_kind: '开发板'
 			})
@@ -69,14 +55,15 @@ Zm.guests.determine = {
 
 	add_to_general_shoes: function(config) {
 		var items = [];
-		records = this.add_to_play_board();
+		var records = this.add_to_play_board();
+        var a = this.add_to_size_of_shoes();
 		var store = Ext.getCmp('makeOrderGrid').getStore();
 		for (var i = 0; i < store.getCount(); i++) {
 			var data = store.getAt(i).data;
 			items.push({
 				shoes_id: config.data[i][0],
-				production_date: '2012-09-09',
-				size_of_shoes_attributes: this.add_to_size_of_shoes(),
+				production_date: year + '-' + month + '-' + day,
+				size_of_shoes_attributes: a,
 				play_board_attributes: records[i]
 			})
 		}
@@ -101,10 +88,11 @@ Zm.guests.determine = {
 				record: record
 			},
 			success: function() {
-				Ext.getCmp('win').close();
+				Zm.guests.add_to_order.win.close();
 				Ext.Msg.alert('添加', '添加成功！')
 			},
 			failure: function() {
+				Zm.guests.add_to_order.win.close();
 				Ext.Msg.alert('添加', '添加失败！')
 			}
 		})
