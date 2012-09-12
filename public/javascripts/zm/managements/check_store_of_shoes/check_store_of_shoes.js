@@ -64,12 +64,6 @@ Zm.managements.check_store_of_shoes = {
 			root: 'check_store_of_shoes',
 			autoLoad: false
 		});
-		store.load({
-			params: {
-				start: 0,
-				limit: 10
-			}
-		});
 
 		var csosGrid = new Ext.grid.GridPanel({
 			id: 'csosGrid',
@@ -189,10 +183,7 @@ Zm.managements.check_store_of_shoes = {
 				date = node.text;
 			}
 			else if (node.text == '全部鞋'){
-				date = null;
-        year = null;
-				month = null;
-				type = null
+				date = null
 			}
 
 			store.proxy = new Ext.data.HttpProxy({

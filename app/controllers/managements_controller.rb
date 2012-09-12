@@ -70,7 +70,7 @@ class ManagementsController < ApplicationController
       size_num = GeneralShoe.get_size_and_num_json( order_shoes )
       respond_to do|format|
         format.json{ render :json => { :check_order_progress => size_num } }
-    end
+      end
     end
 
     ##^^^^^^^^^^^^^  分页  ^^^^^^^^^^^^^^

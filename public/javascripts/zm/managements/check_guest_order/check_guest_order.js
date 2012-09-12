@@ -128,22 +128,22 @@ Zm.managements.check_guest_order= {
 		    treeCgo.setRootNode(rootOrder);
         treeCgo.on("click", function(node){
             if (node.text.toString().indexOf("月") != -1) { 
-                var year_num = node.parentNode.text
-                var month_num = node.id.split("_")[1];
-                if (parseInt(month_num) < 10) month_num = '0' + month_num
-                  var date_num = year_num + '-' + month_num
+                var yearNum = node.parentNode.text
+                var monthNum = node.id.split("_")[1];
+                if (parseInt(monthNum) < 10) monthNum = '0' + monthNum
+                  var dateNum = yearNum + '-' + monthNum
             }
-            else if (node.parentNode.text == '全部订单'){ 
-                date_num = node.text;
+            else if (!isNaN(node.text)){ 
+                dateNum = node.text;
             }
-            else { 
-                date_num = null;
+            else if (node.text == '全部订单'){ 
+                dateNum = null;
             };
 
             store.proxy = new Ext.data.HttpProxy({
                 url: '/managements/get_selected_data.json',
                 method: 'post',
-                jsonData: { selectDate: date_num }      
+                jsonData: { selectDate: dateNum }      
             }),
             store.load({ params: { start: 0, limit: 30 } });
          })
