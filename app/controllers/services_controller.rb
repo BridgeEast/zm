@@ -179,15 +179,17 @@ class ServicesController < ApplicationController
   #----------------------------load the picture ----
   def upload_photo
     @img=params[:photo]
-    puts "ddddddddddddddddddddddddddddd",@img.original_filename
+    puts "ddddddddddddddddddddddddddddd",@img
     
-    content_size=img.size
+    content_size=@img.size
     puts "ssssssssssssssssssssssss",params[:photo]
-   # file_data=img.read
-    filetype=img.content_type
-    @filename=img.original_filename
-    File.open(RAILS_ROOT+"/public/images/"+@filname,"wb"){ |f| f.write(file_data) }
-    render :json => {  }
+   file_data=@img.read
+    filetype=@img.content_type
+    #@filename=img.original_filename
+     File.open( File.join( RAILS_ROOT+"/public/images/", '@filename' ),'wb' ) do |f|   # 打开的文件并准备写入
+        f.write( file_data )
+     end
+    render :json => {}
   end
 
 

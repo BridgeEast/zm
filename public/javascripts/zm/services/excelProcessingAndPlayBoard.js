@@ -537,11 +537,15 @@ Zm.services.excelProcessingAndPlayBoard = {
 				text: '重置',
 				scope: this,
 				handler: function() {
-         var photo = Ext.get('photo_upload').dom;
+         var photo = Ext.getCmp('photo_upload').getValue();
+         //var photo = Ext.getCmp('photo_upload').getEl();
        // var photo= Ext.getCmp('photo_upload').getValue();// only get a string...
-         //var photo = Ext.getDom('photo_upload');
-         
-         console.log('aji......',photo.value);
+        // var photo = Ext.getDom('photo_upload');
+       // var aa=document.getElementById("photo_upload"); 
+       
+        
+
+         console.log('aji: ',photo);
          Ext.Ajax.request({
 					url: '/services/upload_photo.json',
 					method: 'post',
