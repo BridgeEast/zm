@@ -390,11 +390,9 @@ class ServicesController < ApplicationController
     end
 
     def get_scanning_guest_wish_list
-      sgwl_paging(scanning_guest_wish_list.blank? ? "" : GeneralShoe.wish_list_data( GeneralShoe.get_cwl_record( params[:id] ) ).order("production_data DESC") )
-    end
-    
-    def get_selected_data
-      csos_paging(GeneralShoe.where("types_of_shoes like ? and production_date like ? ","%#{params[:selectType]}%" , "%#{params[:selectDate]}%").order("production_date DESC"))
+      wish_list = GeneralShoe.get_cwl_record( params[:id] )
+      selected_data = wish_list.blank? ? "" : GeneralShoe.wish_list_data( wish_list )
+      render :json => { :scanning_guest_wish_list => selected_data } 
     end
     
     def get_sgwl_check_details

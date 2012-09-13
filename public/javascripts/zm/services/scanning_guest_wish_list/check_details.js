@@ -1,5 +1,5 @@
-Zm.managements.checkDetailsWin = {
-	init: function(selected_shoes_id, photo_one, photo_two) {
+Zm.services.checkDetailsWin = {
+	init: function(selected_id, photo_one, photo_two) {
 		var checkDetailsForm = new Ext.form.FormPanel({
 			region: 'north',
 			layout: 'fit',
@@ -31,7 +31,7 @@ Zm.managements.checkDetailsWin = {
 			url: '/managements/get_cgo_check_details.json',
 			fields: ['region', 'material', 'color', 'procession'],
 			method: 'post',
-			baseParams: {	id: selected_shoes_id },
+			baseParams: {	id: selected_id },
            /* totalProperty: 'totalProperty' ,*/
 			root: 'cgo_check_details',
       autoLoad: true

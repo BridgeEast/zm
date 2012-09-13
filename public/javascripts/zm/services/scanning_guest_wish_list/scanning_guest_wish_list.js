@@ -98,14 +98,22 @@ Zm.services.scanning_guest_wish_list = {
 		var contextmenu = new Ext.menu.Menu({
 			items: [{
 				text: '查看详情',
-				scope: this,
 				handler: function() {
-					var select_id = Ext.getCmp('sgwlGrid').getSelectionModel().getSelected().data["id"];
+					var selected_id = Ext.getCmp('sgwlGrid').getSelectionModel().getSelected().data["id"];
 					var photo_one = Ext.getCmp('sgwlGrid').getSelectionModel().getSelected().data["photo_one"];
 					var photo_two = Ext.getCmp('sgwlGrid').getSelectionModel().getSelected().data["photo_two"];
 					Zm.services.checkDetailsWin.init(selected_id, photo_one, photo_two).show();
-				}
-			}]
+				},
+    },{ 
+        text: '更新打板时间',
+        handler: function() {  
+          Zm.services.updatePlayBoardWin.init().show();
+        }
+    },{ 
+        text: '与客户交谈',
+        handler: function() {  }        
+        }
+			]
 		});
 
 		sgwlGrid.on("rowcontextmenu", function(grid, rowIndex, e) {
@@ -150,7 +158,7 @@ Zm.services.scanning_guest_wish_list = {
 			     for (j = months; j > 0; j--) {
 				       var month = new Ext.tree.TreeNode({
 					         text: j + '月',
-					         id: i + '_' + j
+					         id: i + '-' + j
 				       });
 			     year.appendChild(month);
 			     };
