@@ -1,8 +1,10 @@
 Zm.guests.add_to_order = {
 	//isInit: false,
+
 	init: function(config) {
+		Ext.QuickTips.init();
 		this.config = config;
-		this.unSelectAll = Zm.guests.checkbox.unSelectAll();  //不是this.unSelectAll
+		this.unSelectAll = Zm.guests.checkbox.unSelectAll(); //不是this.unSelectAll
 		this.win = this.createWin();
 		//this.isInit = true;
 	},
@@ -27,9 +29,11 @@ Zm.guests.add_to_order = {
 			},
 			{
 				text: '重置',
+				scope: this,
 				handler: function() {
 					Ext.getCmp('makeOrderForm').getForm().reset();
 					Ext.getCmp('makeOrderGrid').getStore().removeAll();
+					Ext.getCmp('makeOrderGrid').store.reload(this.config)
 				}
 			},
 			{
@@ -128,41 +132,77 @@ Zm.guests.add_to_order = {
 		{
 			header: '38',
 			dataIndex: '38',
-			editor: new Ext.form.TextField({})
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		},
 		{
 			header: '39',
 			dataIndex: '39',
-			editor: new Ext.form.TextField({})
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		},
 		{
 			header: '40',
 			dataIndex: '40',
-			editor: new Ext.form.TextField({})
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		},
 		{
 			header: '41',
 			dataIndex: '41',
-			editor: new Ext.form.TextField({})
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		},
 		{
 			header: '42',
 			dataIndex: '42',
-			editor: new Ext.form.TextField({})
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		},
 		{
 			header: '43',
 			dataIndex: '43',
-			editor: new Ext.form.TextField({})
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		},
 		{
 			header: '44',
 			dataIndex: '44',
-			editor: new Ext.form.TextField({})
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		}]);
+
 		var store = new Ext.data.ArrayStore({
 			data: this.config.data,
-			fields: 'sample_id 38 39 40 41 42 43 44 '.split(' ')
+			fields: 'sample_id 38 39 40 41 42 43 44'.split(' ')
 		});
 
 		return new Ext.grid.EditorGridPanel({

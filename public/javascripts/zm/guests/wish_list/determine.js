@@ -1,6 +1,7 @@
 Zm.guests.determine = {
 	add: function(config) {
-		this.config = config
+		this.config = config;
+		price = 0;
 		if (Ext.get('order_id').dom.value == "") {
 			Ext.Msg.alert("警告", "订单名不能为空")
 		} else {
@@ -26,17 +27,25 @@ Zm.guests.determine = {
 	add_to_size_of_shoes: function() {
 		var records = [];
 		var store = Ext.getCmp('makeOrderGrid').store;
+		var linenumber = 0;
 		store.data.items.forEach(function(item) {
+			var number = 0;
 			var items = [];
 			for (var i = 38; i < 45; i++) {
 				if (item.data[i] != "") {
 					items.push({
 						size: i,
-						necessary_num: parseInt(item.data[i])
+						necessary_num: parseInt(item.data[i]),
+						finished_num: 0,
+						store_remaining: parseInt(item.data[i])
 					})
+					number += parseInt(item.data[i]);
 				}
 			}
-			records.push(items)
+			records.push(items);
+			var unit_price = Ext.getCmp("wlGrid").getSelectionModel().getSelections()[linenumber].data.price;
+			price += unit_price * number;
+			linenumber++
 		})
 		return records
 	},
@@ -56,11 +65,18 @@ Zm.guests.determine = {
 		var items = [];
 		var records = this.add_to_play_board();
 		var sizes = this.add_to_size_of_shoes();
+		var selection = Ext.getCmp("wlGrid").getSelectionModel().getSelections();
 		var store = Ext.getCmp('makeOrderGrid').getStore();
 		for (var i = 0; i < store.getCount(); i++) {
-			var data = store.getAt(i).data;
+			var data = selection[i].data;
 			items.push({
-				shoes_id: config.data[i][0],
+				photo_one: data.photo_one,
+				photo_two: data.photo_two,
+				shoes_id: data.shoes_id,
+				types_of_shoes: data.types_of_shoes,
+				suitable_people: data.suitable_people,
+				colors: data.colors,
+				price: data.price,
 				production_date: year + '-' + month + '-' + day,
 				size_of_shoes_attributes: sizes[i],
 				play_board_attributes: records[i]
@@ -78,7 +94,8 @@ Zm.guests.determine = {
 			shipment: false,
 			lading_bill: false,
 			state: '待定订单',
-			general_shoes_attributes: this.add_to_general_shoes(this.config)
+			general_shoes_attributes: this.add_to_general_shoes(this.config),
+			total_price: price
 		};
 		Ext.Ajax.request({
 			url: '/guests/add_to_order.json',
