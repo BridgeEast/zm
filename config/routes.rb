@@ -158,7 +158,7 @@ Zm::Application.routes.draw do
 
      ################################################################
 
-   post "create_in_generalanddetail"
+     post "create_in_generalanddetail"
      post "updata_in_generalanddetail"
      get "get_details_of_shoes_all_id"
      get "factory_order"
@@ -166,6 +166,14 @@ Zm::Application.routes.draw do
      get "get_check_shoes"
      post "mps"
      get "get_speed_of_progress"
+
+     ########################浏览客户心愿单############################
+
+     get "scanning_guest_wish_list"
+     get "get_selected_data"
+     get "get_scanning_guest_wish_list"
+     get "get_sgwl_check_details"
+     get "sgwl_paging"  
      ################################################################
 
 

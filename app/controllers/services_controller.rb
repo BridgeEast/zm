@@ -214,8 +214,9 @@ class ServicesController < ApplicationController
 
 
   end
-#------------------------------------------------------------------------------------------------------
+#-------------------------------------aji-----------------------------------------------------------------
 
+########################################################查看合同############################################################
  def factory_order
     end
 
@@ -279,15 +280,6 @@ class ServicesController < ApplicationController
   end
 
 
-
-  def scanningGuestWishList
-  end
-
-
-
-
-
-  #----------------------------------aji
 
 ########################################################查看订单############################################################
   def guest_order_management
@@ -374,6 +366,45 @@ class ServicesController < ApplicationController
         format.json{ render :json =>{} }
       end
     end
+
+
+########################################################浏览客户心愿单############################################################
+    
+    def sgwl_paging(array)
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > array.length
+        max = array.length
+      end
+      for i in n..max - 1
+        root << array[i]
+      end
+      all_data = { :totalProperty => array.length, :scanning_guest_wish_list => root }
+      render :json => all_data
+    end
+
+
+    def scanning_guest_wish_list
+    end
+
+    def get_scanning_guest_wish_list
+      sgwl_paging(scanning_guest_wish_list.blank? ? "" : GeneralShoe.wish_list_data( GeneralShoe.get_cwl_record( params[:id] ) ).order("production_data DESC") )
+    end
+    
+    def get_selected_data
+      csos_paging(GeneralShoe.where("types_of_shoes like ? and production_date like ? ","%#{params[:selectType]}%" , "%#{params[:selectDate]}%").order("production_date DESC"))
+    end
+    
+    def get_sgwl_check_details
+      shoes_details = GeneralShoe.get_details_json( params[:id] )
+      respond_to do|format|
+        format.json{ render :json => { :sgwl_check_details => shoes_details } }
+      end
+    end
+
+
 
 #########################################################################################################################################################
   def upload_order
