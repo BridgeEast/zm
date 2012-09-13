@@ -51,7 +51,6 @@ Zm.managements.check_guest_order= {
         });                  
    
         var cgoContextMenu = new Ext.menu.Menu({
-         		id: 'theContextMenu',
           	items: [{
               	text: '查看鞋', 
                 handler: function(){ 

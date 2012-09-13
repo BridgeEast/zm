@@ -30,7 +30,7 @@ Zm.managements.checkDetailsWin = {
 		var checkDetailsStore = new Ext.data.JsonStore({
 			url: '/managements/get_cgo_check_details.json',
 			fields: ['region', 'material', 'color', 'procession'],
-			method: 'get',
+			method: 'post',
 			baseParams: {	id: selected_shoes_id },
            /* totalProperty: 'totalProperty' ,*/
 			root: 'cgo_check_details',
@@ -55,7 +55,6 @@ Zm.managements.checkDetailsWin = {
 		});
 
 		var checkDetailsWin = new Ext.Window({
-			id: 'checkDetailsWin',
       layout: 'border',
 			closeAction: 'hide',
 			height: 600,

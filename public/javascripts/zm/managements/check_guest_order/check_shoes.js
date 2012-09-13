@@ -44,7 +44,6 @@ Zm.managements.checkShoesWin = {
     	});
 
       var checkShoesContextMenu = new Ext.menu.Menu({
-       		id: 'theContextMenu',
         	items: [{
             	text: '查看详情',
             	handler: function(){
