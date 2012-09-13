@@ -132,7 +132,7 @@ Zm.dataBases.storeOfShoes = {
                     url: '/data_bases/get_region.json',
                     method: 'get',
                     root: 'region',
-                    fields: ['id', 'region'],
+                    fields: ['id', 'region']
                 }),
                 triggerAction: 'all',
                 displayField: 'region',
@@ -154,13 +154,11 @@ Zm.dataBases.storeOfShoes = {
                     url: '/data_bases/get_material.json',
                     method: 'get',
                     root: 'material',
-                    fields: ['id', 'material'],
-                    autoLoad: true
+                    fields: ['id', 'material']
                 }),
                 triggerAction: 'all',
                 displayField: 'material',
                 valueField: 'id',
-                mode: 'local',
                 editable: false
             })),
             renderer: function(value) {
@@ -178,7 +176,7 @@ Zm.dataBases.storeOfShoes = {
                     url: '/data_bases/get_color.json',
                     method: 'get',
                     root: 'color',
-                    fields: ['id', 'color'],
+                    fields: ['id', 'color']
                 }),
                 triggerAction: 'all',
                 displayField: 'color',
@@ -228,25 +226,42 @@ Zm.dataBases.storeOfShoes = {
         {
             name: 'procession'
         }]);
-       if (type == '修改') { 
-        var inpcstore = new Ext.data.JsonStore({
-            url: '/data_bases/get_details_of_shoes.json',
-            fields: ['region', 'material', 'color', 'procession'],
-            baseParams: {
-              id: Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data['id']
-            },
-            root: 'dos',
-            autoLoad: true
-        }); 
-        } else { 
-        var inpcstore = new Ext.data.Store({ 
-            proxy: new Ext.data.MemoryProxy(inpcdata),
-            reader: new Ext.data.ArrayReader({},
-              [{ name: 'region' }, { name: 'material' }, { name: 'color' }, { name: 'procession' }]
-              )
-        })
+        if (type == '修改') {
+            var inpcstore = new Ext.data.JsonStore({
+                url: '/data_bases/get_check_details_of_shoes.json',
+                fields: ['region', 'material', 'color', 'procession'],
+                baseParams: {
+                    id: Ext.getCmp('storeOfShoesGrid').getSelectionModel().getSelected().data['id']
+                },
+                root: 'dos'
+            });
+            Ext.getCmp("addRegion").store.load();
+            Ext.getCmp("addMaterial").store.load();
+            Ext.getCmp("addColors").store.load();
+            Ext.getCmp("addProcession").store.load({
+                callback: function() {
+                    inpcstore.load()
+                }
+            });
+        } else {
+            var inpcstore = new Ext.data.Store({
+                proxy: new Ext.data.MemoryProxy(inpcdata),
+                reader: new Ext.data.ArrayReader({},
+                [{
+                    name: 'region'
+                },
+                {
+                    name: 'material'
+                },
+                {
+                    name: 'color'
+                },
+                {
+                    name: 'procession'
+                }])
+            })
         };
-        
+
         var grid = new Ext.grid.EditorGridPanel({
             id: 'grid',
             region: 'center',
@@ -445,7 +460,7 @@ Zm.dataBases.storeOfShoes = {
     createData: function() {
         var items = [];
         var store = Ext.getCmp('grid').getStore();
-        for (i = 0; i < store.getCount(); i++) {
+        for (var i = 0; i < store.getCount(); i++) {
             var data = store.getAt(i).data;
             items.push({
                 region_id: data.region,
@@ -458,7 +473,6 @@ Zm.dataBases.storeOfShoes = {
     },
     //******************************************************************************************************************
     checkForShoes: function(type) {
-        var _this = this
         var selection = Ext.getCmp('storeOfShoesGrid').getSelectionModel();
         var shoesId = Ext.getCmp('addShoesId').getValue();
         var suitablePeople = Ext.getCmp('addSuitablePoeple').getValue();
@@ -476,7 +490,7 @@ Zm.dataBases.storeOfShoes = {
             price: price,
             remark: remark,
             production_date: productionDate,
-            details_of_shoes_attributes: _this.createData()
+            details_of_shoes_attributes: this.createData()
         };
         function date2str(d) {
             var ret = d.getFullYear() + "-"
@@ -495,7 +509,7 @@ Zm.dataBases.storeOfShoes = {
                     price: price,
                     remark: remark,
                     production_date: productionDate,
-                    details_of_shoes_attributes: _this.createData()
+                    details_of_shoes_attributes: this.createData()
                 };
                 Ext.Ajax.request({
                     url: '/data_bases/update_shoes_and_details_of_shoes.json',
@@ -576,3 +590,4 @@ Zm.dataBases.storeOfShoes = {
         Ext.getCmp('addRemark').setValue(data["remark"]);
     }
 }
+

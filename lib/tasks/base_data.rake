@@ -136,7 +136,8 @@ namespace :data do
    Order.create([
      {:id => 1, :order_id => "O1",:server_num => "客服1",:custom_num => "客户1",:custom_contrast => "合同1",:quality => "Yes", :payment => "付全款",:order_url => "o1.xls",:total_price => "123.92",:production_date => "2012-7-8",:shipment => "0",:lading_bill => "0", :state => "待定订单",:remark => " "},
      {:id => 2, :order_id => "O2",:server_num => "客服1",:custom_num => "客户2",:custom_contrast => "合同2",:quality => "Yes", :payment => "先付30%",:order_url => "o2.xls",:total_price => "219.10",:production_date => "2012-7-10",:shipment => "1",:lading_bill => "0", :state => "进行中订单",:remark => " "},
-     {:id => 3, :order_id => "O3",:server_num => "客服2",:custom_num => "客户3",:custom_contrast => "合同3",:quality => "No", :payment => "付全款",:order_url => "o3.xls",:total_price => "291.32",:production_date => "2012-8-8",:shipment => "0",:lading_bill => "1", :state => "进行中订单",:remark => " "}
+     {:id => 3, :order_id => "O3",:server_num => "客服2",:custom_num => "客户3",:custom_contrast => "合同3",:quality => "No", :payment => "付全款",:order_url => "o3.xls",:total_price => "291.32",:production_date => "2012-8-8",:shipment => "0",:lading_bill => "1", :state => "进行中订单",:remark => " "},
+     { :id => 4, :order_id => "O4", :server_num => "客服2", :custom_num => "客户2", :custom_contrast => "合同2", :quality => "Yes", :payment => "付全款", :order_url => "O4.xls", :total_price => "234.23", :production_date => "2012-7-9", :shipment => "0", :lading_bill => "0", :state => "待定订单", :remark => " " }
    ]) 
 
    puts "创建鞋概述数据"

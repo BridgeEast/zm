@@ -209,8 +209,16 @@ class GuestsController < ApplicationController
       format.json{ render :json => { :dos => details_shoes } }
     end
   end
-  def send_order
-    Order.where(:order_id => params[:record][:order_id]).update_attributes(params[:record])
+  def send_to_order
+    Order.all.each do |item|
+      if(item.order_id == params[:order_id])
+      item.update_attributes(:state => '进行中订单')
+      end
+    end
+    render :json =>{}
+  end
+  def delete_undetermined_order
+    Order.where(:order_id => params[:order_id]).delete_all
     render :json => {}
   end
 end

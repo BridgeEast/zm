@@ -129,6 +129,7 @@ Zm::Application.routes.draw do
      #********订单管理***************
      get"order_management"
      get"get_details_of_shoes"
+     post"delete_undetermined_order"
    end
  end
 #----------------------------------------aji/jb
