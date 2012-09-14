@@ -84,7 +84,7 @@ Zm.guests.scanning_store_of_shoes={
            var id=Ext.getCmp('scanningGrid').getSelectionModel().getSelected().data["shoes_id"];
             Ext.Ajax.request({ 
               jsonData:{ choses_id: id },
-                 url:'/guests/change_board_kind.json',
+                 url:'/guests/change_board_kinds.json',
                  mehtod:'post',
                  //jsonData:{ record:record },
                  success:function(){ 

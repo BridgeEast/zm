@@ -53,7 +53,7 @@ class GuestsController < ApplicationController
     end
   end
 
-  def change_board_kind
+  def change_board_kinds
 
 
     # PlayBoard.find(params[:choses_id]).board_kind.update_attributes("开发板")
@@ -61,30 +61,13 @@ class GuestsController < ApplicationController
     PlayBoard.all.each do |choses_ids|
       get_shoes = params[:choses_id].delete("S")
       if( choses_ids.general_shoe_id == get_shoes.to_i)
-        choses_ids.supdate_attributes(:board_kind => "开发板")
+        choses_ids.update_attributes(:board_kind => "开发板")
       end
     end
 
     respond_to do |format|
       format.json{  render :json =>{}}
     end
-
-    select_id = nil
-    GeneralShoe.all.each do |j|
-      if(j.shoes_id==params[:record])
-        select_id << j
-      end
-    end
-    PlayBoard.all.each do |choses_id|
-      if( choses_id.general_shoe_id == select_id)
-        choses_id.board_kind.update_attributes("开发板")
-      end
-    end
-    respond_to do |format|
-      format.json{  render :json =>{}}
-    end
-
-
   end
    
   def get_data

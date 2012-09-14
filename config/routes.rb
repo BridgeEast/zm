@@ -111,6 +111,7 @@ Zm::Application.routes.draw do
      get"get_general_shoes"
      get"load_tree"
      get"get_scanning_detail"
+     get"change_board_kinds"
      #*********心愿单****************
      get"change_board_kind"
      post"change_board_kind"
@@ -132,6 +133,12 @@ Zm::Application.routes.draw do
 
  resources :services do
    collection do
+     ###########################################预购单####################
+     get"advanced_order_management"
+     get"get_advanced_orders"
+     get"get_advanced_order_data"
+     #####################################################################
+
      #-----------------------------------aji
      get "excelProcessingAndPlayBoard"
      get "get_excel_shoes"

@@ -348,7 +348,44 @@ class ServicesController < ApplicationController
         format.json{ render :json =>{} }
       end
     end
+#########################################################预购单查看############################################    
+    def get_advanced_orders
+      respond_to do |format|
+      format.json{ render :json => { :advancedorders => AdvancedOrder.all } }
+     end
+    end
 
+    def get_advanced_order_data
+       selectorders = []
+      AdvancedOrder.all.each do |selectorder|
+        if(selectorder.advanced_order_date.to_s.split("-")[0] == params[:selectadvancedorderyear] and selectorder.advanced_order_date.to_s.split("-")[1].gsub(/\b(0+)/,"") == params[:selectadvancedordermonth].to_s)
+            selectorders << selectorder
+        end
+      end
+     respond_to do |format|
+      format.json{ render :json => { :advancedorders => selectorders } }
+    end
+    end
+
+    def get_advanced_order_shoes
+     advanceddetail = []
+      GeneralShoe.all.each do |select|
+        advancedshoes = params[:id].delete("A")
+       if(select.advanced_order_id == advancedshoes.to_i)
+         advanceddetail << select 
+       end
+     end  
+     respond_to do |format|
+       format.json{ render :json =>{ :advanced_order_shoes =>advanceddetail } }
+     end
+     end
+
+    def get_advanced_order_detail
+      advanced_details_shoes = GeneralShoe.get_details_json( params[:id] )
+      respond_to do|format|
+      format.json{ render :json => { :advanced_order_detail => advanced_details_shoes } }
+      end
+    end
 #########################################################################################################################################################
   def upload_order
     @order = Order.new( params[:order] )
