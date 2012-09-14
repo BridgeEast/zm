@@ -1,8 +1,8 @@
 Zm.managements.check_store_of_shoes = {
 	init: function() {
 		this.select_id;
-        this.photo_one;
-        this.photo_two;
+		this.photo_one;
+		this.photo_two;
 		Zm.pages.ViewPort = {
 			layout: 'border',
 			region: 'center',
@@ -61,24 +61,25 @@ Zm.managements.check_store_of_shoes = {
 			url: '/managements/get_check_store_of_shoes.json',
 			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'production_date', 'remark'],
 			totalProperty: "totalProperty",
-      root: 'check_store_of_shoes',
+			root: 'check_store_of_shoes',
 			autoLoad: false
 		});
-    store.load({ params: { start: 0, limit: 10 } });
 
 		var csosGrid = new Ext.grid.GridPanel({
 			id: 'csosGrid',
 			region: 'center',
 			cm: cm,
 			store: store,
-			viewConfig: {	forceFit: true },
-      bbar: new Ext.PagingToolbar({
-          pageSize: 10,
-          store: store,
-          displayInfo: true,
-          displayMsg: "显示第{0}条到{1}条记录，一共{2}条",
-          emptyMsg: "没有记录"
-      })      
+			viewConfig: {
+				forceFit: true
+			},
+			bbar: new Ext.PagingToolbar({
+				pageSize: 10,
+				store: store,
+				displayInfo: true,
+				displayMsg: "显示第{0}条到{1}条记录，一共{2}条",
+				emptyMsg: "没有记录"
+			})
 		});
 
 		var contextmenu = new Ext.menu.Menu({
@@ -88,8 +89,8 @@ Zm.managements.check_store_of_shoes = {
 				scope: this,
 				handler: function() {
 					this.select_id = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["id"];
-                    this.photo_one = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["photo_one"];
-                    this.photo_two = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["photo_two"];
+					this.photo_one = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["photo_one"];
+					this.photo_two = Ext.getCmp('csosGrid').getSelectionModel().getSelected().data["photo_two"];
 					Zm.managements.win.init().show();
 				}
 			}]
@@ -164,23 +165,25 @@ Zm.managements.check_store_of_shoes = {
 			if (node.leaf) {
 				var year = node.parentNode.parentNode.text;
 				var month = node.parentNode.id.split("_")[1];
-				if (parseInt(month) < 10) month = '0' + month
-				       var date = year + '-' + month;
+				if (parseInt(month) < 10) {
+					month = '0' + month
+				}
+				var date = year + '-' + month;
 				var type = node.text
 			}
 			else if (node.text.toString().indexOf("月") != - 1) {
 				year = node.parentNode.text;
 				month = node.id.split("_")[1];
-				if (parseInt(month) < 10) month = '0' + month 
-                    date = year + '-' + month;
+				if (parseInt(month) < 10) {
+					month = '0' + month
+				}
+				date = year + '-' + month;
 			}
-			else if (node.parentNode.text == '全部鞋') {
+			else if (!isNaN(node.text)) {
 				date = node.text;
 			}
-			else {
-				year = null;
-				month = null;
-				type = null
+			else if (node.text == '全部鞋'){
+				date = null
 			}
 
 			store.proxy = new Ext.data.HttpProxy({
@@ -191,7 +194,12 @@ Zm.managements.check_store_of_shoes = {
 					selectType: type
 				}
 			}),
-			store.load({ params: { start: 0, limit: 10 } })
+			store.load({
+				params: {
+					start: 0,
+					limit: 10
+				}
+			})
 		})
 
 		return treeCsos

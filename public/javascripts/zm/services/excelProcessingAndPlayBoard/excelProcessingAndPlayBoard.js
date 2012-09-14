@@ -537,14 +537,26 @@ Zm.services.excelProcessingAndPlayBoard = {
 				text: '重置',
 				scope: this,
 				handler: function() {
-         var photo = Ext.getDom('photo_upload');
-         console.log(photo);
+         var photo = Ext.getCmp('photo_upload').getValue();
+         //var photo = Ext.getCmp('photo_upload').getEl();
+       // var photo= Ext.getCmp('photo_upload').getValue();// only get a string...
+        // var photo = Ext.getDom('photo_upload');
+       // var aa=document.getElementById("photo_upload"); 
+       
+        
+
+         console.log('aji: ',photo);
          Ext.Ajax.request({
 					url: '/services/upload_photo.json',
 					method: 'post',
+          jsonData:{ 
+            photo:photo
+          },
+          /*
+
 					jsonData: {
 						photo: photo
-					},
+					},*/
 					success: function() {
             alert('sucess');
 
@@ -651,6 +663,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 		var productionDate = date2str(new Date());
 		var photo_one = Ext.getCmp('photo_upload').getValue();
 		var excel_receive_id = treenode;
+    var photo_url = Ext.get('photo_upload').dom;
 		var win
 		var record = {
 			shoes_id: shoesId,
@@ -662,6 +675,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			production_date: productionDate,
 			photo_one: photo_one,
 			excel_receive_id: 1,
+      photo_one: photo_url,
 			details_of_shoes_attributes: this.createDetailShoes(),
       play_board_attributes: this.createPlayBoards(),// 这里的表名要写单
 

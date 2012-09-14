@@ -10,11 +10,11 @@ Zm.guests.judge_add_to_order = {
 			});
 			if (!Ext.isEmpty(data)) {
 				var addToOrder = Zm.guests.add_to_order;
-				if (!addToOrder.isInit) { //if (isInit == false)
+				//if (!addToOrder.isInit) { //if (isInit == false)
 					addToOrder.init({
 						data: data
 					})
-				}
+				//}
 				addToOrder.win.show();
                 console.log('win',data)
 			}

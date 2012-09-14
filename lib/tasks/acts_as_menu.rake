@@ -17,8 +17,10 @@ namespace :menu do
       { :name => "客服",
         :s_menus_attributes => [
           { :name => "Excel文件处理及下板", :url => "/services/excelProcessingAndPlayBoard" },#---aji
-          { :name => "浏览客户心愿单", :url => "/services/scanningGuestWishList" },#---aji
+          { :name => "浏览客户心愿单", :url => "/services/scanning_guest_wish_list" },#---aji
           { :name => "合同制作", :url => "" },
+          { :name => "浏览客户心愿单", :url => "/services/scanningGuestWishList" },#---aji
+          { :name => "合同制作", :url => "/services/makingFactoryOrder" },
           { :name => "虚拟仓库管理", :url => "" },
           { :name => "预购单管理", :url => "/services/advanced_order_management" },
           { :name => "订单管理", :url => "/services/guest_order_management" },

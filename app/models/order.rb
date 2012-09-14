@@ -1,5 +1,6 @@
 class Order < ActiveRecord::Base
   has_many :general_shoes,:dependent => :destroy
+  accepts_nested_attributes_for :general_shoes
 
   ############ 文件路径 
   File_target = "public/files/orders_files"

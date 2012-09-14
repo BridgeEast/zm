@@ -40,18 +40,18 @@ Zm.managements.win = {
 		}]);
 
 		var store = new Ext.data.JsonStore({
-			url: '/managements/get_details.json',
+			url: '/managements/get_csos_check_details.json',
+
 			fields: ['region', 'material', 'color', 'procession'],
 			method: 'post',
-			baseParams: {
-				id: Zm.managements.check_store_of_shoes.select_id 
-			},
+			baseParams: {	id: Zm.managements.check_store_of_shoes.select_id },
            /* totalProperty: 'totalProperty' ,*/
-			root: 'shoes',
-            autoLoad: true
+			root: 'csos_check_details',
+      autoLoad: true
+
 		});
 
-        //store.load({ params: { start: 0 , limit: 2 } });
+        //store.load({ params: { start: 0 , limit: 2 } });shoes
 
 		var grid = new Ext.grid.GridPanel({
 			region: 'center',

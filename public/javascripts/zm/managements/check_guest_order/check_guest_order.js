@@ -29,7 +29,7 @@ Zm.managements.check_guest_order= {
 
         store = new Ext.data.JsonStore({ 
             url: '/managements/get_check_guest_order.json',
-            fields: ['order_id','custom_num', 'custom_contrast','quality','total_price','shipment','payment','lading_bill','production_date','remark'],
+            fields: ['id','order_id','custom_num', 'custom_contrast','quality','total_price','shipment','payment','lading_bill','production_date','remark'],
             totalProperty: "totalProperty",
             root: 'check_guest_order',
             autoLoad: false
@@ -50,14 +50,19 @@ Zm.managements.check_guest_order= {
             })
         });                  
    
-        var cgoContexMenu = new Ext.menu.Menu({
-         		id: 'theContextMenu',
+        var cgoContextMenu = new Ext.menu.Menu({
           	items: [{
               	text: '查看鞋', 
-                handler: function(){ Zm.managements.checkShoesWin.init().show(); }
+                handler: function(){ 
+                   var selected_id = Ext.getCmp('cgoGrid').getSelectionModel().getSelected().data["id"];
+                   Zm.managements.checkShoesWin.init(selected_id).show(); 
+                }
   	    		},{
                	text: '查看订单进度',
-                handler: function(){ checkProgressWindow.show(); }
+                handler: function(){ 
+                   var selected_id = Ext.getCmp('cgoGrid').getSelectionModel().getSelected().data["id"];
+                   Zm.managements.checkOrderProgressWin.init(selected_id).show()
+                }
   	    		},{				
   	    		    text: '打开提单',
                 handler: function(){ }
@@ -73,7 +78,7 @@ Zm.managements.check_guest_order= {
       	cgoGrid.on("rowcontextmenu", function(grid, rowIndex, e){
           	e.preventDefault();
           	grid.getSelectionModel().selectRow(rowIndex);
-          	cgoContexMenu.showAt(e.getXY())
+          	cgoContextMenu.showAt(e.getXY())
       	});
 
         return cgoGrid
@@ -86,7 +91,7 @@ Zm.managements.check_guest_order= {
 		    var treeCgo = new Ext.tree.TreePanel({ 
           id: 'treeCgo',
           region: 'west',
-          width: 180,
+          width: '180',
           autoScroll: true
         });
 
@@ -122,23 +127,22 @@ Zm.managements.check_guest_order= {
 		    treeCgo.setRootNode(rootOrder);
         treeCgo.on("click", function(node){
             if (node.text.toString().indexOf("月") != -1) { 
-                var year = node.parentNode.text
-                var month = node.id.split("_")[1];
-                if (parseInt(month) < 10) month = '0' + month
-                  var date = year + '-' + month
+                var yearNum = node.parentNode.text
+                var monthNum = node.id.split("_")[1];
+                if (parseInt(monthNum) < 10) monthNum = '0' + monthNum
+                  var dateNum = yearNum + '-' + monthNum
             }
-            else if (node.parentNode.text == '全部订单'){ 
-            
+            else if (!isNaN(node.text)){ 
+                dateNum = node.text;
             }
-            else { 
-                year = null;
-                month = nullguest_order
+            else if (node.text == '全部订单'){ 
+                dateNum = null;
             };
 
             store.proxy = new Ext.data.HttpProxy({
                 url: '/managements/get_selected_data.json',
                 method: 'post',
-                jsonData: { selectDate: date }      
+                jsonData: { selectDate: dateNum }      
             }),
             store.load({ params: { start: 0, limit: 30 } });
          })

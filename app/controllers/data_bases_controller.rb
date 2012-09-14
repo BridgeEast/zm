@@ -40,11 +40,14 @@ class DataBasesController < ApplicationController
       format.json{ render :json => { :general_shoes => GeneralShoe.all } }
     end
   end
-  def get_details_of_shoes
-         details = GeneralShoe.get_shoes_details( params[:id] )
+  def get_check_details_of_shoes
+         details = GeneralShoe.get_details_ids_json( params[:id] )
          render :json => { :dos => details }
   end
- 
+  def get_details_of_shoes
+        details = GeneralShoe.get_details_json(params[:id])
+        render :json => { :dos => details }
+  end
 
   #scope: data_bases/region/region.js
   #scope: data_bases/material/material.js
@@ -113,6 +116,7 @@ class DataBasesController < ApplicationController
     render :json => {}
   end
   def update_shoes_and_details_of_shoes
+    GeneralShoe.find(params[:record][:id]).details_of_shoes.delete_all
     GeneralShoe.find(params[:record][:id]).update_attributes(params[:record])
     render :json => {}
   end

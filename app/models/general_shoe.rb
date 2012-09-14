@@ -14,17 +14,7 @@ class GeneralShoe < ActiveRecord::Base
   belongs_to :excel_receive
   belongs_to :factory_order
 
-   def self.get_shoes_details( id ) 
-    shoes = self.where(:id => id).first   #where返回1个数组
-    shoes.details_of_shoes.collect! do |item|
-     { 
-        :region_id => item.region.id,
-        :material_id => item.material.id,
-        :color_id => item.color.id,
-        :procecession_id => item.procession.id,
-      }
-    end
-  end
+
 
    def self.wish_list_data(cwl)
     cwl.collect! do|item|
@@ -112,7 +102,6 @@ class GeneralShoe < ActiveRecord::Base
         :material => record.material.material,
         :color => record.color.color,
         :procession => record.procession.procession,
-        :remark => record.region.remark,
       }
     end
   end
@@ -135,23 +124,6 @@ class GeneralShoe < ActiveRecord::Base
       end
   end
 
-##^^^^^^^^^^^^^^^^^^^^^^  订单进度  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  def self.get_progress_num_and_size( shoes )
-      shoes.collect! do|shoe|
-        { 
-          :shoes_id => shoe.shoes_id,
-          :size_36 => GeneralShoe.get_size_obj( shoe, 36 ),
-          :size_37 => GeneralShoe.get_size_obj( shoe, 37 ),
-          :size_38 => GeneralShoe.get_size_obj( shoe, 38 ),
-          :size_39 => GeneralShoe.get_size_obj( shoe, 39 ),
-          :size_40 => GeneralShoe.get_size_obj( shoe, 40 ),
-          :size_41 => GeneralShoe.get_size_obj( shoe, 41 ),
-          :size_42 => GeneralShoe.get_size_obj( shoe, 42 ),
-          :size_43 => GeneralShoe.get_size_obj( shoe, 43 ),
-          :size_44 => GeneralShoe.get_size_obj( shoe, 44 ),
-        }
-      end
-  end
   ###################### 获取鞋码为size的size_of_shoes的记录 ######################
   def self.get_size_obj( shoe, size )
     size_shoe = shoe.size_of_shoes.where( :size => size )

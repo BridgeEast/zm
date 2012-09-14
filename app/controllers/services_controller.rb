@@ -78,9 +78,32 @@ class ServicesController < ApplicationController
 
   #------------------------------ 添加数据在general_shoes and details_of_shoes
   def create_in_generalanddetail
-    GeneralShoe.create!(params[:record])
+    #GeneralShoe.create!(params[:record])
+    @url= "public/images"
+    @generalshoe=GeneralShoe.new( params[:record])
+    origin_path=params[:record][:photo_one]
+    shoes_path = upload_file(origin_path,@url )
+
+    @generalshoe.set_photo_url(shoes_path)
+    
+    @generalshoe.save
+
+
     render :json =>{}
   end
+  
+  def upload_file( file, target_dir )
+    if file.nil || file.original_filename.empty?
+      #return "空文件或文件名错误！"
+    else
+      filename = file.original_filename                            # 文件名
+      File.open( File.join( target_dir, filename ),'wb' ) do |f|   # 打开的文件并准备写入
+        f.write( file.read )                                       # 向文件夹中写入文件
+        return filename #返回文件名和其后缀
+      end
+    end
+  end
+
   #------------------------------ 修改数据在general_shoes and details_of_shoes
   def updata_in_generalanddetail
     GeneralShoe.find(params[:record][:id]).details_of_shoes.delete_all
@@ -155,15 +178,18 @@ class ServicesController < ApplicationController
   end
   #----------------------------load the picture ----
   def upload_photo
-    img=params[:photo]
+    @img=params[:photo]
+    puts "ddddddddddddddddddddddddddddd",@img
     
-    content_size=img.size
-    puts "ssssssssssssssssssssssss",img
-    file_data=img.read
-    filetype=img.content_type
-    @filename=img.original_filename
-    File.open(RAILS_ROOT+"/public/images/"+@filname,"wb"){ |f| f.write(file_data) }
-    render :json => {  }
+    content_size=@img.size
+    puts "ssssssssssssssssssssssss",params[:photo]
+   file_data=@img.read
+    filetype=@img.content_type
+    #@filename=img.original_filename
+     File.open( File.join( RAILS_ROOT+"/public/images/", '@filename' ),'wb' ) do |f|   # 打开的文件并准备写入
+        f.write( file_data )
+     end
+    render :json => {}
   end
 
 
@@ -188,8 +214,13 @@ class ServicesController < ApplicationController
 
 
   end
-#------------------------------------------------------------------------------------------------------
+#-------------------------------------aji-----------------------------------------------------------------
+#-------------------------makingFactoryOrder---------aji--------------------------------------------------------------------
+  def makingFactoryOrder
+  end
+#---------------------------------------------------------------------------------------------------------------------------
 
+########################################################查看合同############################################################
  def factory_order
     end
 
@@ -253,15 +284,6 @@ class ServicesController < ApplicationController
   end
 
 
-
-  def scanningGuestWishList
-  end
-
-
-
-
-
-  #----------------------------------aji
 
 ########################################################查看订单############################################################
   def guest_order_management
@@ -367,6 +389,7 @@ class ServicesController < ApplicationController
     end
     end
 
+
     def get_advanced_order_shoes
      advanceddetail = []
       GeneralShoe.all.each do |select|
@@ -386,6 +409,42 @@ class ServicesController < ApplicationController
       format.json{ render :json => { :advanced_order_detail => advanced_details_shoes } }
       end
     end
+
+########################################################浏览客户心愿单############################################################
+    
+    def sgwl_paging(array)
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > array.length
+        max = array.length
+      end
+      for i in n..max - 1
+        root << array[i]
+      end
+      all_data = { :totalProperty => array.length, :scanning_guest_wish_list => root }
+      render :json => all_data
+    end
+
+
+    def scanning_guest_wish_list
+    end
+
+    def get_scanning_guest_wish_list
+      wish_list = GeneralShoe.get_cwl_record( params[:id] )
+      selected_data = wish_list.blank? ? "" : GeneralShoe.wish_list_data( wish_list )
+      render :json => { :scanning_guest_wish_list => selected_data } 
+    end
+    
+    def get_sgwl_check_details
+      shoes_details = GeneralShoe.get_details_json( params[:id] )
+      respond_to do|format|
+        format.json{ render :json => { :sgwl_check_details => shoes_details } }
+      end
+    end
+
+
 #########################################################################################################################################################
   def upload_order
     @order = Order.new( params[:order] )

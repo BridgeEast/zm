@@ -1,60 +1,50 @@
 Zm.guests.add_to_order = {
-	isInit: false,
+	//isInit: false,
+
 	init: function(config) {
-		this.unSelectAll();
-		this.win = this.createWin(config);
-		this.isInit = true;
+		Ext.QuickTips.init();
+		this.config = config;
+		this.unSelectAll = Zm.guests.checkbox.unSelectAll(); //不是this.unSelectAll
+		this.win = this.createWin();
+		//this.isInit = true;
 	},
 
-	createWin: function(config) {
+	createWin: function() {
 		return new Ext.Window({
-			id: 'win',
 			layout: 'border',
-			closeAction: 'hide',
+			id: 'win',
+			closeAction: 'close',
 			height: 450,
 			width: 600,
 			constrainHeader: true,
 			resizable: true,
-			items: [this.make_order_form(), this.make_order_grid(config)],
+			items: [this.make_order_form(), this.make_order_grid()],
 			buttons: [{
 				text: '确定',
+				scope: this,
 				handler: function() {
-                   console.log(Ext.getCmp('makeOrderGrid').getStore().getAt(0).data); 
-       console.log('init' , config.data);
-					Zm.guests.determine.add(config.data)
+					Zm.guests.determine.add(this.config);
+					Ext.getCmp('wlGrid').unSelectAll();
 				}
 			},
 			{
 				text: '重置',
+				scope: this,
 				handler: function() {
 					Ext.getCmp('makeOrderForm').getForm().reset();
-					Ext.getCmp('makeOrderGrid').getStore().reload();
+					Ext.getCmp('makeOrderGrid').getStore().removeAll();
+					Ext.getCmp('makeOrderGrid').store.reload(this.config)
 				}
 			},
 			{
 				text: '取消',
 				scope: this,
 				handler: function() {
-					this.win.hide(); //close会把win关掉，下次show时又要重新建win，很浪费资源
-					Ext.getCmp('wlGrid').unSelectAll()
+					this.win.close();
+					Ext.getCmp('wlGrid').unSelectAll();
 				}
 			}]
 		});
-	},
-
-	unSelectAll: function() { //每次点总选框再取消，用clearSelections()只能去掉每条记录前面的勾,总选框的勾去不掉，这是Ext的问题。
-		Ext.grid.GridPanel.prototype.unSelectAll = function() { //prototype是原型的意思，
-			var view = this.getView();
-			var sm = this.getSelectionModel();
-			if (sm) {
-				sm.clearSelections(); //去掉每条记录前面的勾
-				var hd = Ext.fly(view.innerHd); //下面是改那个总选框的样式，去掉它的勾，
-				var c = hd.query('.x-grid3-hd-checker-on');
-				if (c && c.length > 0) {
-					Ext.fly(c[0]).removeClass('x-grid3-hd-checker-on')
-				}
-			}
-		};
 	},
 
 	make_order_form: function() {
@@ -112,6 +102,7 @@ Zm.guests.add_to_order = {
 					layout: 'form',
 					items: [{
 						xtype: 'textarea',
+						id: 'remark',
 						fieldLabel: '备注',
 						name: 'textarea',
 					}]
@@ -133,54 +124,86 @@ Zm.guests.add_to_order = {
 		});
 	},
 
-	make_order_grid: function(config) {
+	make_order_grid: function() {
 		var cm = new Ext.grid.ColumnModel([{
 			header: '样品号',
 			dataIndex: 'sample_id'
 		},
 		{
 			header: '38',
-			dataIndex: '38_size',
-			editor: new Ext.form.TextField({})
+			dataIndex: '38',
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		},
 		{
 			header: '39',
-			dataIndex: '39_size',
-			editor: new Ext.form.TextField({})
+			dataIndex: '39',
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		},
 		{
 			header: '40',
-			dataIndex: '40_size',
-			editor: new Ext.form.TextField({})
+			dataIndex: '40',
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		},
 		{
 			header: '41',
-			dataIndex: '41_size',
-			editor: new Ext.form.TextField({})
+			dataIndex: '41',
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		},
 		{
 			header: '42',
-			dataIndex: '42_size',
-			editor: new Ext.form.TextField({})
+			dataIndex: '42',
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		},
 		{
 			header: '43',
-			dataIndex: '43_size',
-			editor: new Ext.form.TextField({})
+			dataIndex: '43',
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		},
 		{
 			header: '44',
-			dataIndex: '44_size',
-			editor: new Ext.form.TextField({})
+			dataIndex: '44',
+			editor: new Ext.form.NumberField({
+				allowNegative: false,
+				allowDecimals: false,
+				regex: /^[0-9]*[1-9][0-9]*$/,
+				regexText: '只能输入正整数'
+			})
 		}]);
-		var store = new Ext.data.Store({
-			proxy: new Ext.data.MemoryProxy(config.data),
-			reader: new Ext.data.ArrayReader({},
-			[{
-				name: 'sample_id'
-			}])
+
+		var store = new Ext.data.ArrayStore({
+			data: this.config.data,
+			fields: 'sample_id 38 39 40 41 42 43 44'.split(' ')
 		});
-		store.load();
 
 		return new Ext.grid.EditorGridPanel({
 			id: 'makeOrderGrid',

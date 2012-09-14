@@ -80,13 +80,16 @@ Zm.guests.order_management = {
                 emptyMsg: '没有记录'
             }),
             tbar: new Ext.Toolbar(['-', {
-                text: '删除所选'
+                text: '删除所选',
+                handler: function() { 
+                     Zm.guests.delete_undetermined_order.init()
+                }
             },
             '-', {
                 text: '发送订单',
                 scope: this,
                 handler: function(){ 
-                this.sendOrders();
+                Zm.guests.send_to_order.init();
                 }
             },
             '-'])

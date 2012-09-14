@@ -1,7 +1,11 @@
-Ext.onReady(function(){
+Zm.managements.checkOrderProgressWin = { 
+    init: function(selected_id) { 
+    
     var cm = new Ext.grid.ColumnModel([
         new Ext.grid.RowNumberer(),
         { header: "鞋号", dataIndex: "shoes_id" },
+        { header: "36", dataIndex: "size_36" },
+        { header: "37", dataIndex: "size_37" },
         { header: "38", dataIndex: "size_38" },
         { header: "39", dataIndex: "size_39" },
         { header: "40", dataIndex: "size_40" },
@@ -12,17 +16,19 @@ Ext.onReady(function(){
     ]);
 
     var store = new Ext.data.JsonStore({
-        url: "/managements/guest_order.json",
-        fields: ["shoes_id", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
+        url: "/managements/check_order_progress.json",
+        fields: ["id","shoes_id",  "size_36",  "size_37", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
         totalProperty: "totalProperty",
-        root: "roots",
+        baseParams: { id: selected_id },
+        root: "check_order_progress",
+        autoLoad: true
     });
     store.load({ params: { start: 0, limit: 20 } })
 
-    var progressGrid = new Ext.grid.GridPanel({
-        id: "progressgrid",
+    var checkOrderProgressGrid = new Ext.grid.GridPanel({
         height: 491,
         width: 788,
+        region: "center",
         viewConfig: { forceFit: true },
         cm: cm,
         store: store,
@@ -36,21 +42,17 @@ Ext.onReady(function(){
 
     });
 
-    progressWindow = new Ext.Window({
-        id: "progresswindow",
+    checkOrderProgressWindow = new Ext.Window({
         height: 527,
         width: 800,
+        layout: 'border',
         closeAction: "hide",
         resizable: false,
-        items: [progressGrid],
-        listeners: {'show':{fn: function(){
-            var order = Ext.getCmp('guestgrid').getSelectionModel().getSelected().data["order_id"];
-            store.proxy = new Ext.data.HttpProxy({
-                url: "/managements/get_order_progress.json",
-                method: "post",
-                jsonData: { orderid: order},
-            });
-            store.load({ params: { start: 0, limit: 20 } });
-        }}}
+        constrainHeader: true,
+        items: [checkOrderProgressGrid],
     });
-});
+
+    return checkOrderProgressWindow
+
+   }
+}

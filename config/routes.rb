@@ -70,12 +70,14 @@ Zm::Application.routes.draw do
      get "check_guest_order"
      get "get_check_guest_order"
      get "get_selected_data"
+     get "check_shoes"
+     get "get_cgo_check_details"
+     get "get_order_progress"
      get "get_virtuals"
      get "get_virtual_daily_dispatch"
      get "get_virtual_mouth_sheet"
      get "get_virtual_mouth_dispatch"
      get "get_virtual_daily_sheet"
-     get "get_order_progress"
      get "check_virtual_warehouse"
    ################
 
@@ -83,7 +85,7 @@ Zm::Application.routes.draw do
      get "check_store_of_shoes"
      get "get_data"
      get "get_check_store_of_shoes"
-     get "get_details"
+     get "get_csos_check_details"
      get "csos_paging"
    #*******************************
 
@@ -113,20 +115,21 @@ Zm::Application.routes.draw do
      get"get_scanning_detail"
      get"change_board_kinds"
      #*********心愿单****************
-     get"change_board_kind"
-     post"change_board_kind"
-     get"get_data"
-     #################################
-     
-    get "wish_list"
+     get "get_details"
+     get "wish_list"
      get "wish_list_data"
      post "destroy_choice"
      post "add_to_determined_board"
      post "add_to_order"
     
+     post"change_board_kind"
+     get "get_data"
+
+
      #********订单管理***************
      get"order_management"
      get"get_details_of_shoes"
+     post"delete_undetermined_order"
    end
  end
 #----------------------------------------aji/jb
@@ -143,7 +146,6 @@ Zm::Application.routes.draw do
      get "excelProcessingAndPlayBoard"
      get "get_excel_shoes"
      post "delete_shoes_and_detail_of_shoes"
-     ############################我的别动############################
      get "get_details_of_shoes"
      post "create_in_generalanddetail"
      post "updata_in_generalanddetail"
@@ -153,6 +155,8 @@ Zm::Application.routes.draw do
      get "scanningGuestWishLists"
      post "upload_photo"
 
+     get "makingFactoryOrder"
+
      #--------------------------------------jb
      get "guest_order_management"
      get "get_orders"
@@ -161,7 +165,7 @@ Zm::Application.routes.draw do
 
      ################################################################
 
-   post "create_in_generalanddetail"
+     post "create_in_generalanddetail"
      post "updata_in_generalanddetail"
      get "get_details_of_shoes_all_id"
      get "factory_order"
@@ -169,6 +173,14 @@ Zm::Application.routes.draw do
      get "get_check_shoes"
      post "mps"
      get "get_speed_of_progress"
+
+     ########################浏览客户心愿单############################
+
+     get "scanning_guest_wish_list"
+     get "get_selected_data"
+     get "get_scanning_guest_wish_list"
+     get "get_sgwl_check_details"
+     get "sgwl_paging"  
      ################################################################
 
 
