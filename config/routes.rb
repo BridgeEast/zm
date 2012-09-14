@@ -140,7 +140,6 @@ Zm::Application.routes.draw do
      get "excelProcessingAndPlayBoard"
      get "get_excel_shoes"
      post "delete_shoes_and_detail_of_shoes"
-     ############################我的别动############################
      get "get_details_of_shoes"
      post "create_in_generalanddetail"
      post "updata_in_generalanddetail"
@@ -149,6 +148,8 @@ Zm::Application.routes.draw do
      get "get_tree_node"
      get "scanningGuestWishLists"
      post "upload_photo"
+
+     get "makingFactoryOrder"
 
      #--------------------------------------jb
      get "guest_order_management"
