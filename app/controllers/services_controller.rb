@@ -218,6 +218,85 @@ class ServicesController < ApplicationController
 #-------------------------makingFactoryOrder---------aji--------------------------------------------------------------------
   def makingFactoryOrder
   end
+  
+  def getMfo1TreeNode
+    treenodes=[]
+    yearnode=[]
+    yearnode.push('2011')
+    aji=false
+
+    Order.all.each do |tem|
+      yearnode << tem.production_date.year
+      yearnode=yearnode.uniq
+    end
+
+    for year in yearnode do
+      #-------
+      monthnode=Array.new(13){ Array.new()}
+      Order.all.each do |tem|
+        if tem.production_date.year == year then
+          aji = true
+          monthnode[tem.production_date.month] << { :text => tem.order_id, :id => tem.id, :leaf =>true }
+        end
+      end
+      #-------
+      monTime=12
+      excelnode=[]
+      if year==Time.new.year then monTime=Time.new.month end
+      
+      for i in 1..monTime do
+         if (monthnode[i].empty?) then
+             excelnode << { :text => i.to_s+'mon', :id => i.to_s+'m', :leaf => true  }
+          else
+             excelnode << { :text => i.to_s+'mon', :id => i.to_s+'m', :children => monthnode[i] }
+          end
+      end
+
+      #----------
+      fuck="ccccccc"
+        if aji then
+          treenodes << { :text => year.to_s+'y', :id => year.to_s+'y', :children => excelnode}
+        else
+          treenodes << { :text => year.to_s+'qqq', :qtip => fuck, :id => year.to_s+'y', :leaf => true }
+        end
+      #-----------
+     
+    end
+    render :json=> treenodes
+
+  end
+
+  def getAllOrdershoes
+    @tem1=[]
+    case params[:nodekind]
+    when 'y'
+      @tem1=[]
+      @temp=Order.where("production_date like ?","#{params[:nodename]}%")
+      @temp.each do |temp|
+        @tempp=GeneralShoe.find_all_by_order_id(temp.id)
+        @tem1.concat(@tempp)
+      end
+
+    when 'm'
+      @tem1=[]
+      @temp=Order.where("production_date like ?","#{params[:nodename]}%")
+      @temp.each do |temp|
+        @tempp=GeneralShoe.find_all_by_order_id(temp.id)
+        @tem1.concat(@tempp)
+      end
+
+    when 'nodeid'
+       @tem1=[]
+       @tem1 = GeneralShoe.find_all_by_order_id(params[:nodename])
+    end
+
+    respond_to do |format|
+      format.json{ render :json => { :allOrdershoes => @tem1 } }
+    end
+    
+
+
+  end
 #---------------------------------------------------------------------------------------------------------------------------
 
 ########################################################查看合同############################################################

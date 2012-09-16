@@ -156,6 +156,8 @@ Zm::Application.routes.draw do
      post "upload_photo"
 
      get "makingFactoryOrder"
+     get "getMfo1TreeNode"
+     get "getAllOrdershoes"
 
      #--------------------------------------jb
      get "guest_order_management"

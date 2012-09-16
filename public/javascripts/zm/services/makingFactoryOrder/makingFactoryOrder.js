@@ -1,78 +1,114 @@
 Zm.services.makingFactoryOrder = {
 	init: function() {
+    Ext.QuickTips.init();
 		//Ext.Msg.alert('hello','world');
 		Zm.pages.ViewPort = { //i don't know what it readly it,shit,Zm.pages.ViewPort......
-      title: '客户－工厂订单管理',
+			title: '客户－工厂订单管理',
 			layout: 'border',
 			region: 'center',
 			items: [{
 				region: 'north',
 				height: 380,
 				layout: 'border',
-			  split: true,
-				items: [this.createMfo1Tree(),this.createMfo1Grid()]
+				split: true,
+				items: [this.createMfo1Tree(), this.createMfo1Grid()]
 			},
 			{
-        region: 'center',
+				region: 'center',
 				height: 80,
 				layout: 'border',
-				items: [this.createMfo2Tree(),this.createMfo2Grid()]
-      }]
+				items: [this.createMfo2Tree(), this.createMfo2Grid()]
+			}]
 		};
 	},
-//++++++++++++++++++++++++++++++++createMfo1Tree ++++++++++++++++++++++++++++++++++++++++
-  createMfo1Tree: function(){ 
+	//++++++++++++++++++++++++++++++++createMfo1Tree ++++++++++++++++++++++++++++++++++++++++
+	createMfo1Tree: function() {
+		var Mfo1TreeLoader = new Ext.tree.TreeLoader({
+			dataUrl: '/services/getMfo1TreeNode.json'
+		});
 
-       var Mfo1Tree = new Ext.tree.TreePanel({ 
-         id: 'Mfo1Tree',
-         width:120,
-         region:'west',
-         root:Mfo1TreeRoot,
-       //  root: new Ext.tree.TreeNode({ text:'sss' }),
-         autoScroll:true,
-       });
-    
-        var Mfo1TreeRoot = new Ext.tree.TreeNode({
-         text:'全部订单',
-         id:'0',
-         });
+		var Mfo1TreeRoot = new Ext.tree.AsyncTreeNode({
+			text: '全部订单',
+			id: '0',
+			draggable: false,
+		});
+		//    root.expand();
+		var Mfo1Tree = new Ext.tree.TreePanel({
+			//renderTo:'tree1',//这也一另一种渲染手法，你也可以在下面body里找到div
+			//autoHeight:true,// 如果是这种渲染手法，就要为它加上这个属性，不然就要在div里设定div的高度
+			width: 100,
+			split: true,
+			maxSize: 150,
+			minSize: 80,
+			collapsible: true,
+			autoScroll: true,
+			loader: Mfo1TreeLoader,
+			region: 'west',
+			root: Mfo1TreeRoot,
+		});
 
-       var time = new Date();
-       var nowyear = time.getFullYear();
-       var nowmonth = time.getMonth();
-       for(var i=nowyear; i > nowyear-3; i--){ 
-         var year = new Ext.tree.TreeNode({ text: i });
-         Mfo1TreeRoot.appendChild(year);
-         if(i==nowyear)
-          { var a = nowmonth +1 }
-         else
-          { a = 12 }
-         for(var b=a; b > 0; b--){  
-         var month = new Ext.tree.AsyncTreeNode({ text: b +'月',id:i +'_' +b,leaf:true });
-         year.appendChild(month);
-         }
-        };
-         Mfo1Tree.setRootNode(Mfo1TreeRoot);
-         Mfo1Tree.on('click',function(node){ 
-           if(node.leaf){ 
-           var years = node.parentNode.text.toString();
-           var months =node.id.split("_")[1]
-             orderstore.proxy = new Ext.data.HttpProxy({ 
-               url:'/services/get_order_data.json',
-               method:'post',
-               jsonData:{ 
-                selectorderyear:years,
-                selectordermonth:months,
-               }
-             }),
-             orderstore.reload()
-               }
-             })
-         return Mfo1Tree 
-    
-  },
-//+++++++++++++++++++++++++++++++++createMfo1Grid++++++++++++++++++++++++++++++++++++++++
-  createMfo1Grid: function(){ 
+    Mfo1Tree.on('click', function(node) {
+      
+
+			var store = Ext.getCmp('Mfo1grid').store;
+			var nodekind = node.id.toString().slice(-1);
+			var nodename = node.id.toString().substring(0, node.id.toString().length - 1);
+			console.log('nodekind', nodekind);
+			console.log('nodename', nodename);
+
+			if (nodekind == 'y') {
+				store.setBaseParam('nodekind', nodekind); //must devide into 2 steps
+				store.setBaseParam('nodename', nodename);
+				store.reload();
+			}
+			else if (nodekind == 'm') {
+				if (nodename < 10) nodename = '0' + nodename // 格式化一下日期
+				var year = node.parentNode.id.toString().substring(0, node.parentNode.id.toString().length - 1); //得到父节点的什么年份
+				nodename = year + '_' + nodename;
+				console.log('nodename' + nodename);
+				store.setBaseParam('nodekind', nodekind);
+				store.setBaseParam('nodename', nodename);
+				store.reload();
+			}
+
+			else {
+        treenode=node.id;// 保存用到的全局变量
+				nodekind = 'nodeid';
+				store.setBaseParam('nodekind', nodekind);
+				store.setBaseParam('nodename', node.id);
+				store.reload();
+			}
+
+			/*
+      if(nodekind == 'y'){ 
+        //var yeardate=.substring(0,4);
+       // console.log('year',yeardate);
+        console.log('nodename',nodename);
+        store.setBaseParam('yeardate',nodename,'excel_receive_id',kong);
+        store.reload();
+      }
+      else if(nodekind == 'm'){ 
+        var yeardate=node.parentNode.id.toString().substring(0,node.parentNode.id.toString().length-1);
+        store.setBaseParam( 'yeardate',yeardate, 'monthdate',nodename );
+      
+      }else
+        {
+        console.log('nodeid',node.id)
+        store.removeAll();
+        store.setBaseParam('excel_receive_id',node.id);
+        store.reload();
+        }
+        
+			//var store = Ext.getCmp('wlGrid').store;
+			//store.setBaseParam("id", node.id);
+			//store.reload();
+    //*/
+		});
+		return Mfo1Tree;
+
+	},
+	//+++++++++++++++++++++++++++++++++createMfo1Grid++++++++++++++++++++++++++++++++++++++++
+	createMfo1Grid: function() {
 		//Ext.Msg.alert('hello','world');
 		var Mfo1GridCm = new Ext.grid.ColumnModel([
 		new Ext.grid.RowNumberer(), {
@@ -119,9 +155,9 @@ Zm.services.makingFactoryOrder = {
 		}]);
 		//------------------------------------------
 		var Mfo1GridStore = new Ext.data.JsonStore({
-			url: '/services/get_excel_shoes.json',
+			url: '/services/getAllOrdershoes.json',
 			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'size', 'necessary_num', 'production_date', 'remark'],
-			root: 'excel_shoes',
+			root: 'allOrdershoes',
 			baseParams: {
 				//yeardate: 'null',
 				//monthdate: 'null',
@@ -132,8 +168,6 @@ Zm.services.makingFactoryOrder = {
 			//autoLoad: true
 		});
 		//Mfo1GridStore.load;
-	
-
 		var Mfo1gridContextMenu = new Ext.menu.Menu({ // 这里做了一个菜单，供下面的行的右键可用
 			id: 'Mfo1gridContextMenu',
 			defaults: {
@@ -201,12 +235,11 @@ Zm.services.makingFactoryOrder = {
 		});
 		return Mfo1grid;
 
-	
-  },
+	},
 
-//++++++++++++++++++++++++++++++++createMfo1Tree ++++++++++++++++++++++++++++++++++++++++
-  createMfo2Tree: function(){ 
- 	var loader = new Ext.tree.TreeLoader({
+	//++++++++++++++++++++++++++++++++createMfo1Tree ++++++++++++++++++++++++++++++++++++++++
+	createMfo2Tree: function() {
+		var loader = new Ext.tree.TreeLoader({
 			dataUrl: '/services/get_tree_node.json'
 		});
 
@@ -224,16 +257,16 @@ Zm.services.makingFactoryOrder = {
 			maxSize: 150,
 			minSize: 80,
 			collapsible: true,
-      autoScroll: true,
+			autoScroll: true,
 			loader: loader,
 			region: 'west',
 			root: root,
 		});
 
-    return Mfo2Tree;
-  },
-//+++++++++++++++++++++++++++++++++createMfo2Grid++++++++++++++++++++++++++++++++++++++++
-  createMfo2Grid: function(){ 
+		return Mfo2Tree;
+	},
+	//+++++++++++++++++++++++++++++++++createMfo2Grid++++++++++++++++++++++++++++++++++++++++
+	createMfo2Grid: function() {
 		//Ext.Msg.alert('hello','world');
 		var cm = new Ext.grid.ColumnModel([
 		new Ext.grid.RowNumberer(), {
@@ -385,7 +418,6 @@ Zm.services.makingFactoryOrder = {
 		});
 		return EpapbGrid;
 
-	
-  },
+	},
 }
 
