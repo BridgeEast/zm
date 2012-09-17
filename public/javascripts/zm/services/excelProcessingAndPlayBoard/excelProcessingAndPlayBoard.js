@@ -13,8 +13,11 @@ Zm.services.excelProcessingAndPlayBoard = {
 	//+++++++++++++++++++++++++++EpapdGrid,used for show the main message+++++++++++++++++++++++++++++++++++
 	createEpapbGrid: function() {
 		//Ext.Msg.alert('hello','world');
+    var sm = new Ext.grid.CheckboxSelectionModel({handlerMouseDown: Ext.emptyFn});
 		var cm = new Ext.grid.ColumnModel([
-		new Ext.grid.RowNumberer(), {
+		new Ext.grid.RowNumberer(),
+    sm,
+    {
 			header: '鞋图1',
 			dataIndex: 'photo_one',
 			renderer: title_img
@@ -147,6 +150,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			region: 'center',
 			border: true,
 			cm: cm,
+      sm: sm,
 			store: store,
 			width: 400,
 			height: 300,
@@ -747,6 +751,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++deleteShoes++++++++++++++++++++++++
 	deleteShoes: function() {
 		var selection = Ext.getCmp('EpapbGrid').getSelectionModel();
+    //console.log("xxx",selection.getSelections().length);,it can be used for delete more rows
 		if (selection.getSelected()) {
 			Ext.Ajax.request({
 				url: '/services/delete_shoes_and_detail_of_shoes.json',

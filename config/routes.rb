@@ -158,6 +158,7 @@ Zm::Application.routes.draw do
      get "makingFactoryOrder"
      get "getMfo1TreeNode"
      get "getAllOrdershoes"
+     get "checkSizeAndNum"
 
      #--------------------------------------jb
      get "guest_order_management"
