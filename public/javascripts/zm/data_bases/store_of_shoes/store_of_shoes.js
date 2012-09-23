@@ -395,23 +395,60 @@ Zm.data_bases.store_of_shoes = {
             labelWidth: 70,
             height: 230,
             width: 600,
-            layout: 'form',
+            layout: 'column',
             items: [{
-                layout: 'column',
+                columnWidth: .5,
                 items: [{
-                    xtype: 'textfield',
-                    inputType: 'file',
-                    columnWidth: .5,
-                    layout: 'form',
-                    fieldLabel:'图片1'
+                    xtype: 'box',
+                    id: 'pho',
+                    height: 192,
+                    autoEl: {
+                        tag: 'img',
+                        src: Ext.BLANK_IMAGE_URL,
+                    }
                 },
                 {
                     xtype: 'textfield',
                     inputType: 'file',
-                    columnWidth: .5,
-                    layout: 'form',
-                    fieldLabel: '图片2',
+                    id: 'photoFileOne',
+                    name: 'photoFileOne',
+                    listeners: {
+                        'render': function() {
+                            var fileCmpO = Ext.get('photoFileOne');
+                            fileCmpO.on('change', function(field, newValue, oldValue) {
+                                Ext.get('pho').dom.src = window.URL.createObjectURL(Ext.get('photoFileOne').dom.files[0]);
+                            },
+                            this);
+                        }
+                    }
 
+                }]
+            },
+            {
+                columnWidth: .5,
+                items: [{
+                    xtype: 'box',
+                    id: 'pht',
+                    height: 192,
+                    autoEl: {
+                        tag: 'img',
+                        src: Ext.BLANK_IMAGE_URL
+                    }
+                },
+                {
+                    xtype: 'textfield',
+                    inputType: 'file',
+                    id: 'photoFileTwo',
+                    name: 'photoTwo',
+                    listeners: {
+                        'render': function() {
+                            var fileCmpT = Ext.get('photoFileTwo');
+                            fileCmpT.on('change', function(field, newValue, oldValue) {
+                                Ext.get('pht').dom.src = window.URL.createObjectURL(Ext.get('photoFileTwo').dom.files[0]);
+                            },
+                            this);
+                        }
+                    }
                 }]
             }]
         });
@@ -452,16 +489,6 @@ Zm.data_bases.store_of_shoes = {
             modal: true,
             items: [form]
         });
-    },
-    showImage: function() {
-        var uploadImage = Ext.getCmp('form').getForm().buttons[0].getValue();
-        var img_reg = /\.([jJ][pP][gG]){1}$|\.([jJ][pP][eE][gG]){1}$|\.([gG][iI][fF]){1}$|\.([pP][nN][gG]){1}$|\.([bB][mM][pP]){1}$/
-        var url = 'fiel://' + uploadImage.getValue();
-        if (img_reg.test(url)) {
-            var imageShow_box = Ext.getCmp('form').getForm().imageShow_box.getEl().dom;
-            var file = uploadImage.getEl().dom.files.item(0);
-            imageShow_box.src = window.URL.createObjectURL(file);
-        }
     }
 }
 

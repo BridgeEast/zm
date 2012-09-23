@@ -120,5 +120,15 @@ class DataBasesController < ApplicationController
     GeneralShoe.find(params[:record][:id]).update_attributes(params[:record])
     render :json => {}
   end
+  def upload_photo( photo, target_dir)
+    if photo.nil || photo.original_filename.empty?
+    else
+      filename = photo.original_filename
+      File.open( File.join( target_dir, filename), 'wb') do |f|
+        f.write( file.read )
+        return filename
+      end
+    end
+  end
 
 end
