@@ -1,7 +1,7 @@
 Zm.services.excelProcessingAndPlayBoard = {
 	//+++++++++++++++++++++++++++++++++ initialize++++++++++++++++++++++++++++++++++++++
 	init: function() {
-    treenode=null;
+		treenode = null;
 		//Ext.Msg.alert('hello','world');
 		Zm.pages.ViewPort = { //i don't know what it readly it,shit,Zm.pages.ViewPort......
 			layout: 'border',
@@ -13,11 +13,11 @@ Zm.services.excelProcessingAndPlayBoard = {
 	//+++++++++++++++++++++++++++EpapdGrid,used for show the main message+++++++++++++++++++++++++++++++++++
 	createEpapbGrid: function() {
 		//Ext.Msg.alert('hello','world');
-    var sm = new Ext.grid.CheckboxSelectionModel({handlerMouseDown: Ext.emptyFn});
+		var sm = new Ext.grid.CheckboxSelectionModel({
+			handlerMouseDown: Ext.emptyFn
+		});
 		var cm = new Ext.grid.ColumnModel([
-		new Ext.grid.RowNumberer(),
-    sm,
-    {
+		new Ext.grid.RowNumberer(), sm, {
 			header: '鞋图1',
 			dataIndex: 'photo_one',
 			renderer: title_img
@@ -150,7 +150,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			region: 'center',
 			border: true,
 			cm: cm,
-      sm: sm,
+			sm: sm,
 			store: store,
 			width: 400,
 			height: 300,
@@ -170,7 +170,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 	},
 	//++++++++++++++++++++++++++++++++addOrModifyshoes:function+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	addOrModifyshoes: function(type, shoes_id) {
-    /*if(treenode==null){ //if the custom hasn't click a excel node,than the treenode is null,and cannot create a new one!
+		/*if(treenode==null){ //if the custom hasn't click a excel node,than the treenode is null,and cannot create a new one!
       Ext.Msg.alert('Tip!','请选择一个excel节点！');
       return treenode;
     }*/
@@ -455,7 +455,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 				AOMSGrid.stopEditing();
 				AOMSStore.insert(0, p); //insert data above the head of store
 				AOMSGrid.startEditing(0, 0); //start at x=0,y=0
-        AOMSGrid.view.refresh();
+				AOMSGrid.view.refresh();
 			}
 		},
 		'-', {
@@ -489,22 +489,36 @@ Zm.services.excelProcessingAndPlayBoard = {
 			//activeItem:
 		});
 
-		var AOMSPhoto = new Ext.Panel({
+		var AOMSPhoto = new Ext.form.FormPanel({
 			id: 'AOMSPhoto',
-			// title: "xx",
-			// height: 100,
-			// width: 100,
-			layout: 'column',
+			region: 'south',
+			frame: true,
+			labelAlign: 'right',
+			labelWidth: 70,
+			height: 230,
+			width: 600,
+			layout: 'form',
 			items: [{
-				title: 'photo1',
-				columnWidth: .5
-			},
-			{
-				title: 'photo2',
-				columnWidth: .5,
+				layout: 'column',
+				items: [{
+				 // scope: this,
+					xtype: 'textfield',
+					inputType: 'file',
+					columnWidth: .5,
+					layout: 'form',
+					fieldLabel: '图片1',
+          id: 'photo_upload',
+        //	anchor: '50%' // anchor width by percentage
+				},
+				{
+					xtype: 'textfield',
+					inputType: 'file',
+					columnWidth: .5,
+					layout: 'form',
+					fieldLabel: '图片2',
 
-			},
-			]
+				}]
+			}]
 		});
 
 		return new Ext.Window({
@@ -516,20 +530,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			constrainHeader: true,
 			//protect the frame out of the page 
 			items: [AOMSForm, AOMSGrid, AOMSPhoto],
-			buttons: [{
-				scope: this,
-
-				id: 'photo_upload',
-				//labelAlign: 'right',
-				xtype: 'textfield',
-				fieldLabel: 'upload',
-				name: 'file',
-				inputType: 'file',
-        blankText: '请上传文件',  
-  
-        anchor: '50%'  // anchor width by percentage
-
-			},
+			buttons: [
 			{
 				text: '确定',
 				scope: this,
@@ -541,34 +542,34 @@ Zm.services.excelProcessingAndPlayBoard = {
 				text: '重置',
 				scope: this,
 				handler: function() {
-         var photo = Ext.getCmp('photo_upload').getValue();
-         //var photo = Ext.getCmp('photo_upload').getEl();
-       // var photo= Ext.getCmp('photo_upload').getValue();// only get a string...
-        // var photo = Ext.getDom('photo_upload');
-       // var aa=document.getElementById("photo_upload"); 
-       
-        
+					var photo = 0;
+					//var photo = Ext.getCmp('photo_upload').getValue();
+					//var photo = Ext.getCmp('photo_upload').getEl();
+					// var photo= Ext.getCmp('photo_upload').getValue();// only get a string...
+					// var photo = Ext.getDom('photo_upload');
+					// var photo=document.getElementById("photo_upload"); 
+					var photo = Ext.get('photo_upload').dom.files[0];
 
-         console.log('aji: ',photo);
-         Ext.Ajax.request({
-					url: '/services/upload_photo.json',
-					method: 'post',
-          jsonData:{ 
-            photo:photo
-          },
-          /*
+					console.log('aji: ', photo);
+					Ext.Ajax.request({
+						url: '/services/upload_photo.json',
+						method: 'post',
+						jsonData: {
+							photo: photo
+						},
+						/*
 
 					jsonData: {
 						photo: photo
 					},*/
-					success: function() {
-            alert('sucess');
+						success: function() {
+							alert('sucess');
 
-					},
-					failure: function() {
-            alert('failure');
-					},
-				}); 
+						},
+						failure: function() {
+							alert('failure');
+						},
+					});
 
 				}
 			},
@@ -639,21 +640,19 @@ Zm.services.excelProcessingAndPlayBoard = {
 		return detailrecord;
 
 	},
-  createPlayBoards: function() {
-    
+	createPlayBoards: function() {
 
-		var playboard=[];
-    
-    var record={
-      custom_num: 'aji',
-      server_num: 'fuckfan',
-      communication: 'fuckfan is sb',
-      board_kind: '开发板'
-    };
-    playboard.push(record);
+		var playboard = [];
+
+		var record = {
+			custom_num: 'aji',
+			server_num: 'fuckfan',
+			communication: 'fuckfan is sb',
+			board_kind: '开发板'
+		};
+		playboard.push(record);
 		return record;
 	},
-
 
 	checkForShoes: function(type) {
 
@@ -667,7 +666,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 		var productionDate = date2str(new Date());
 		var photo_one = Ext.getCmp('photo_upload').getValue();
 		var excel_receive_id = treenode;
-    var photo_url = Ext.get('photo_upload').dom;
+		var photo_url = Ext.get('photo_upload').dom;
 		var win
 		var record = {
 			shoes_id: shoesId,
@@ -679,10 +678,10 @@ Zm.services.excelProcessingAndPlayBoard = {
 			production_date: productionDate,
 			photo_one: photo_one,
 			excel_receive_id: 1,
-      photo_one: photo_url,
+			photo_one: photo_url,
 			details_of_shoes_attributes: this.createDetailShoes(),
-      play_board_attributes: this.createPlayBoards(),// 这里的表名要写单
-
+			play_board_attributes: this.createPlayBoards(),
+			// 这里的表名要写单
 			// 返回的是一个数组，数组包含几条记录如：｛key:value,key:value....｝等。
 		};
 		function date2str(d) {
@@ -751,7 +750,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++deleteShoes++++++++++++++++++++++++
 	deleteShoes: function() {
 		var selection = Ext.getCmp('EpapbGrid').getSelectionModel();
-    //console.log("xxx",selection.getSelections().length);,it can be used for delete more rows
+		//console.log("xxx",selection.getSelections().length);,it can be used for delete more rows
 		if (selection.getSelected()) {
 			Ext.Ajax.request({
 				url: '/services/delete_shoes_and_detail_of_shoes.json',
@@ -805,7 +804,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 				//when you invoke some function,and show the 'uncaught typeError',you can add the scope:this,   
 				handler: function() {
 					this.updatePlayBoard(data.id);
-          console.log("xxx",data.id);
+					console.log("xxx", data.id);
 				}
 			},
 			{
@@ -880,14 +879,13 @@ Zm.services.excelProcessingAndPlayBoard = {
 			maxSize: 150,
 			minSize: 80,
 			collapsible: true,
-      autoScroll: true,
+			autoScroll: true,
 			loader: loader,
 			region: 'west',
 			root: root,
 		});
 
 		EpapbTree.on('click', function(node) {
-      
 
 			var store = Ext.getCmp('EpapbGrid').store;
 			var nodekind = node.id.toString().slice( - 1);
@@ -911,7 +909,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 			}
 
 			else {
-        treenode=node.id;// 保存用到的全局变量
+				treenode = node.id; // 保存用到的全局变量
 				nodekind = 'excelid';
 				store.setBaseParam('nodekind', nodekind);
 				store.setBaseParam('nodename', node.id);
@@ -951,7 +949,8 @@ Zm.services.excelProcessingAndPlayBoard = {
 				handler: function() {
 					alert('xxx');
 				}
-			},{
+			},
+			{
 				text: 'download',
 				handler: function() {
 					alert('xxx');
@@ -960,11 +959,11 @@ Zm.services.excelProcessingAndPlayBoard = {
 
 		});
 
-    EpapbTree.on("contextmenu",function(node,e){ 
-      e.preventDefault();
-      node.select();
-      contextmenu.showAt(e.getXY());
-    });
+		EpapbTree.on("contextmenu", function(node, e) {
+			e.preventDefault();
+			node.select();
+			contextmenu.showAt(e.getXY());
+		});
 
 		return EpapbTree;
 
