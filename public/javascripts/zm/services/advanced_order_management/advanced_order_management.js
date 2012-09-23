@@ -5,7 +5,7 @@ Zm.services.advanced_order_management={
        layout:'border',
        region:'center',
        items:[{ 
-          region:'center',
+          region:'north',
           title:'客服-预购单管理'
        },
          this.advancedorderGrid(),this.tree()]

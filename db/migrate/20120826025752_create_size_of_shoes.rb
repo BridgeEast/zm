@@ -7,6 +7,7 @@ class CreateSizeOfShoes < ActiveRecord::Migration
 
       t.integer :size
       t.integer :necessary_num
+      t.integer :not_processing_num  #没送去加工的。
       t.integer :finished_num
       t.integer :store_remaining
 

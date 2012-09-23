@@ -1,33 +1,34 @@
 Zm.services.makingFactoryOrder = {
 	init: function() {
+    Ext.QuickTips.init();
 		//Ext.Msg.alert('hello','world');
 		Zm.pages.ViewPort = { //i don't know what it readly it,shit,Zm.pages.ViewPort......
-      title: '客户－工厂订单管理',
+			title: '客户－工厂订单管理',
 			layout: 'border',
 			region: 'center',
 			items: [{
 				region: 'north',
 				height: 380,
 				layout: 'border',
-			  split: true,
-				items: [this.createMfo1Tree(),this.createMfo1Grid()]
+				split: true,
+				items: [this.createMfo1Tree(), this.createMfo1Grid()]
 			},
 			{
-        region: 'center',
+				region: 'center',
 				height: 80,
 				layout: 'border',
-				items: [this.createMfo2Tree(),this.createMfo2Grid()]
-      }]
+				items: [this.createMfo2Tree(), this.createMfo2Grid()]
+			}]
 		};
 	},
-//++++++++++++++++++++++++++++++++createMfo1Tree ++++++++++++++++++++++++++++++++++++++++
-  createMfo1Tree: function(){ 
- 	var loader = new Ext.tree.TreeLoader({
-			dataUrl: '/services/get_tree_node.json'
+	//++++++++++++++++++++++++++++++++createMfo1Tree ++++++++++++++++++++++++++++++++++++++++
+	createMfo1Tree: function() {
+		var Mfo1TreeLoader = new Ext.tree.TreeLoader({
+			dataUrl: '/services/getMfo1TreeNode.json'
 		});
 
-		var root = new Ext.tree.AsyncTreeNode({
-			text: '客户Excel接收',
+		var Mfo1TreeRoot = new Ext.tree.AsyncTreeNode({
+			text: '全部订单',
 			id: '0',
 			draggable: false,
 		});
@@ -40,19 +41,80 @@ Zm.services.makingFactoryOrder = {
 			maxSize: 150,
 			minSize: 80,
 			collapsible: true,
-      autoScroll: true,
-			loader: loader,
+			autoScroll: true,
+			loader: Mfo1TreeLoader,
 			region: 'west',
-			root: root,
+			root: Mfo1TreeRoot,
 		});
 
-    return Mfo1Tree;
-  },
-//+++++++++++++++++++++++++++++++++createMfo1Grid++++++++++++++++++++++++++++++++++++++++
-  createMfo1Grid: function(){ 
+    Mfo1Tree.on('click', function(node) {
+      
+
+			var store = Ext.getCmp('Mfo1grid').store;
+			var nodekind = node.id.toString().slice(-1);
+			var nodename = node.id.toString().substring(0, node.id.toString().length - 1);
+			console.log('nodekind', nodekind);
+			console.log('nodename', nodename);
+
+			if (nodekind == 'y') {
+				store.setBaseParam('nodekind', nodekind); //must devide into 2 steps
+				store.setBaseParam('nodename', nodename);
+				store.reload();
+			}
+			else if (nodekind == 'm') {
+				if (nodename < 10) nodename = '0' + nodename // 格式化一下日期
+				var year = node.parentNode.id.toString().substring(0, node.parentNode.id.toString().length - 1); //得到父节点的什么年份
+				nodename = year + '_' + nodename;
+				console.log('nodename' + nodename);
+				store.setBaseParam('nodekind', nodekind);
+				store.setBaseParam('nodename', nodename);
+				store.reload();
+			}
+
+			else {
+        treenode=node.id;// 保存用到的全局变量
+				nodekind = 'nodeid';
+				store.setBaseParam('nodekind', nodekind);
+				store.setBaseParam('nodename', node.id);
+				store.reload();
+			}
+
+			/*
+      if(nodekind == 'y'){ 
+        //var yeardate=.substring(0,4);
+       // console.log('year',yeardate);
+        console.log('nodename',nodename);
+        store.setBaseParam('yeardate',nodename,'excel_receive_id',kong);
+        store.reload();
+      }
+      else if(nodekind == 'm'){ 
+        var yeardate=node.parentNode.id.toString().substring(0,node.parentNode.id.toString().length-1);
+        store.setBaseParam( 'yeardate',yeardate, 'monthdate',nodename );
+      
+      }else
+        {
+        console.log('nodeid',node.id)
+        store.removeAll();
+        store.setBaseParam('excel_receive_id',node.id);
+        store.reload();
+        }
+        
+			//var store = Ext.getCmp('wlGrid').store;
+			//store.setBaseParam("id", node.id);
+			//store.reload();
+    //*/
+		});
+		return Mfo1Tree;
+
+	},
+	//+++++++++++++++++++++++++++++++++createMfo1Grid++++++++++++++++++++++++++++++++++++++++
+	createMfo1Grid: function() {
 		//Ext.Msg.alert('hello','world');
-		var cm = new Ext.grid.ColumnModel([
-		new Ext.grid.RowNumberer(), {
+    var Mfo1GridSm = new Ext.grid.CheckboxSelectionModel({handlerMouseDown: Ext.emptyFn});
+		var Mfo1GridCm = new Ext.grid.ColumnModel([
+		new Ext.grid.RowNumberer(),
+    Mfo1GridSm,
+    {
 			header: '鞋图1',
 			dataIndex: 'photo_one',
 			renderer: title_img
@@ -79,26 +141,18 @@ Zm.services.makingFactoryOrder = {
 			dataIndex: 'colors'
 		},
 		{
-			header: '价格',
-			dataIndex: 'price'
-		},
-		{
-			header: '确定打板时间',
-			dataIndex: 'sure_board'
-		},
-		{
-			header: '完成打板时间',
-			dataIndex: 'done_board'
+			header: '日期',
+			dataIndex: 'production_date'
 		},
 		{
 			header: '备注',
 			dataIndex: 'remark'
 		}]);
 		//------------------------------------------
-		var store = new Ext.data.JsonStore({
-			url: '/services/get_excel_shoes.json',
-			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'sure_board', 'done_board', 'remark'],
-			root: 'excel_shoes',
+		var Mfo1GridStore = new Ext.data.JsonStore({
+			url: '/services/getAllOrdershoes.json',
+			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'size', 'necessary_num', 'production_date', 'remark'],
+			root: 'allOrdershoes',
 			baseParams: {
 				//yeardate: 'null',
 				//monthdate: 'null',
@@ -108,61 +162,27 @@ Zm.services.makingFactoryOrder = {
 			},
 			//autoLoad: true
 		});
-		//store.load;
-		var gridTbar = new Ext.Toolbar({
-			defaults: {
-				scope: this
-			},
-			items: [{
-				text: '添加鞋',
-				handler: function() { // 这里一定要先用function，不然会直接引用下面的命令
-					this.addOrModifyshoes("添加鞋").show()
-				}
-			},
-			'-', {
-				text: '删除所选',
-				handler: function() {
-					this.deleteShoes();
-				}
-			},
-			'-', {
-				text: '发送至心愿单',
-				handler: function() {
-
-				}
-			}]
-		});
-
-		var Epapbcontextmenu = new Ext.menu.Menu({ // 这里做了一个菜单，供下面的行的右键可用
-			id: 'Epapbcontextmenu',
+		//Mfo1GridStore.load;
+		var Mfo1gridContextMenu = new Ext.menu.Menu({ // 这里做了一个菜单，供下面的行的右键可用
+			id: 'Mfo1gridContextMenu',
 			defaults: {
 				scope: this
 			},
 			items: [{ //菜单主要有什么内容，实现什么功能
 				text: '查看详情',
-				handler: function() {
-					var shoes_id = Ext.getCmp('EpapbGrid').getSelectionModel().getSelected().data.id;
-					var photo_one = Ext.getCmp('EpapbGrid').getSelectionModel().getSelected().data.photo_one;
-					var photo_two = Ext.getCmp('EpapbGrid').getSelectionModel().getSelected().data.photo_two;
-					// Ext.Msg.alert("xxx",shoes_id);
-					//this.cwlWindow( this.checkDetailsForm(), this.checkDetailsGrid() ).show();
-					Zm.services.checkDetail.createCheckDetails(shoes_id, photo_one, photo_two).show(); //invoke the function of looking details
-					//var store = Ext.getCmp('detailGrid').store;
-					//store.setBaseParam('id', shoes_id );
-					//store.reload();
-				}
+				handler: function(){ this.checkShoesDetail()}
 			},
 			{
-				text: '修改',
+				text: '查看码号与数量',
 				handler: function() {
-					this.updateShoes();
+					this.checkSizeAndNum();
 
 				}
 			},
 			{
 				text: '与客户交谈',
 				handler: function() {
-					Zm.services.communicateWithGuest.createCommunicateWithGuest().show(); //invoke the im
+          this.communicateWithGuest()
 				}
 			},
 			{
@@ -179,34 +199,56 @@ Zm.services.makingFactoryOrder = {
 			}]
 		});
 
-		var EpapbGrid = new Ext.grid.GridPanel({
-			id: 'EpapbGrid',
-			title: '客服-Excel文件处理及打板',
+		var Mfo1grid = new Ext.grid.GridPanel({
+			id: 'Mfo1grid',
+			title: '请选择相关的订单',
 			region: 'center',
 			border: true,
-			cm: cm,
-			store: store,
+			cm: Mfo1GridCm,
+      sm: Mfo1GridSm,
+			store: Mfo1GridStore,
 			width: 400,
 			height: 300,
 			viewConfig: {
 				forceFit: true
 			},
-			tbar: gridTbar
 		});
 
-		EpapbGrid.on("rowcontextmenu", function(grid, rowIndex, e) {
+		Mfo1grid.on("rowcontextmenu", function(grid, rowIndex, e) {
 			e.preventDefault();
 			grid.getSelectionModel().selectRow(rowIndex);
-			Epapbcontextmenu.showAt(e.getXY());
+			Mfo1gridContextMenu.showAt(e.getXY());
 		});
-		return EpapbGrid;
+		return Mfo1grid;
 
-	
+	},
+
+  checkShoesDetail: function(){ 
+    var shoes_id = Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.id;
+					var photo_one = Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.photo_one;
+					var photo_two = Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.photo_two;
+					// Ext.Msg.alert("xxx",shoes_id);
+					//this.cwlWindow( this.checkDetailsForm(), this.checkDetailsGrid() ).show();
+					Zm.services.checkDetail.createCheckDetails(shoes_id, photo_one, photo_two).show(); //invoke the function of looking details
+					//var Mfo1GridStore = Ext.getCmp('detailGrid').Mfo1GridStore;
+					//Mfo1GridStore.setBaseParam('id', shoes_id );
+					//Mfo1GridStore.reload();
   },
 
-//++++++++++++++++++++++++++++++++createMfo1Tree ++++++++++++++++++++++++++++++++++++++++
-  createMfo2Tree: function(){ 
- 	var loader = new Ext.tree.TreeLoader({
+  communicateWithGuest: function(){ 
+    Zm.services.communicateWithGuest.createCommunicateWithGuest().show();
+      
+  },
+
+  checkSizeAndNum: function(){ 
+    var id = Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.id;
+    var shoes_id=Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.shoes_id;
+    console.log('shoes_id',shoes_id);
+    Zm.services.checkSizeAndNum.createCheckSizeAndNum(id,shoes_id).show();
+  },
+	//++++++++++++++++++++++++++++++++createMfo1Tree ++++++++++++++++++++++++++++++++++++++++
+	createMfo2Tree: function() {
+		var loader = new Ext.tree.TreeLoader({
 			dataUrl: '/services/get_tree_node.json'
 		});
 
@@ -224,16 +266,16 @@ Zm.services.makingFactoryOrder = {
 			maxSize: 150,
 			minSize: 80,
 			collapsible: true,
-      autoScroll: true,
+			autoScroll: true,
 			loader: loader,
 			region: 'west',
 			root: root,
 		});
 
-    return Mfo2Tree;
-  },
-//+++++++++++++++++++++++++++++++++createMfo2Grid++++++++++++++++++++++++++++++++++++++++
-  createMfo2Grid: function(){ 
+		return Mfo2Tree;
+	},
+	//+++++++++++++++++++++++++++++++++createMfo2Grid++++++++++++++++++++++++++++++++++++++++
+	createMfo2Grid: function() {
 		//Ext.Msg.alert('hello','world');
 		var cm = new Ext.grid.ColumnModel([
 		new Ext.grid.RowNumberer(), {
@@ -263,16 +305,16 @@ Zm.services.makingFactoryOrder = {
 			dataIndex: 'colors'
 		},
 		{
-			header: '价格',
-			dataIndex: 'price'
+			header: '码号',
+			dataIndex: 'size'
 		},
 		{
-			header: '确定打板时间',
-			dataIndex: 'sure_board'
+			header: '数量',
+			dataIndex: 'necessary_num'
 		},
 		{
-			header: '完成打板时间',
-			dataIndex: 'done_board'
+			header: '日期',
+			dataIndex: 'production_date'
 		},
 		{
 			header: '备注',
@@ -281,7 +323,7 @@ Zm.services.makingFactoryOrder = {
 		//------------------------------------------
 		var store = new Ext.data.JsonStore({
 			url: '/services/get_excel_shoes.json',
-			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'price', 'sure_board', 'done_board', 'remark'],
+			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'size', 'necessary_num', 'production_date', 'remark'],
 			root: 'excel_shoes',
 			baseParams: {
 				//yeardate: 'null',
@@ -385,7 +427,6 @@ Zm.services.makingFactoryOrder = {
 		});
 		return EpapbGrid;
 
-	
-  },
+	},
 }
 

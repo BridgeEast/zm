@@ -214,9 +214,122 @@ class ServicesController < ApplicationController
 
 
   end
-#-------------------------------------aji-----------------------------------------------------------------
 #-------------------------makingFactoryOrder---------aji--------------------------------------------------------------------
   def makingFactoryOrder
+  end
+  
+  def getMfo1TreeNode
+    treenodes=[]
+    yearnode=[]
+    yearnode.push('2011')
+    aji=false
+
+    Order.all.each do |tem|
+      yearnode << tem.production_date.year
+      yearnode=yearnode.uniq
+    end
+
+    for year in yearnode do
+      #-------
+      monthnode=Array.new(13){ Array.new()}
+      Order.all.each do |tem|
+        if tem.production_date.year == year then
+          aji = true
+          monthnode[tem.production_date.month] << { :text => tem.order_id, :id => tem.id, :leaf =>true }
+        end
+      end
+      #-------
+      monTime=12
+      excelnode=[]
+      if year==Time.new.year then monTime=Time.new.month end
+      
+      for i in 1..monTime do
+         if (monthnode[i].empty?) then
+             excelnode << { :text => i.to_s+'mon', :id => i.to_s+'m', :leaf => true  }
+          else
+             excelnode << { :text => i.to_s+'mon', :id => i.to_s+'m', :children => monthnode[i] }
+          end
+      end
+
+      #----------
+      fuck="ccccccc"
+        if aji then
+          treenodes << { :text => year.to_s+'y', :id => year.to_s+'y', :children => excelnode}
+        else
+          treenodes << { :text => year.to_s+'qqq', :qtip => fuck, :id => year.to_s+'y', :leaf => true }
+        end
+      #-----------
+     
+    end
+    render :json=> treenodes
+
+  end
+
+  def getAllOrdershoes
+    @tem1=[]
+    case params[:nodekind]
+    when 'y'
+      @tem1=[]
+      @temp=Order.where("production_date like ?","#{params[:nodename]}%")
+      @temp.each do |temp|
+        @tempp=GeneralShoe.find_all_by_order_id(temp.id)
+        @tem1.concat(@tempp)
+      end
+
+    when 'm'
+      @tem1=[]
+      @temp=Order.where("production_date like ?","#{params[:nodename]}%")
+      @temp.each do |temp|
+        @tempp=GeneralShoe.find_all_by_order_id(temp.id)
+        @tem1.concat(@tempp)
+      end
+
+    when 'nodeid'
+       @tem1=[]
+       @tem1 = GeneralShoe.find_all_by_order_id(params[:nodename])
+    end
+
+    respond_to do |format|
+      format.json{ render :json => { :allOrdershoes => @tem1 } }
+    end
+
+  end
+
+  def checkSizeAndNum
+    @tem=[]
+    hash={
+      "36"=>0,
+      "37"=>0,
+      "38"=>0,
+      "39"=>0,
+      "40"=>0,
+      "41"=>0,
+      "42"=>0,
+      "43"=>0,
+      "44"=>0
+    }
+    
+    @tem=SizeOfShoe.find_all_by_general_shoe_id(params[:id])
+    
+    @tem.each do |tem|
+      hash[tem.size.to_s]=tem.necessary_num
+    end
+    
+    puts "xxxxxxxxxxxxxxxxxxxxxxxx"+hash.size.to_s
+    hash.each do |key,value|
+      puts "----------"+key.to_s+":"+value.to_s
+    end
+
+    tem1={ :id=>params[:id], :shoes_id=>params[:shoes_id], :size_36=>hash["36"],:size_37=>hash["37"],:size_38=>hash["38"],:size_39=>hash["39"],:size_40=>hash["40"],:size_41=>hash["41"],:size_42=>hash["42"],:size_43=>hash["43"],:size_44=>hash["44"] }
+
+
+
+
+
+
+    respond_to do |format|
+      format.json{ render :json => { :sizeAndNum => tem1 } }
+    end
   end
 #---------------------------------------------------------------------------------------------------------------------------
 
