@@ -83,7 +83,8 @@ class GuestsController < ApplicationController
    end
    
    
-    def get_scanning_detail
+=begin
+     def get_scanning_detail
       details_shoes = GeneralShoe.get_details_json( params[:id] )
       respond_to do|format|
         format.json{ render :json => { :scanning_detail => details_shoes } }
@@ -92,7 +93,7 @@ class GuestsController < ApplicationController
       format.json{  render :json =>{ :general_shoes =>selects }}
     end
   end
-
+=end
 
   def get_scanning_detail
     details_shoes = GeneralShoe.get_details_json( params[:id] )
@@ -134,7 +135,100 @@ class GuestsController < ApplicationController
     render :json=>treenodes
   end
 =end
+############################预购单管理###################################
+  def advanced_order_management 
+  end
+   
+  def get_advanced_orders
+    respond_to do |format|
+      format.json{ render :json => { :advancedorders => AdvancedOrder.all } }
+    end
+  end
 
+  def get_ready_data
+    selects = []
+    AdvancedOrder.all.each do |select|   
+      if(select.advanced_order_date.to_s.split("-")[0] == params[:selectYear] and select.advanced_order_date.to_s.split("-")[1].gsub(/\b(0+)/,"") == params[:selectMonth] and select.state =="待定预购单" )
+        selects << select
+      end
+    end
+    respond_to do|format|
+      format.json{ render :json => { :advancedorders => selects } }
+    end
+  end
+
+  def get_making_data
+      selects1 = []
+    AdvancedOrder.all.each do |select|    
+      if(select.advanced_order_date.to_s.split("-")[0] == params[:selectYear] and select.advanced_order_date.to_s.split("-")[1].gsub(/\b(0+)/,"") == params[:selectMonth] and select.state =="进行中预购单")
+        selects1 << select
+      end
+    end
+    respond_to do |format|
+      format.json{ render :json =>{ :advancedorders => selects1 } }
+    end
+  end
+
+  def delete_orders
+    AdvancedOrder.all.each do |choses|
+       if(choses.advanced_order_id == params[:choses_id])
+         choses.update_attributes(:state => "")
+       end
+    end
+    respond_to do |format|
+      format.json{ render :json =>{} }
+  end
+  end
+
+  def send_orders
+    AdvancedOrder.all.each do |choses_send|
+      if(choses_send.advanced_order_id == params[:choses_send_id])
+        choses_send.update_attributes(:state => "进行中预购单")
+      end
+    end
+    respond_to do |format|
+      format.json{ render :json =>{} }
+    end
+  end
+
+  def get_advanced_detail
+    details_shoes = GeneralShoe.get_details_json( params[:id] )
+    respond_to do|format|
+      format.json{ render :json => { :advanced_detail => details_shoes } }
+    end
+  end
+
+  def get_advanced_order_shoes
+     advanceddetail = []
+      GeneralShoe.all.each do |select|
+        advancedshoes = params[:id].delete("A")
+       if(select.advanced_order_id == advancedshoes.to_i)
+         advanceddetail << select 
+       end
+     end  
+     respond_to do |format|
+       format.json{ render :json =>{ :advanced_order_shoes =>advanceddetail } }
+     end
+  end
+
+  def get_speed_of_progress
+    shoes = AdvancedOrder.where(:id => params[:id].delete("A")).first.general_shoes
+     size_num = GeneralShoe.get_size_num_json(shoes)
+     respond_to do |format|
+       format.json{ render :json => { :speed_of_progress =>size_num } }
+     end
+  end
+
+  def delete_shoes
+    GeneralShoe.all.each do |chosesdelete|
+     if( chosesdelete.shoes_id == params[:choses_delete_id])
+       chosesdelete.update_attributes( :advanced_order_id => "")
+     end
+    end
+    respond_to do |format|
+      format.json{ render :json =>{} }
+    end
+  end
   ########################################################################
   #####################订单管理###########################################
 

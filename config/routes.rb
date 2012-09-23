@@ -108,7 +108,18 @@ Zm::Application.routes.draw do
 
   resources :guests do
    collection do
-######################我的别动######################
+#####################预购单#####################
+     get"advanced_order_management"
+     get"get_making_data"
+     get"get_ready_data"
+     get"get_advanced_orders"
+     get"delete_orders"
+     get"send_orders"
+     get"get_advanced_detail"
+     get"get_advanced_order_shoes"
+     get"get_speed_of_progress"
+     get"delete_shoes"
+     ######################我的别动######################
      get"scanning_store_of_shoes"
      get"get_general_shoes"
      get"load_tree"
