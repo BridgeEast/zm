@@ -28,7 +28,7 @@ Zm.services.advanced_order_management={
       url:'/services/get_advanced_orders.json',
       fields:['id','advanced_order_id','custom_num','total_price','advanced_order_date','remark'],
        root:'advancedorders',
-       autoLoad:true
+       autoLoad:false
     });
 
     var advancedorderGrid = new Ext.grid.GridPanel({ 
