@@ -178,14 +178,18 @@ class ServicesController < ApplicationController
   end
   #----------------------------load the picture ----
   def upload_photo
-    @img=params[:photo]
+  #  aji='/home/aji/desktop/vim plugin src.png'
+    puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+    puts params[:photo]
+    puts params[:photo].size
+   @img = File.new(aji,"r+")
     puts "ddddddddddddddddddddddddddddd",@img
     
     content_size=@img.size
     puts "ssssssssssssssssssssssss",params[:photo]
    file_data=@img.read
     filetype=@img.content_type
-    #@filename=img.original_filename
+    @filename=img.original_filename
      File.open( File.join( RAILS_ROOT+"/public/images/", '@filename' ),'wb' ) do |f|   # 打开的文件并准备写入
         f.write( file_data )
      end

@@ -417,6 +417,7 @@ Zm.data_bases.store_of_shoes = {
                             var fileCmpO = Ext.get('photoFileOne');
                             fileCmpO.on('change', function(field, newValue, oldValue) {
                                 Ext.get('pho').dom.src = window.URL.createObjectURL(Ext.get('photoFileOne').dom.files[0]);
+                                
                             },
                             this);
                         }
