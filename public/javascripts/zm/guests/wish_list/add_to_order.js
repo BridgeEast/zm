@@ -1,6 +1,5 @@
 Zm.guests.add_to_order = {
 	//isInit: false,
-
 	init: function(config) {
 		Ext.QuickTips.init();
 		this.config = config;
@@ -13,7 +12,7 @@ Zm.guests.add_to_order = {
 		return new Ext.Window({
 			layout: 'border',
 			id: 'win',
-			closeAction: 'close',
+			closeAction: 'hide',
 			height: 450,
 			width: 600,
 			constrainHeader: true,
@@ -33,18 +32,29 @@ Zm.guests.add_to_order = {
 				handler: function() {
 					Ext.getCmp('makeOrderForm').getForm().reset();
 					Ext.getCmp('makeOrderGrid').getStore().removeAll();
-					Ext.getCmp('makeOrderGrid').store.reload(this.config)
+					this.reloadData()
 				}
 			},
 			{
 				text: '取消',
 				scope: this,
 				handler: function() {
-					this.win.close();
+					this.win.hide();
+					Ext.getCmp('makeOrderForm').getForm().reset();
+					Ext.getCmp('makeOrderGrid').getStore().removeAll();
 					Ext.getCmp('wlGrid').unSelectAll();
 				}
 			}]
 		});
+	},
+
+	reloadData: function() {
+		this.config.data.forEach(function(sample_id) {
+			var record = new Ext.data.Record({
+				sample_id: sample_id[0]
+			})
+			store.add(record)
+		})
 	},
 
 	make_order_form: function() {
@@ -118,6 +128,7 @@ Zm.guests.add_to_order = {
 					xtype: 'textfield',
 					fieldLabel: '文件名',
 					name: 'file',
+                    id: 'order_name',
 					inputType: 'file'
 				}]
 			}]
@@ -200,7 +211,7 @@ Zm.guests.add_to_order = {
 			})
 		}]);
 
-		var store = new Ext.data.ArrayStore({
+		store = new Ext.data.ArrayStore({
 			data: this.config.data,
 			fields: 'sample_id 38 39 40 41 42 43 44'.split(' ')
 		});

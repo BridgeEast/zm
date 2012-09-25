@@ -61,7 +61,7 @@ Zm.guests.determine = {
 		return items
 	},
 
-	add_to_general_shoes: function(config) {
+	add_to_general_shoes: function(config) t{
 		var items = [];
 		var records = this.add_to_play_board();
 		var sizes = this.add_to_size_of_shoes();
@@ -90,6 +90,7 @@ Zm.guests.determine = {
 			order_id: Ext.get('order_id').dom.value,
 			remark: Ext.getCmp('remark').getValue(),
 			payment: Ext.getCmp('makeOrderForm').getForm().findField('type').getGroupValue(),
+            order_url: Ext.getCmp('order_name').getValue(),
 			production_date: year + '-' + month + '-' + day,
 			shipment: false,
 			lading_bill: false,
@@ -104,11 +105,11 @@ Zm.guests.determine = {
 				record: record
 			},
 			success: function() {
-				Zm.guests.add_to_order.win.close();
+				Zm.guests.add_to_order.win.hide();
 				Ext.Msg.alert('添加', '添加成功！')
 			},
 			failure: function() {
-				Zm.guests.add_to_order.win.close();
+				Zm.guests.add_to_order.win.hide();
 				Ext.Msg.alert('添加', '添加失败！')
 			}
 		})
