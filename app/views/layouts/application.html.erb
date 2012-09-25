@@ -11,8 +11,11 @@
   <%= stylesheet_link_tag "resources/css/ext-all.css" %>
   <%= javascript_include_tag "ext_js/ext-base.js" %>
   <%= javascript_include_tag "ext_js/ext-all-debug.js" %>
-  <%= javascript_include_tag "zm/zm.js"%>
+  <%= javascript_include_tag "zm/zm.js", "ext_js/zm_ext.js"%>
 </head>
+    <script type="text/javascript" charset="utf-8">
+        Zm.ajaxToken = "<%= form_authenticity_token %>";
+    </script>
 <script type="text/javascript">
   function title_img(val){
 		return  '<img src="/images/shoes/'+val+'" width="70" height="70" align="center">'

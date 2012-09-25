@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class ServicesController < ApplicationController
   #---------------------------------------------aji-------------------------------------------------
   def excelProcessingAndPlayBoard
@@ -178,22 +179,29 @@ class ServicesController < ApplicationController
   end
   #----------------------------load the picture ----
   def upload_photo
-  #  aji='/home/aji/desktop/vim plugin src.png'
-    puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-    puts params[:photo]
-    puts params[:photo].size
-   @img = File.new(aji,"r+")
-    puts "ddddddddddddddddddddddddddddd",@img
+  ##  aji='/home/aji/desktop/vim plugin src.png'
+  #  puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+  #  puts params[:photo]
+  #  puts params[:photo].size
+  # @img = File.new(aji,"r+")
+  #  puts "ddddddddddddddddddddddddddddd",@img
     
-    content_size=@img.size
-    puts "ssssssssssssssssssssssss",params[:photo]
-   file_data=@img.read
-    filetype=@img.content_type
-    @filename=img.original_filename
-     File.open( File.join( RAILS_ROOT+"/public/images/", '@filename' ),'wb' ) do |f|   # 打开的文件并准备写入
-        f.write( file_data )
-     end
-    render :json => {}
+  #  content_size=@img.size
+  #  puts "ssssssssssssssssssssssss",params[:photo]
+  # file_data=@img.read
+  #  filetype=@img.content_type
+  #  @filename=img.original_filename
+  #   File.open( File.join( RAILS_ROOT+"/public/images/", '@filename' ),'wb' ) do |f|   # 打开的文件并准备写入
+  #      f.write( file_data )
+  #   end
+  #  render :json => {}
+
+    upload = params[:photoFileOne]
+    name = upload.original_filename
+    dierectory = 'public'
+    path = File.join(dierectory,name)
+    File.open(path,'wb'){ |f| f.write(upload.read) }
+    render :json => ''
   end
 
 

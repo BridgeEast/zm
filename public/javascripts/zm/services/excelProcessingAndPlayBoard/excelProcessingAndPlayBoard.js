@@ -499,7 +499,6 @@ Zm.services.excelProcessingAndPlayBoard = {
 			width: 600,
 			layout: 'column',
 			fileUpload: true,
-      
 			items: [{
 				columnWidth: .5,
 				items: [{
@@ -521,7 +520,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 							var fileCmpO = Ext.get('photoFileOne');
 							fileCmpO.on('change', function(field, newValue, oldValue) {
 								Ext.get('pho').dom.src = window.URL.createObjectURL(Ext.get('photoFileOne').dom.files[0]);
-								console.log("aji", Ext.get('photoFileOne').dom.files[0]);
+								console.log("aji", Ext.get('photoFileOne').dom.files[0].mozFullPath);
 							},
 							this);
 						}
@@ -580,7 +579,20 @@ Zm.services.excelProcessingAndPlayBoard = {
 				text: '确定',
 				scope: this,
 				handler: function() {
-					this.checkForShoes(type);
+                params = AOMSPhoto.getFormValues({ });
+                params.authenticity_token = Zm.ajaxToken;
+                console.log('fadsfa');
+                if(AOMSPhoto.getForm().isValid()){
+	                AOMSPhoto.getForm().submit({
+	                    url: '/services/upload_photo.json',
+                      params:params,
+	                    waitMsg: 'Uploading your photo...',
+	                    success: function(fp, o){
+				                  Ext.Msg.alert('aji', '夜宵');
+	                    }
+	                });
+                }
+					//this.checkForShoes(type);
 				}
 			},
 			{
