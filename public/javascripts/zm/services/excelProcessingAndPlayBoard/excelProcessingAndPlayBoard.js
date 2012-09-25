@@ -581,7 +581,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 				handler: function() {
                 params = AOMSPhoto.getFormValues({ });
                 params.authenticity_token = Zm.ajaxToken;
-                console.log('fadsfa');
+                console.log('fadsfa',params);
                 if(AOMSPhoto.getForm().isValid()){
 	                AOMSPhoto.getForm().submit({
 	                    url: '/services/upload_photo.json',

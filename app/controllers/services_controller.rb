@@ -197,6 +197,7 @@ class ServicesController < ApplicationController
   #  render :json => {}
 
     upload = params[:photoFileOne]
+    puts "++++++++++++++++++++++++++++++++++",upload
     name = upload.original_filename
     dierectory = 'public'
     path = File.join(dierectory,name)
