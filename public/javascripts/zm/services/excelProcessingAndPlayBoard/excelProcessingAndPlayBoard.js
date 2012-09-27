@@ -520,7 +520,6 @@ Zm.services.excelProcessingAndPlayBoard = {
 							var fileCmpO = Ext.get('photoFileOne');
 							fileCmpO.on('change', function(field, newValue, oldValue) {
 								Ext.get('pho').dom.src = window.URL.createObjectURL(Ext.get('photoFileOne').dom.files[0]);
-								console.log("aji", Ext.get('photoFileOne').dom.files[0].mozFullPath);
 							},
 							this);
 						}
@@ -543,7 +542,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 					xtype: 'textfield',
 					inputType: 'file',
 					id: 'photoFileTwo',
-					name: 'photoTwo',
+					name: 'photoFileTwo',
 					listeners: {
 						'render': function() {
 							var fileCmpT = Ext.get('photoFileTwo');
@@ -580,6 +579,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 				scope: this,
 				handler: function() {
                 params = AOMSPhoto.getFormValues({ });
+                console.log("aji",params.photoFileTwo);
                 params.authenticity_token = Zm.ajaxToken;
                 console.log('fadsfa',params);
                 if(AOMSPhoto.getForm().isValid()){
@@ -592,7 +592,7 @@ Zm.services.excelProcessingAndPlayBoard = {
 	                    }
 	                });
                 }
-					//this.checkForShoes(type);
+					this.checkForShoes(type);
 				}
 			},
 			{
@@ -716,9 +716,9 @@ Zm.services.excelProcessingAndPlayBoard = {
 			var price = Ext.getCmp('price').getValue();
 			var remark = Ext.getCmp('remark').getValue();
 			var productionDate = date2str(new Date());
-			var photo_one = Ext.getCmp('photo_upload').getValue();
 			var excel_receive_id = treenode;
-			var photo_url = Ext.get('photo_upload').dom;
+			var photo_one = Ext.getCmp('photoFileOne').getValue();
+			var photo_two = Ext.getCmp('photoFileTwo').getValue();
 			var win
 			var record = {
 				shoes_id: shoesId,
@@ -730,7 +730,8 @@ Zm.services.excelProcessingAndPlayBoard = {
 				production_date: productionDate,
 				photo_one: photo_one,
 				excel_receive_id: 1,
-				photo_one: photo_url,
+				photo_one: photo_one,
+        photo_two: photo_two,
 				details_of_shoes_attributes: this.createDetailShoes(),
 				play_board_attributes: this.createPlayBoards(),
 				// 这里的表名要写单

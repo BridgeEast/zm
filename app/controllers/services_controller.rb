@@ -82,10 +82,10 @@ class ServicesController < ApplicationController
     #GeneralShoe.create!(params[:record])
     @url= "public/images"
     @generalshoe=GeneralShoe.new( params[:record])
-    origin_path=params[:record][:photo_one]
-    shoes_path = upload_file(origin_path,@url )
+    #origin_path=params[:record][:photo_one]
+    #shoes_path = upload_file(origin_path,@url )
 
-    @generalshoe.set_photo_url(shoes_path)
+    #@generalshoe.set_photo_url(shoes_path)
     
     @generalshoe.save
 
@@ -195,14 +195,25 @@ class ServicesController < ApplicationController
   #      f.write( file_data )
   #   end
   #  render :json => {}
-
+ if params[:photoFileOne] then
     upload = params[:photoFileOne]
     puts "++++++++++++++++++++++++++++++++++",upload
     name = upload.original_filename
-    dierectory = 'public'
+    dierectory = 'public/images/shoes'
     path = File.join(dierectory,name)
     File.open(path,'wb'){ |f| f.write(upload.read) }
     render :json => ''
+ end
+
+ if params[:photoFileTwo] then
+    upload = params[:photoFileTwo]
+    puts "++++++++++++++++++++++++++++++++++",upload
+    name = upload.original_filename
+    dierectory = 'public/images/shoes'
+    path = File.join(dierectory,name)
+    File.open(path,'wb'){ |f| f.write(upload.read) }
+    render :json => ''
+ end
   end
 
 
