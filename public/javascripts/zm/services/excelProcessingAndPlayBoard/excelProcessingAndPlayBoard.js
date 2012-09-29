@@ -578,20 +578,20 @@ Zm.services.excelProcessingAndPlayBoard = {
 				text: '确定',
 				scope: this,
 				handler: function() {
-                params = AOMSPhoto.getFormValues({ });
-                console.log("aji",params.photoFileTwo);
-                params.authenticity_token = Zm.ajaxToken;
-                console.log('fadsfa',params);
-                if(AOMSPhoto.getForm().isValid()){
-	                AOMSPhoto.getForm().submit({
-	                    url: '/services/upload_photo.json',
-                      params:params,
-	                    waitMsg: 'Uploading your photo...',
-	                    success: function(fp, o){
-				                  Ext.Msg.alert('aji', '夜宵');
-	                    }
-	                });
-                }
+					params = AOMSPhoto.getFormValues({});
+					console.log("aji", params.photoFileTwo);
+					params.authenticity_token = Zm.ajaxToken;
+					console.log('fadsfa', params);
+					if (AOMSPhoto.getForm().isValid()) {
+						AOMSPhoto.getForm().submit({
+							url: '/services/upload_photo.json',
+							params: params,
+							waitMsg: 'Uploading your photo...',
+							success: function(fp, o) {
+								Ext.Msg.alert('aji', '夜宵');
+							}
+						});
+					}
 					this.checkForShoes(type);
 				}
 			},
@@ -599,14 +599,14 @@ Zm.services.excelProcessingAndPlayBoard = {
 				text: '重置',
 				scope: this,
 				handler: function() {
-          var photo=AOMSPhoto.getForm().get('photoFileOne').value
-            console.log('aji',photo);
+					var photo = AOMSPhoto.getForm().get('photoFileOne').value
+					console.log('aji', photo);
 
 					Ext.Ajax.request({
 						url: '/services/upload_photo.json',
 						method: 'post',
 						jsonData: {
-						//	photo: 
+							//	photo: 
 						},
 						/*
 
@@ -621,355 +621,355 @@ Zm.services.excelProcessingAndPlayBoard = {
 							alert('failure');
 						},
 					});
-        }
+				}
 
-				},
-				{
-					text: '取消',
-					scope: this,
+			},
+			{
+				text: '取消',
+				scope: this,
 
-				}]
+			}]
 
-			});
-		},
+		});
+	},
 
-		//+++++++++++++++++++++++++++++++updata_shoes++++++++++++++++++++++++++++++++++++++++++++++++
-		updateShoes: function() {
-			var selection = Ext.getCmp('EpapbGrid').getSelectionModel();
-			if (!selection.getSelected()) {
-				Ext.Msg.alert('警告', '请选择一条记录');
-			} else {
-				var data = selection.getSelected().data;
-				var shoes_id = data.id;
-				this.addOrModifyshoes("修改", shoes_id).show();
+	//+++++++++++++++++++++++++++++++updata_shoes++++++++++++++++++++++++++++++++++++++++++++++++
+	updateShoes: function() {
+		var selection = Ext.getCmp('EpapbGrid').getSelectionModel();
+		if (!selection.getSelected()) {
+			Ext.Msg.alert('警告', '请选择一条记录');
+		} else {
+			var data = selection.getSelected().data;
+			var shoes_id = data.id;
+			this.addOrModifyshoes("修改", shoes_id).show();
 
-				Ext.getCmp('shoes_id').setValue(data["shoes_id"]);
-				Ext.getCmp('types_of_shoes').setValue(data["types_of_shoes"]);
-				Ext.getCmp('suitable_people').setValue(data["suitable_people"]);
-				Ext.getCmp('price').setValue(data["price"]);
-				Ext.getCmp('colors').setValue(data["colors"]);
-				Ext.getCmp('remark').setValue(data["remark"]);
+			Ext.getCmp('shoes_id').setValue(data["shoes_id"]);
+			Ext.getCmp('types_of_shoes').setValue(data["types_of_shoes"]);
+			Ext.getCmp('suitable_people').setValue(data["suitable_people"]);
+			Ext.getCmp('price').setValue(data["price"]);
+			Ext.getCmp('colors').setValue(data["colors"]);
+			Ext.getCmp('remark').setValue(data["remark"]);
 
-				/*	var tempgrid = new Ext.grid.EditorGridPanel({
+			/*	var tempgrid = new Ext.grid.EditorGridPanel({
 				id: 'tempgird',
 				store: detailStore,
 				viewConfig: {
 					forceFit: true
 				},
 			});*/
-				// detailStore.load();
-				//console.log("id",shoes_id);
-				//	detailStore.setBaseParam('id', shoes_id);
-				//detailStore.load();
-				//console.log("dataDos", detailStore.getCount());
-				//var dataDos = detailStore.data;
-				//	Ext.getCmp("AOMSGrid").getStore().loadData(dataDos);
-			};
-		},
+			// detailStore.load();
+			//console.log("id",shoes_id);
+			//	detailStore.setBaseParam('id', shoes_id);
+			//detailStore.load();
+			//console.log("dataDos", detailStore.getCount());
+			//var dataDos = detailStore.data;
+			//	Ext.getCmp("AOMSGrid").getStore().loadData(dataDos);
+		};
+	},
 
-		// if(type=='修改'){ 
-		//   Ext.Msg.alert("xxx");
-		//   var data = Ext.getCmp('colorGrid').getSelectionModel().getSelected().data
-		//  }
-		//++++++++++++++++++++++++++++++++++++++++++++checkForShoes+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		createDetailShoes: function() {
-			var store = Ext.getCmp('AOMSGrid').getStore();
-			//var count=store.getCount();
-			//console.log("count",count);
-			var detailrecord = [];
-			for (i = 0; i < store.getCount(); i++) {
-				var data = store.getAt(i).data;
+	// if(type=='修改'){ 
+	//   Ext.Msg.alert("xxx");
+	//   var data = Ext.getCmp('colorGrid').getSelectionModel().getSelected().data
+	//  }
+	//++++++++++++++++++++++++++++++++++++++++++++checkForShoes+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	createDetailShoes: function() {
+		var store = Ext.getCmp('AOMSGrid').getStore();
+		//var count=store.getCount();
+		//console.log("count",count);
+		var detailrecord = [];
+		for (i = 0; i < store.getCount(); i++) {
+			var data = store.getAt(i).data;
 
-				detailrecord.push({
-					region_id: data.region,
-					material_id: data.material,
-					color_id: data.color,
-					procession_id: data.procession
-				});
+			detailrecord.push({
+				region_id: data.region,
+				material_id: data.material,
+				color_id: data.color,
+				procession_id: data.procession
+			});
 
-			} //返回记录，记住这里的region_id：要与数据库的字段一致
-			// console.log("detailrecord",detailrecord[0].region_id);
-			return detailrecord;
+		} //返回记录，记住这里的region_id：要与数据库的字段一致
+		// console.log("detailrecord",detailrecord[0].region_id);
+		return detailrecord;
 
-		},
-		createPlayBoards: function() {
+	},
+	createPlayBoards: function() {
 
-			var playboard = [];
+		var playboard = [];
 
-			var record = {
-				custom_num: 'aji',
-				server_num: 'fuckfan',
-				communication: 'fuckfan is sb',
-				board_kind: '开发板'
-			};
-			playboard.push(record);
-			return record;
-		},
+		var record = {
+			custom_num: 'aji',
+			server_num: 'fuckfan',
+			communication: 'fuckfan is sb',
+			board_kind: '开发板'
+		};
+		playboard.push(record);
+		return record;
+	},
 
-		checkForShoes: function(type) {
+	checkForShoes: function(type) {
 
-			var selection = Ext.getCmp('EpapbGrid').getSelectionModel();
-			var shoesId = Ext.getCmp('shoes_id').getValue();
-			var suitablePeople = Ext.getCmp('suitable_people').getValue();
-			var color = Ext.getCmp('colors').getValue();
-			var typesOfShoes = Ext.getCmp('types_of_shoes').getValue();
-			var price = Ext.getCmp('price').getValue();
-			var remark = Ext.getCmp('remark').getValue();
-			var productionDate = date2str(new Date());
-			var excel_receive_id = treenode;
-			var photo_one = Ext.getCmp('photoFileOne').getValue();
-			var photo_two = Ext.getCmp('photoFileTwo').getValue();
-			var win
-			var record = {
-				shoes_id: shoesId,
-				suitable_people: suitablePeople,
-				colors: color,
-				types_of_shoes: typesOfShoes,
-				price: price,
-				remark: remark,
-				production_date: productionDate,
-				photo_one: photo_one,
-				excel_receive_id: 1,
-				photo_one: photo_one,
-        photo_two: photo_two,
-				details_of_shoes_attributes: this.createDetailShoes(),
-				play_board_attributes: this.createPlayBoards(),
-				// 这里的表名要写单
-				// 返回的是一个数组，数组包含几条记录如：｛key:value,key:value....｝等。
-			};
-			function date2str(d) {
-				var ret = d.getFullYear() + "-"
-				ret += ("00" + (d.getMonth() + 1)).slice( - 2) + "-"
-				ret += ("00" + d.getDate()).slice( - 2) + " "
-				return ret;
-			}
-			if (shoesId) {
-				if (type == "修改") {
-					var record = {
-						id: selection.getSelected().id,
-						shoes_id: shoesId,
-						suitable_people: suitablePeople,
-						colors: color,
-						types_of_shoes: typesOfShoes,
-						price: price,
-						remark: remark,
-						production_date: productionDate,
-						details_of_shoes_attributes: this.createDetailShoes(),
-						// 返回的是一个数组，数组包含几条记录如：｛key:value,key:value....｝等。
-					};
+		var selection = Ext.getCmp('EpapbGrid').getSelectionModel();
+		var shoesId = Ext.getCmp('shoes_id').getValue();
+		var suitablePeople = Ext.getCmp('suitable_people').getValue();
+		var color = Ext.getCmp('colors').getValue();
+		var typesOfShoes = Ext.getCmp('types_of_shoes').getValue();
+		var price = Ext.getCmp('price').getValue();
+		var remark = Ext.getCmp('remark').getValue();
+		var productionDate = date2str(new Date());
+		var excel_receive_id = treenode;
+		var photo_one = Ext.getCmp('photoFileOne').getValue();
+		var photo_two = Ext.getCmp('photoFileTwo').getValue();
+		var win
+		var record = {
+			shoes_id: shoesId,
+			suitable_people: suitablePeople,
+			colors: color,
+			types_of_shoes: typesOfShoes,
+			price: price,
+			remark: remark,
+			production_date: productionDate,
+			photo_one: photo_one,
+			excel_receive_id: 1,
+			photo_one: photo_one,
+			photo_two: photo_two,
+			details_of_shoes_attributes: this.createDetailShoes(),
+			play_board_attributes: this.createPlayBoards(),
+			// 这里的表名要写单
+			// 返回的是一个数组，数组包含几条记录如：｛key:value,key:value....｝等。
+		};
+		function date2str(d) {
+			var ret = d.getFullYear() + "-"
+			ret += ("00" + (d.getMonth() + 1)).slice( - 2) + "-"
+			ret += ("00" + d.getDate()).slice( - 2) + " "
+			return ret;
+		}
+		if (shoesId) {
+			if (type == "修改") {
+				var record = {
+					id: selection.getSelected().id,
+					shoes_id: shoesId,
+					suitable_people: suitablePeople,
+					colors: color,
+					types_of_shoes: typesOfShoes,
+					price: price,
+					remark: remark,
+					production_date: productionDate,
+					details_of_shoes_attributes: this.createDetailShoes(),
+					// 返回的是一个数组，数组包含几条记录如：｛key:value,key:value....｝等。
+				};
 
-					Ext.Ajax.request({
-						url: '/services/updata_in_generalanddetail.json',
-						method: 'post',
-						jsonData: {
-							record: record
-						},
-						success: function() {
-							Ext.getCmp('EpapbGrid').store.load();
-							Ext.getCmp('AOMSWindow').close();
-							Ext.Msg.alert('修改', '修改成功');
-							// Ext.Msg.alert('',this.createData.region_id)
-						},
-						failure: function() {
-							Ext.Msg.alert('修改', '修改失败!');
-						},
-					});
-				} else {
-					Ext.Ajax.request({
-						url: '/services/create_in_generalanddetail.json',
-						method: 'post',
-						jsonData: {
-							record: record
-						},
-						success: function() {
-							Ext.Msg.alert('添加', '添加成功!');
-						},
-						failure: function() {
-							Ext.Msg.alert('添加', '添加失败!');
-						},
-						callback: function() {
-							Ext.getCmp('AOMSForm').form.reset();
-							Ext.getCmp('AOMSWindow').close();
-							Ext.getCmp('EpapbGrid').store.load();
-						}
-					});
-				}
-			}
-			else {
-				Ext.Msg.alert('警告', '样品号不能为空!');
-			}
-		},
-
-		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++deleteShoes++++++++++++++++++++++++
-		deleteShoes: function() {
-			var selection = Ext.getCmp('EpapbGrid').getSelectionModel();
-			//console.log("xxx",selection.getSelections().length);,it can be used for delete more rows
-			if (selection.getSelected()) {
 				Ext.Ajax.request({
-					url: '/services/delete_shoes_and_detail_of_shoes.json',
+					url: '/services/updata_in_generalanddetail.json',
 					method: 'post',
 					jsonData: {
-						id: selection.getSelected().id,
-
+						record: record
 					},
 					success: function() {
 						Ext.getCmp('EpapbGrid').store.load();
-						Ext.Msg.alert('删除', '删除成功!');
+						Ext.getCmp('AOMSWindow').close();
+						Ext.Msg.alert('修改', '修改成功');
+						// Ext.Msg.alert('',this.createData.region_id)
 					},
 					failure: function() {
-						Ext.Msg.alert('删除', '删除失败!');
+						Ext.Msg.alert('修改', '修改失败!');
 					},
-				})
+				});
 			} else {
-				Ext.Msg.alert('警告', '请选择一条记录');
+				Ext.Ajax.request({
+					url: '/services/create_in_generalanddetail.json',
+					method: 'post',
+					jsonData: {
+						record: record
+					},
+					success: function() {
+						Ext.Msg.alert('添加', '添加成功!');
+					},
+					failure: function() {
+						Ext.Msg.alert('添加', '添加失败!');
+					},
+					callback: function() {
+						Ext.getCmp('AOMSForm').form.reset();
+						Ext.getCmp('AOMSWindow').close();
+						Ext.getCmp('EpapbGrid').store.load();
+					}
+				});
 			}
+		}
+		else {
+			Ext.Msg.alert('警告', '样品号不能为空!');
+		}
+	},
 
-		},
-		//++++++++++++++++++++++++++++++++++++++++++++updatePlayBoard++++++++++++++++++++++++++++++++++++++++++++
-		updatePlayBoardWin: function() {
-			var data = Ext.getCmp('EpapbGrid').getSelectionModel().getSelected().data;
-
-			var updatePlayBoardForm = new Ext.form.FormPanel({
-				id: 'updatePlayBoardForm',
-				labelAlign: 'right',
-				labelWidth: 50,
-				bodyStyle: 'padding: 10px 10px 30px 30px',
-				frame: true,
-				defaultType: 'datefield',
-				deafaults: {
-					scope: this
-				},
-				items: [{
-					id: 'sure_board',
-					fieldLabel: '确定打板时间',
-					format: 'Y-m-d',
-					width: 200,
-				},
-				{
-					id: 'done_board',
-					fieldLabel: '完成打板时间',
-					format: 'Y-m-d',
-					width: 200,
-				}],
-				buttons: [{
-					text: '确定',
-					scope: this,
-					//when you invoke some function,and show the 'uncaught typeError',you can add the scope:this,   
-					handler: function() {
-						this.updatePlayBoard(data.id);
-						console.log("xxx", data.id);
-					}
-				},
-				{
-					text: '取消',
-					handler: function() {
-						Ext.getCmp('updatePlayBoardWin').close();
-					}
-				}]
-			});
-
-			Ext.getCmp('sure_board').setValue(data["sure_board"]);
-			Ext.getCmp('done_board').setValue(data["done_board"]);
-
-			return new Ext.Window({
-				id: 'updatePlayBoardWin',
-				title: "updataPlayBoard",
-				height: 200,
-				width: 400,
-				constrainHeader: true,
-				layout: 'fit',
-				items: [updatePlayBoardForm]
-			})
-
-		},
-
-		updatePlayBoard: function(shoes_id) {
-			var sure = Ext.getCmp('sure_board').getValue();
-			var done = Ext.getCmp('done_board').getValue();
-			console.log('xxx', sure);
-			var record = {
-				sure_board: sure,
-				done_board: done,
-				general_shoe_id: shoes_id,
-
-			};
-
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++deleteShoes++++++++++++++++++++++++
+	deleteShoes: function() {
+		var selection = Ext.getCmp('EpapbGrid').getSelectionModel();
+		//console.log("xxx",selection.getSelections().length);,it can be used for delete more rows
+		if (selection.getSelected()) {
 			Ext.Ajax.request({
-				url: '/services/updata_in_play_board.json',
+				url: '/services/delete_shoes_and_detail_of_shoes.json',
 				method: 'post',
 				jsonData: {
-					record: record
+					id: selection.getSelected().id,
+
 				},
 				success: function() {
 					Ext.getCmp('EpapbGrid').store.load();
-					Ext.getCmp('updatePlayBoardWin').close();
-					Ext.Msg.alert('修改', '修改成功');
-					// Ext.Msg.alert('',this.createData.region_id)
+					Ext.Msg.alert('删除', '删除成功!');
 				},
 				failure: function() {
-					Ext.Msg.alert('修改', '修改失败!');
+					Ext.Msg.alert('删除', '删除失败!');
 				},
-			});
-		},
-		//+++++++++++++++++++++++++++++++send_to_wish_list++++++++++++++++++++++++++++++++++++++++++
-		//+++++++++++++++++++++++++++++++++++EpapbTree++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		createEpapbTree: function() {
-			var loader = new Ext.tree.TreeLoader({
-				dataUrl: '/services/get_tree_node.json'
-			});
+			})
+		} else {
+			Ext.Msg.alert('警告', '请选择一条记录');
+		}
 
-			var root = new Ext.tree.AsyncTreeNode({
-				text: '客户Excel接收',
-				id: '0',
-				draggable: false,
-			});
-			//    root.expand();
-			var EpapbTree = new Ext.tree.TreePanel({
-				//renderTo:'tree1',//这也一另一种渲染手法，你也可以在下面body里找到div
-				//autoHeight:true,// 如果是这种渲染手法，就要为它加上这个属性，不然就要在div里设定div的高度
-				width: 100,
-				split: true,
-				maxSize: 150,
-				minSize: 80,
-				collapsible: true,
-				autoScroll: true,
-				loader: loader,
-				region: 'west',
-				root: root,
-			});
+	},
+	//++++++++++++++++++++++++++++++++++++++++++++updatePlayBoard++++++++++++++++++++++++++++++++++++++++++++
+	updatePlayBoardWin: function() {
+		var data = Ext.getCmp('EpapbGrid').getSelectionModel().getSelected().data;
 
-			EpapbTree.on('click', function(node) {
-
-				var store = Ext.getCmp('EpapbGrid').store;
-				var nodekind = node.id.toString().slice( - 1);
-				var nodename = node.id.toString().substring(0, node.id.toString().length - 1);
-				console.log('nodekind', nodekind);
-				console.log('nodename', nodename);
-
-				if (nodekind == 'y') {
-					store.setBaseParam('nodekind', nodekind); //must devide into 2 steps
-					store.setBaseParam('nodename', nodename);
-					store.reload();
+		var updatePlayBoardForm = new Ext.form.FormPanel({
+			id: 'updatePlayBoardForm',
+			labelAlign: 'right',
+			labelWidth: 50,
+			bodyStyle: 'padding: 10px 10px 30px 30px',
+			frame: true,
+			defaultType: 'datefield',
+			deafaults: {
+				scope: this
+			},
+			items: [{
+				id: 'sure_board',
+				fieldLabel: '确定打板时间',
+				format: 'Y-m-d',
+				width: 200,
+			},
+			{
+				id: 'done_board',
+				fieldLabel: '完成打板时间',
+				format: 'Y-m-d',
+				width: 200,
+			}],
+			buttons: [{
+				text: '确定',
+				scope: this,
+				//when you invoke some function,and show the 'uncaught typeError',you can add the scope:this,   
+				handler: function() {
+					this.updatePlayBoard(data.id);
+					console.log("xxx", data.id);
 				}
-				else if (nodekind == 'm') {
-					if (nodename < 10) nodename = '0' + nodename // 格式化一下日期
-					var year = node.parentNode.id.toString().substring(0, node.parentNode.id.toString().length - 1); //得到父节点的什么年份
-					nodename = year + '_' + nodename;
-					console.log('nodename' + nodename);
-					store.setBaseParam('nodekind', nodekind);
-					store.setBaseParam('nodename', nodename);
-					store.reload();
+			},
+			{
+				text: '取消',
+				handler: function() {
+					Ext.getCmp('updatePlayBoardWin').close();
 				}
+			}]
+		});
 
-				else {
-					treenode = node.id; // 保存用到的全局变量
-					nodekind = 'excelid';
-					store.setBaseParam('nodekind', nodekind);
-					store.setBaseParam('nodename', node.id);
-					store.reload();
-				}
+		Ext.getCmp('sure_board').setValue(data["sure_board"]);
+		Ext.getCmp('done_board').setValue(data["done_board"]);
 
-				/*
+		return new Ext.Window({
+			id: 'updatePlayBoardWin',
+			title: "updataPlayBoard",
+			height: 200,
+			width: 400,
+			constrainHeader: true,
+			layout: 'fit',
+			items: [updatePlayBoardForm]
+		})
+
+	},
+
+	updatePlayBoard: function(shoes_id) {
+		var sure = Ext.getCmp('sure_board').getValue();
+		var done = Ext.getCmp('done_board').getValue();
+		console.log('xxx', sure);
+		var record = {
+			sure_board: sure,
+			done_board: done,
+			general_shoe_id: shoes_id,
+
+		};
+
+		Ext.Ajax.request({
+			url: '/services/updata_in_play_board.json',
+			method: 'post',
+			jsonData: {
+				record: record
+			},
+			success: function() {
+				Ext.getCmp('EpapbGrid').store.load();
+				Ext.getCmp('updatePlayBoardWin').close();
+				Ext.Msg.alert('修改', '修改成功');
+				// Ext.Msg.alert('',this.createData.region_id)
+			},
+			failure: function() {
+				Ext.Msg.alert('修改', '修改失败!');
+			},
+		});
+	},
+	//+++++++++++++++++++++++++++++++send_to_wish_list++++++++++++++++++++++++++++++++++++++++++
+	//+++++++++++++++++++++++++++++++++++EpapbTree++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	createEpapbTree: function() {
+		var loader = new Ext.tree.TreeLoader({
+			dataUrl: '/services/get_tree_node.json'
+		});
+
+		var root = new Ext.tree.AsyncTreeNode({
+			text: '客户Excel接收',
+			id: '0',
+			draggable: false,
+		});
+		//    root.expand();
+		var EpapbTree = new Ext.tree.TreePanel({
+			//renderTo:'tree1',//这也一另一种渲染手法，你也可以在下面body里找到div
+			//autoHeight:true,// 如果是这种渲染手法，就要为它加上这个属性，不然就要在div里设定div的高度
+			width: 100,
+			split: true,
+			maxSize: 150,
+			minSize: 80,
+			collapsible: true,
+			autoScroll: true,
+			loader: loader,
+			region: 'west',
+			root: root,
+		});
+
+		EpapbTree.on('click', function(node) {
+
+			var store = Ext.getCmp('EpapbGrid').store;
+			var nodekind = node.id.toString().slice( - 1);
+			var nodename = node.id.toString().substring(0, node.id.toString().length - 1);
+			console.log('nodekind', nodekind);
+			console.log('nodename', nodename);
+
+			if (nodekind == 'y') {
+				store.setBaseParam('nodekind', nodekind); //must devide into 2 steps
+				store.setBaseParam('nodename', nodename);
+				store.reload();
+			}
+			else if (nodekind == 'm') {
+				if (nodename < 10) nodename = '0' + nodename // 格式化一下日期
+				var year = node.parentNode.id.toString().substring(0, node.parentNode.id.toString().length - 1); //得到父节点的什么年份
+				nodename = year + '_' + nodename;
+				console.log('nodename' + nodename);
+				store.setBaseParam('nodekind', nodekind);
+				store.setBaseParam('nodename', nodename);
+				store.reload();
+			}
+
+			else {
+				treenode = node.id; // 保存用到的全局变量
+				nodekind = 'excelid';
+				store.setBaseParam('nodekind', nodekind);
+				store.setBaseParam('nodename', node.id);
+				store.reload();
+			}
+
+			/*
       if(nodekind == 'y'){ 
         //var yeardate=.substring(0,4);
        // console.log('year',yeardate);
@@ -993,34 +993,44 @@ Zm.services.excelProcessingAndPlayBoard = {
 			//store.setBaseParam("id", node.id);
 			//store.reload();
     //*/
-			});
+		});
 
-			var contextmenu = new Ext.menu.Menu({
-				id: 'treecontextmenu',
-				items: [{
-					text: 'open',
-					handler: function() {
-						alert('xxx');
-					}
-				},
-				{
-					text: 'download',
-					handler: function() {
-						alert('xxx');
-					}
-				}]
+		var contextmenu = new Ext.menu.Menu({
+			id: 'treecontextmenu',
+			items: [{
+				text: 'open',
+				handler: function() {
+					alert('xxx');
+				}
+			},
+			{
+				text: 'download',
+				handler: function() {
+//window.open('test.html','newwindow','height=200,width=300,top=50,left=50')
+          
+				/*	Ext.Ajax.request({
+						url: '/services/test',
+						//method: 'get',
+					
 
-			});
+					})*/
+          var but = document.getElementById(linkid);
+    but.target="_blank";
+    but.click();
+				}
+			}]
 
-			EpapbTree.on("contextmenu", function(node, e) {
-				e.preventDefault();
-				node.select();
-				contextmenu.showAt(e.getXY());
-			});
+		});
 
-			return EpapbTree;
+		EpapbTree.on("contextmenu", function(node, e) {
+			e.preventDefault();
+			node.select();
+			contextmenu.showAt(e.getXY());
+		});
 
-		}
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	};
+		return EpapbTree;
+
+	}
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+};
 

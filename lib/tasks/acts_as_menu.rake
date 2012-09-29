@@ -23,6 +23,7 @@ namespace :menu do
           { :name => "预购单管理", :url => "/services/advanced_order_management" },
           { :name => "订单管理", :url => "/services/guest_order_management" },
           { :name => "合同管理", :url => "/services/factory_order" },
+          { :name => "test", :url => "/services/test" }
 
      
         ]

@@ -235,9 +235,37 @@ class ServicesController < ApplicationController
       f.write( file.read)
       return photo_name
     end
-
-
   end
+
+  def download_exl
+    aji="robots.txt"
+   
+    send_file "public/robots.txt"
+
+    puts "xxxxxxxxxx"
+=begin
+   io=File.open(RAILS_ROOT+"/public/rails.png")
+    io.binmode
+    send_data(io.read,
+             :filename=>"rails.png",
+             :type=>'image/png',
+             :disposition => 'inline')
+    io.close
+=end
+  end
+
+  
+  def test
+     respond_to do |format| #调用到view/product/index,它是以layouts下面的products.为模板的
+      format.html # index.html.erb
+    #  format.xml  { render :xml => @products }
+    end
+  end
+
+  def down_file
+    send_file "public/files/excel_files/"+"aaa.png"
+  end
+
 #-------------------------makingFactoryOrder---------aji--------------------------------------------------------------------
   def makingFactoryOrder
   end
@@ -471,6 +499,9 @@ class ServicesController < ApplicationController
      size_num = GeneralShoe.get_size_and_num_json( shoes )
       respond_to do|format|
         format.json{ render :json => { :speed_of_progress => size_num } }
+
+
+
       end
    end
 
@@ -488,7 +519,7 @@ class ServicesController < ApplicationController
     def update_quality
       Order.all.each do |qualityselects|
         if(qualityselects.order_id == params[:id])
-         # p paramas[:qualityvalue]
+         # p params[:qualityvalue]
           qualityselects.update_attributes(:quality => params[:value])
         end
       end

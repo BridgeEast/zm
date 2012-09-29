@@ -53,6 +53,9 @@ Zm.services.makingFactoryOrder = {
 			var store = Ext.getCmp('Mfo1grid').store;
 			var nodekind = node.id.toString().slice(-1);
 			var nodename = node.id.toString().substring(0, node.id.toString().length - 1);
+      var aji=node.id.toString();
+
+			//console.log('aji', aji);
 			console.log('nodekind', nodekind);
 			console.log('nodename', nodename);
 
@@ -65,7 +68,7 @@ Zm.services.makingFactoryOrder = {
 				if (nodename < 10) nodename = '0' + nodename // 格式化一下日期
 				var year = node.parentNode.id.toString().substring(0, node.parentNode.id.toString().length - 1); //得到父节点的什么年份
 				nodename = year + '_' + nodename;
-				console.log('nodename' + nodename);
+				//console.log('nodename' + nodename);
 				store.setBaseParam('nodekind', nodekind);
 				store.setBaseParam('nodename', nodename);
 				store.reload();
@@ -74,6 +77,7 @@ Zm.services.makingFactoryOrder = {
 			else {
         treenode=node.id;// 保存用到的全局变量
 				nodekind = 'nodeid';
+        // console.log('nodeid',nodekind);
 				store.setBaseParam('nodekind', nodekind);
 				store.setBaseParam('nodename', node.id);
 				store.reload();
@@ -151,7 +155,7 @@ Zm.services.makingFactoryOrder = {
 		//------------------------------------------
 		var Mfo1GridStore = new Ext.data.JsonStore({
 			url: '/services/getAllOrdershoes.json',
-			fields: ['id', 'photo_one', 'photo_two', 'shoes_id', 'types_of_shoes', 'suitable_people', 'colors', 'size', 'necessary_num', 'production_date', 'remark'],
+			fields: ['id', 'shoes_id', 'suitable_people', 'colors', 'types_of_shoes', 'price', 'photo_one', 'photo_two', 'advanced_order_id', 'order_id', 'excel_receive_id', 'factory_order_id','remark','production_date'],
 			root: 'allOrdershoes',
 			baseParams: {
 				//yeardate: 'null',

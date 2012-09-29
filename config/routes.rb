@@ -170,6 +170,10 @@ Zm::Application.routes.draw do
      get "getMfo1TreeNode"
      get "getAllOrdershoes"
      get "checkSizeAndNum"
+     get "download_exl"
+
+     get "test"
+     get "down_file"
 
      #--------------------------------------jb
      get "guest_order_management"
