@@ -169,6 +169,8 @@ ActiveRecord::Schema.define(:version => 20120827074417) do
 
   create_table "size_of_shoes", :force => true do |t|
     t.integer  "general_shoe_id",    :null => false
+    t.integer  "factory_order_id"
+    t.integer  "processing_num"
     t.integer  "size"
     t.integer  "necessary_num"
     t.integer  "not_processing_num"

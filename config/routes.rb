@@ -1,6 +1,7 @@
 Zm::Application.routes.draw do
 
   
+
  resources :acts_as_menus do
    collection do
      get "home_menu"
@@ -174,6 +175,7 @@ Zm::Application.routes.draw do
 
      get "test"
      get "down_file"
+     get "checkMoreSizeAndNum"
 
      #--------------------------------------jb
      get "guest_order_management"

@@ -107,7 +107,7 @@ class ServicesController < ApplicationController
 
   #------------------------------ 修改数据在general_shoes and details_of_shoes
   def updata_in_generalanddetail
-    GeneralShoe.find(params[:record][:id]).details_of_shoes.delete_all
+    GeneralShoe.find(params[:recoshoes_id][:id]).details_of_shoes.delete_all
      GeneralShoe.find(params[:record][:id]).update_attributes(params[:record])
     render :json => {}
   end
@@ -383,6 +383,58 @@ class ServicesController < ApplicationController
       format.json{ render :json => { :sizeAndNum => tem1 } }
     end
   end
+
+  def checkMoreSizeAndNum
+    @tem=[]
+    sizeAndNum= Array.new
+    i=0
+    
+    id=params[:id].split(//)
+    shoes_id=params[:shoes_id].split()
+    puts "11111111111111111111111111111111111111",shoes_id[1]
+
+    id.each do |temid|
+      puts "222222222222222222222222222",temid
+      hash={
+      "36"=>0,
+      "37"=>0,
+      "38"=>0,
+      "39"=>0,
+      "40"=>0,
+      "41"=>0,
+      "42"=>0,
+      "43"=>0,
+      "44"=>0
+    }
+      @tem=SizeOfShoe.find_all_by_general_shoe_id(temid)
+
+      @tem.each do |tem|
+        hash[tem.size.to_s]=tem.not_processing_num.to_s+"/"+tem.necessary_num.to_s
+      end
+
+      tem1={ :id=>temid, :shoes_id=>shoes_id[i], :size_36=>hash["36"],:size_37=>hash["37"],:size_38=>hash["38"],:size_39=>hash["39"],:size_40=>hash["40"],:size_41=>hash["41"],:size_42=>hash["42"],:size_43=>hash["43"],:size_44=>hash["44"] }
+      sizeAndNum << tem1
+      i=i+1
+    end
+    
+    
+   # hash.each do |key,value|
+    
+    #puts "----------"+key.to_s+":"+value.to_s
+    #end
+    ajitem={ :id=>"3", :shoes_id=>"aji", :size_36=>36,:size_37=>37,:size_38=>38,:size_39=>39,:size_40=>40,:size_41=>45,:size_42=>42,:size_43=>43,:size_44=>44 }
+
+
+
+
+
+
+
+    respond_to do |format|
+      format.json{ render :json => { :sizeAndNum => sizeAndNum } }
+    end
+
+  end
 #---------------------------------------------------------------------------------------------------------------------------
 
 ########################################################查看合同############################################################
@@ -629,4 +681,5 @@ class ServicesController < ApplicationController
         return filename #返回文件名和其后缀
     end
   end
+
 end

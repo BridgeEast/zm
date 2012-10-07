@@ -3,6 +3,8 @@ class CreateSizeOfShoes < ActiveRecord::Migration
     create_table :size_of_shoes do |t|
 
       t.integer :general_shoe_id, :null => false
+      t.integer :factory_order_id 
+      t.integer :processing_num
 
 
       t.integer :size

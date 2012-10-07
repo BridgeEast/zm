@@ -9,6 +9,8 @@ Zm = {
     //the services, 对应着相对应的controller器----aji
     services:{},
      //客户
-    guests:{}
+    guests:{},
+    
+    makingFactoryOrder:{},
     
 }

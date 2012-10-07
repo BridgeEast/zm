@@ -1,6 +1,6 @@
 Zm.services.makingFactoryOrder = {
 	init: function() {
-    Ext.QuickTips.init();
+		Ext.QuickTips.init();
 		//Ext.Msg.alert('hello','world');
 		Zm.pages.ViewPort = { //i don't know what it readly it,shit,Zm.pages.ViewPort......
 			title: '客户－工厂订单管理',
@@ -47,13 +47,12 @@ Zm.services.makingFactoryOrder = {
 			root: Mfo1TreeRoot,
 		});
 
-    Mfo1Tree.on('click', function(node) {
-      
+		Mfo1Tree.on('click', function(node) {
 
 			var store = Ext.getCmp('Mfo1grid').store;
-			var nodekind = node.id.toString().slice(-1);
+			var nodekind = node.id.toString().slice( - 1);
 			var nodename = node.id.toString().substring(0, node.id.toString().length - 1);
-      var aji=node.id.toString();
+			var aji = node.id.toString();
 
 			//console.log('aji', aji);
 			console.log('nodekind', nodekind);
@@ -75,9 +74,9 @@ Zm.services.makingFactoryOrder = {
 			}
 
 			else {
-        treenode=node.id;// 保存用到的全局变量
+				treenode = node.id; // 保存用到的全局变量
 				nodekind = 'nodeid';
-        // console.log('nodeid',nodekind);
+				// console.log('nodeid',nodekind);
 				store.setBaseParam('nodekind', nodekind);
 				store.setBaseParam('nodename', node.id);
 				store.reload();
@@ -114,11 +113,11 @@ Zm.services.makingFactoryOrder = {
 	//+++++++++++++++++++++++++++++++++createMfo1Grid++++++++++++++++++++++++++++++++++++++++
 	createMfo1Grid: function() {
 		//Ext.Msg.alert('hello','world');
-    var Mfo1GridSm = new Ext.grid.CheckboxSelectionModel({handlerMouseDown: Ext.emptyFn});
+		var Mfo1GridSm = new Ext.grid.CheckboxSelectionModel({
+			handlerMouseDown: Ext.emptyFn
+		});
 		var Mfo1GridCm = new Ext.grid.ColumnModel([
-		new Ext.grid.RowNumberer(),
-    Mfo1GridSm,
-    {
+		new Ext.grid.RowNumberer(), Mfo1GridSm, {
 			header: '鞋图1',
 			dataIndex: 'photo_one',
 			renderer: title_img
@@ -155,7 +154,7 @@ Zm.services.makingFactoryOrder = {
 		//------------------------------------------
 		var Mfo1GridStore = new Ext.data.JsonStore({
 			url: '/services/getAllOrdershoes.json',
-			fields: ['id', 'shoes_id', 'suitable_people', 'colors', 'types_of_shoes', 'price', 'photo_one', 'photo_two', 'advanced_order_id', 'order_id', 'excel_receive_id', 'factory_order_id','remark','production_date'],
+			fields: ['id', 'shoes_id', 'suitable_people', 'colors', 'types_of_shoes', 'price', 'photo_one', 'photo_two', 'advanced_order_id', 'order_id', 'excel_receive_id', 'factory_order_id', 'remark', 'production_date'],
 			root: 'allOrdershoes',
 			baseParams: {
 				//yeardate: 'null',
@@ -174,7 +173,9 @@ Zm.services.makingFactoryOrder = {
 			},
 			items: [{ //菜单主要有什么内容，实现什么功能
 				text: '查看详情',
-				handler: function(){ this.checkShoesDetail()}
+				handler: function() {
+					this.checkShoesDetail()
+				}
 			},
 			{
 				text: '查看码号与数量',
@@ -186,7 +187,7 @@ Zm.services.makingFactoryOrder = {
 			{
 				text: '与客户交谈',
 				handler: function() {
-          this.communicateWithGuest()
+					this.communicateWithGuest()
 				}
 			},
 			{
@@ -203,19 +204,47 @@ Zm.services.makingFactoryOrder = {
 			}]
 		});
 
+		var Mfo1gridTbar = new Ext.Toolbar({
+			defaults: {
+				scope: this
+			},
+			items: [{
+				text: '制作工厂合同',
+				handler: function() { // 这里一定要先用function，不然会直接引用下面的命令
+          var record = Ext.getCmp("Mfo1grid").getSelectionModel().getSelections();
+          
+					Zm.makingFactoryOrder.makeFactoryOrder.makeFactoryOrder(record).show();
+        }
+			},
+			'-', {
+				text: '删除所选',
+				handler: function() {
+					this.deleteShoes();
+				}
+			},
+			'-', {
+				text: '发送至心愿单',
+				handler: function() {
+
+				}
+			}]
+		});
+
 		var Mfo1grid = new Ext.grid.GridPanel({
 			id: 'Mfo1grid',
 			title: '请选择相关的订单',
 			region: 'center',
 			border: true,
 			cm: Mfo1GridCm,
-      sm: Mfo1GridSm,
+			sm: Mfo1GridSm,
 			store: Mfo1GridStore,
 			width: 400,
 			height: 300,
 			viewConfig: {
 				forceFit: true
 			},
+			tbar: Mfo1gridTbar,
+
 		});
 
 		Mfo1grid.on("rowcontextmenu", function(grid, rowIndex, e) {
@@ -227,29 +256,37 @@ Zm.services.makingFactoryOrder = {
 
 	},
 
-  checkShoesDetail: function(){ 
-    var shoes_id = Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.id;
-					var photo_one = Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.photo_one;
-					var photo_two = Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.photo_two;
-					// Ext.Msg.alert("xxx",shoes_id);
-					//this.cwlWindow( this.checkDetailsForm(), this.checkDetailsGrid() ).show();
-					Zm.services.checkDetail.createCheckDetails(shoes_id, photo_one, photo_two).show(); //invoke the function of looking details
-					//var Mfo1GridStore = Ext.getCmp('detailGrid').Mfo1GridStore;
-					//Mfo1GridStore.setBaseParam('id', shoes_id );
-					//Mfo1GridStore.reload();
-  },
+	checkShoesDetail: function() {
+		var shoes_id = Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.id;
+		var photo_one = Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.photo_one;
+		var photo_two = Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.photo_two;
+		// Ext.Msg.alert("xxx",shoes_id);
+		//this.cwlWindow( this.checkDetailsForm(), this.checkDetailsGrid() ).show();
+		Zm.services.checkDetail.createCheckDetails(shoes_id, photo_one, photo_two).show(); //invoke the function of looking details
+		//var Mfo1GridStore = Ext.getCmp('detailGrid').Mfo1GridStore;
+		//Mfo1GridStore.setBaseParam('id', shoes_id );
+		//Mfo1GridStore.reload();
+	},
 
-  communicateWithGuest: function(){ 
-    Zm.services.communicateWithGuest.createCommunicateWithGuest().show();
-      
-  },
+	communicateWithGuest: function() {
+		Zm.services.communicateWithGuest.createCommunicateWithGuest().show();
 
-  checkSizeAndNum: function(){ 
-    var id = Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.id;
-    var shoes_id=Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.shoes_id;
-    console.log('shoes_id',shoes_id);
-    Zm.services.checkSizeAndNum.createCheckSizeAndNum(id,shoes_id).show();
-  },
+	},
+	checkSizeAndNum: function() {
+		var id = Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.id;
+		var shoes_id = Ext.getCmp('Mfo1grid').getSelectionModel().getSelected().data.shoes_id;
+		console.log('shoes_id', shoes_id);
+		Zm.services.checkSizeAndNum.createCheckSizeAndNum(id, shoes_id).show();
+	},
+
+
+
+
+
+
+
+
+
 	//++++++++++++++++++++++++++++++++createMfo1Tree ++++++++++++++++++++++++++++++++++++++++
 	createMfo2Tree: function() {
 		var loader = new Ext.tree.TreeLoader({
