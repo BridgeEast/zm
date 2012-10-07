@@ -1,0 +1,6 @@
+<%= javascript_include_tag "zm/zm.js","zm/services/virtualWarehouseManagent/virtualWarehouseManagent.js","zm/services/virtualWarehouseManagent/daily_sheet_window.js","zm/services/virtualWarehouseManagent/month_sheet_window.js","zm/services/virtualWarehouseManagent/daily_dispatch_window.js","zm/services/virtualWarehouseManagent/month_dispatch_window.js","zm/services/virtualWarehouseManagent/factory_daily_sheet.js" %>
+<script>
+  Ext.onReady(function(){ 
+    Zm.services.virtulWarehouesManagent.init();
+  });
+</script>

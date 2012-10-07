@@ -1,4 +1,4 @@
-# -*- encoding : utf-8 -*-
+#encoding: utf-8
 class ServicesController < ApplicationController
   #---------------------------------------------aji-------------------------------------------------
   def excelProcessingAndPlayBoard
@@ -491,6 +491,222 @@ class ServicesController < ApplicationController
     FactoryOrder.find(params[:record][:id]).update_attributes(:payment => params[:record][:payment])
     render :json => {  }
     end
+
+  def virtual_warehouse_management
+
+    end
+
+    def get_virtual_warehouse_management
+        
+          #selects = []
+          #GeneralShoe.all.each do |select|
+          #if(select.factory_order_id == params[:id].to_i)
+          #selects << select
+          #end
+          #end
+=begin      
+      choses = []
+      selects.each do |a|
+      if(a.factory_order.production_date.to_s.split("-")[0] == params[:year] and a.factory_order.production_date.to_s.split("-")[1].gsub(/\b(0+)/,"") == params[:month])
+      choses << a
+      end
+      end
+=end
+     # a = params[:id]
+     # b = a.split("-")
+      #aa=[]
+       #FactoryOrder.all.each do |ya|
+        #asd= ya.production_date.to_s
+       #aa << asd
+       #end
+       #selects =[]
+             #if a == FactoryOrder.first.production_date.year.to_s
+       #aa.each do |chose|
+       #year = chose.split("-")[0].to_s
+       #month = chose.split("-")[1].gsub(/\b(0+)/,"").to_s
+       #if(a == year)
+        #       selects = GeneralShoe.where("factory_order_id is not null ")
+         # end
+      
+     #  if   a == year + '-' + month 
+       #用each实现
+      #   selects = GeneralShoe.where("factory_order_id like ?",1)
+       #  end
+       #end 
+       
+        vv = FactoryOrder.get_cfo_record(params[:id])
+         sel=[]
+         selects =[]
+        vv.each do |v| 
+        select = vv.blank? ? "" : FactoryOrder.cj(v)
+         selects.concat(select)
+   
+        end
+        render :json => { :virtual_wm => selects}
+      #  respond_to do |format|
+       # format.json{ render :json => {  :virtual_wm => selects }}
+    #end
+    end
+#查看鞋数量
+    def get_all
+      a = SizeOfShoe.where(:general_shoe_id => (params[:id]))
+      respond_to do |format|
+      format.json{ render :json => { :ga => a } }
+      end
+    end
+#分页
+     def paging(array)
+      m = params[:limit].to_i
+      n = params[:start].to_i
+      root = []
+      max = m + n
+      if max > array.length
+        max = array.length
+      end
+      for i in n..max - 1
+        root << array[i]
+      end
+      all_data = { :totalProperty => array.length, :roots => root }
+      render :json => all_data
+    end 
+
+    #查看日报表
+     def get_virtual_daily_sheet
+      prodate = []
+      shoe_name = []
+      pro = params[:pro_date]
+      InboundAndOutbound.all.each do |m|
+        if m.inbound_and_outbound_date.to_s == "#{pro}"
+          prodate << m.size_of_shoe_id
+        end
+      end
+      SizeOfShoe.where( :id => prodate ).each do |n|
+        shoe_name << n
+      end
+      paging(SizeOfShoe.sheet_shoe_size_num( shoe_name ))
+    end
+     
+      def get_virtual_month_sheet
+      shoe_name = []
+      prodate = []
+      proym = params[:pro_ym] 
+      InboundAndOutbound.all.each do |m|
+        a = []
+        root_data = []
+        a = m.inbound_and_outbound_date.to_s.split("-")
+        pro = a[0].to_s + "-" + a[1].to_s
+        if pro == "#{proym}"
+          prodate << m.size_of_shoe_id
+        end
+      end
+      SizeOfShoe.where( :id => prodate ).each do |n|
+        shoe_name << n
+      end
+      paging(SizeOfShoe.sheet_shoe_size_num( shoe_name ))
+    end
+
+    #查看日发货单
+     def get_virtual_daily_dispatch
+      prodate = []
+      shoe_name = []
+      pro = params[:pro_date]
+      InboundAndOutbound.all.each do |m|
+        if m.inbound_and_outbound_date.to_s == "#{pro}"
+          prodate << m.size_of_shoe_id
+        end
+      end
+      SizeOfShoe.where( :id => prodate ).each do |n|
+        shoe_name << n
+      end
+      paging(SizeOfShoe.dispatch_shoe_size_num( shoe_name ))
+    end
+
+     def get_virtual_month_dispatch
+      shoe_name = []
+      prodate = []
+      proym = params[:pro_ym] 
+      InboundAndOutbound.all.each do |m|
+        a = []
+        a = m.inbound_and_outbound_date.to_s.split("-")
+        pro = a[0].to_s + "-" + a[1].to_s
+        if pro == "#{proym}"
+          prodate << m.size_of_shoe_id
+        end
+      end
+      SizeOfShoe.where( :id => prodate ).each do |n|
+        shoe_name << n
+      end
+      paging(SizeOfShoe.dispatch_shoe_size_num( shoe_name ))
+    end
+
+    #填写工厂日报表
+    def create_data
+        InboundAndOutbound.create!(params[:record])
+        render :json => {}
+    end
+
+    def get_inbound_num
+      respond_to do |format|
+      format.json{ render :json => { :inbound_num => InboundAndOutbound.all }}
+    end
+
+    end
+
+
+      def get_treenode
+         treenodes = []
+         yearnode = []
+        #yearnode.push("2011")
+         jj = false
+         FactoryOrder.all.each do |tem|
+         yearnode << tem.production_date.year
+         yearnode = yearnode.uniq
+         end
+           for year in yearnode do
+              monthnode = Array.new(13){ Array.new }
+                FactoryOrder.all.each do |tem|
+                  if tem.production_date.year == year then
+                   jj = true
+                    monthnode[tem.production_date.month] << { :text => tem.factory_order_id, :id => tem.production_date.year.to_s+'-'+tem.production_date.month.to_s+'-'+tem.factory_order_id, :leaf => true }
+                    end
+                  end
+                   ordernode = []
+                     monTime = 12
+                      if year== Time.new.year then monTime= Time.new.month end
+                       for i  in 1..monTime do
+                        if (monthnode[i].empty?) then
+                          ordernode << { :text => i.to_s+'月', :id =>yearnode.first.to_s+'-'+ i.to_s, :leaf => true }
+                        else
+                         ordernode << { :text => i.to_s+'月', :id =>yearnode.first.to_s+'-'+ i.to_s, :children => monthnode[i] }
+                         end
+                        end
+                  if jj then
+                    treenodes << { :text => year.to_s , :id => year.to_s, :children => ordernode }
+        else
+          treenodes << { :text => year.to_s, :id => year.to_s, :leaf => true }
+        end
+    end
+
+    render :json => treenodes
+
+   
+     end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  #-----------------------------右键查看详情----------------
   def get_details_of_shoes

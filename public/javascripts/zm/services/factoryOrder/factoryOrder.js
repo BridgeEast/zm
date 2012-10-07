@@ -334,17 +334,7 @@ Zm.services.factoryOrder ={
         }
         else{
             var value2 =  modify_payment['payment'];     
-            (function(){ 
-               
-                switch(value){
-                case '1':
-                 return  value2="付款30%";
-                 case '2':
-                 return  value2="已付全款";
-                 default:
-                  return false; 
-                
-            };}())
+               (value==='1')? value2="付款30%":value2="已付全款"
              modify_payment['payment'] = value2 ;
             var record = { id: modify_payment['id'], payment: modify_payment['payment']  }
             Ext.Ajax.request({ 
@@ -353,7 +343,7 @@ Zm.services.factoryOrder ={
                 jsonData: { record: record },
                 success: function(){ 
                   Ext.getCmp('createPanel1').store.reload();
-                  Ext.getCmp('checkWindow').close();
+                  Ext.getCmp('checkWindow2').close();
                   Ext.Msg.alert('','修改成功');
                 },
                 failure: function(){ Ext.Msg.alert('','修改失败'); },

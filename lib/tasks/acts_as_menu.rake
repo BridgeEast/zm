@@ -21,6 +21,10 @@ namespace :menu do
           { :name => "合同制作", :url => "/services/makingFactoryOrder" },
           { :name => "虚拟仓库管理", :url => "" },
           { :name => "预购单管理", :url => "/services/advanced_order_management" },
+          { :name => "浏览客户心愿单", :url => "/services/scanningGuestWishList" },#---aji
+          { :name => "合同制作", :url => "" },
+          { :name => "虚拟仓库管理", :url => "/services/virtual_warehouse_management" },
+          { :name => "预购单管理", :url => "" },
           { :name => "订单管理", :url => "/services/guest_order_management" },
           { :name => "合同管理", :url => "/services/factory_order" },
           { :name => "test", :url => "/services/test" }

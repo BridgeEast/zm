@@ -9,13 +9,18 @@ class FactoryOrder < ActiveRecord::Base
         #如果点击的是年的，就显示符合年的记录
         if date[0] == param 
           rec << record
-        else
+          end
+        #else
         #与所创建的年月匹配, 则记录输入rec
           yearMonth = date[0] + "-" + date[1]
           if yearMonth == param
             rec << record
           end
-        end
+        #end
+        ymnode = date[0]+'-'+date[1]+'-'+ record.factory_order_id
+         if  ymnode == param
+              rec << record
+              end
       end
       # 没数据返回空数组
       return rec
@@ -34,4 +39,21 @@ class FactoryOrder < ActiveRecord::Base
        }
     end
   end
+
+ def self.cj(yy)
+     yy.general_shoes.collect! do |record|
+ { 
+    :id => record.id,
+    :photo_one => record.photo_one,
+    :photo_two => record.photo_two,
+    :shoes_id => record.shoes_id,
+    :types_of_shos => record.types_of_shoes,
+    :suitable_people => record.suitable_people,
+    :colors => record.colors,
+    :production_date => record.production_date
+    
+ }
+  end
+end
+
 end

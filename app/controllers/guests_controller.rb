@@ -29,6 +29,9 @@ class GuestsController < ApplicationController
     Order.create!(params[:record])
     render :json => {}
   end
+  
+   # render :json => { }
+ # end
 
   #*********************************************************************
 

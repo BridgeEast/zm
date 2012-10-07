@@ -2,6 +2,8 @@ Ext.onReady(function(){
     var cm = new Ext.grid.ColumnModel([
         new Ext.grid.RowNumberer(),
         { header: "鞋号", dataIndex: "shoes_id"},
+        { header: '36', dataIndex: "size_36" },
+        { header: "37", dataIndex: "size_37" },
         { header: "38", dataIndex: "size_38"},
         { header: "39", dataIndex: "size_39"},
         { header: "40", dataIndex: "size_40"},
@@ -12,10 +14,10 @@ Ext.onReady(function(){
     ]);
 
     var store = new Ext.data.JsonStore({
-        url: "/managements/get_virtual_daily_sheet.json",
-        fields: ["shoes_id", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
+        url: "/services/get_virtual_daily_sheet.json",
+        fields: ["shoes_id","size_36","size_37", "size_38", "size_39", "size_40", "size_41", "size_42", "size_43", "size_44"],
         totalProperty: "totalProperty",
-        root: "check_guest_order",
+        root: "roots",
     });
     store.load({ params: { start: 0, limit: 20 } });
 
@@ -49,6 +51,8 @@ Ext.onReady(function(){
         width: 800,
         height: 550,
         closeAction: "hide",
+        contrain: true,
+        constrainHeader: true,
         resizable: false,
         items: [dailySheetGrid],
         buttons: [{
@@ -82,8 +86,11 @@ Ext.onReady(function(){
                     month = "-12-" 
                 };
                 var pro = day[3] + month + day[2];
+                console.log("day",day[3]);
+                console.log("day",month);
+                console.log("day",day[2]);
                 store.proxy = new Ext.data.HttpProxy({
-                    url: "/managements/get_virtual_daily_sheet.json",
+                    url: "/services/get_virtual_daily_sheet.json",
                     method: "post",
                     jsonData: { pro_date: pro },
                 });

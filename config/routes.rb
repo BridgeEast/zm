@@ -204,6 +204,16 @@ Zm::Application.routes.draw do
      ################################################################
 
 
+     get  "virtual_warehouse_management"
+     get "get_virtual_warehouse_management"
+     get "get_all"
+     get "get_virtual_daily_sheet"
+     get "get_virtual_month_sheet"
+     get "get_virtual_daily_dispatch"
+     get "get_virtual_month_dispatch"
+     get "get_treenode"
+     post "create_data"
+     get "get_inbound_num"
    end
  end
 
