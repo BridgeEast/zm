@@ -61,7 +61,7 @@ Zm.guests.determine = {
 		return items
 	},
 
-	add_to_general_shoes: function(config) t{
+	add_to_general_shoes: function(config) {
 		var items = [];
 		var records = this.add_to_play_board();
 		var sizes = this.add_to_size_of_shoes();

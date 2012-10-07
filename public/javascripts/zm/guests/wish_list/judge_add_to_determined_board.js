@@ -24,5 +24,5 @@ Zm.guests.judge_add_to_determined_board = {
 			}
 		}
 	}
-}
+}		this.change_id = [];
 
