@@ -1,6 +1,6 @@
 Zm = { 
     //基础数据
-    data_bases: {},
+    dataBases: {},
     //Zm项目中应用的Viewport
     pages: {},
     //管理层
